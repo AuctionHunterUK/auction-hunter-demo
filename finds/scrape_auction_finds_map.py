@@ -886,10 +886,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       <span class="term-tag">Current search term: <strong>{terms_str}</strong> <span class="term-soon">· Coming soon: edit search term for next update</span></span>
       <span class="term-tag">Local auctions: <strong>6 houses</strong> <span class="term-soon">· Coming soon: edit local auctions</span></span>
       <nav class="jump">
-        {f'<a class="new-pill" href="#" onclick="filterNew(); return false;">✨ {new_total} new</a>' if new_total else ''}
-        <a href="#local">📍 Local · {local_local_count}</a>
-        <a href="#uk-wide">🇬🇧 Later · {wide_later_count}</a>
-        {f'<a class="today-pill" href="#today">🔥 Today · {wide_today_count}</a>' if wide_today_count else ''}
+        {f'<a class="new-pill" href="#" onclick="filterNew(); return false;">New · {new_total}</a>' if new_total else ''}
+        <a href="#local">Local · {local_local_count}</a>
+        <a href="#uk-wide">Later · {wide_later_count}</a>
+        {f'<a class="today-pill" href="#today">Today · {wide_today_count}</a>' if wide_today_count else ''}
       </nav>
     </div>
   </header>
