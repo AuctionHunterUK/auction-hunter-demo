@@ -22,6 +22,14 @@ body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;backgro
 .app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
 .app-nav-link.on{background:var(--pine);color:#fff;box-shadow:0 1px 4px rgba(58,92,59,.35)}
 .app-nav-link.on:hover{background:var(--pine)}
+/* Mobile header sizes — mirror the Finds page so the two headers match on phones */
+@media(max-width:767px){
+  header>div:first-child img{height:26px!important}
+  header>div:first-child h1{font-size:1rem!important}
+  .demo-tag{font-size:.52rem;padding:2px 7px}
+  .app-nav{padding:2px}
+  .app-nav-link{font-size:.72rem;padding:5px 13px}
+}
 .demo-tag{font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;padding:3px 9px;border-radius:20px;white-space:nowrap}
 
 /* ── HEADER ── */
