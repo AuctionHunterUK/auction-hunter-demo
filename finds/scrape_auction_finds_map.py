@@ -356,7 +356,7 @@ def _is_today(lot, today_str):
 def _card_html(lot, is_new, postcodes):
     img_src = f"images/{lot['img_file']}" if lot.get("img_file") else ""
     img_tag = (
-        f'<img src="{img_src}" alt="{lot["title"]}" width="500" height="500" loading="lazy">'
+        f'<img src="{img_src}" alt="{lot["title"]}" width="400" height="300" loading="lazy">'
         if img_src else '<div class="no-img">No image</div>'
     )
     bid      = f'<span class="bid">Bid {lot["bid"]}</span>'           if lot.get("bid")       else ""
@@ -558,13 +558,15 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     header {{
       background: var(--panel);
       border-bottom: 1px solid var(--line);
-      padding: 14px 24px 12px;
+      padding: 8px 24px;
       position: sticky; top: 0; z-index: 1000;
       backdrop-filter: blur(8px);
-      display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap;
     }}
-    header .tagline {{ margin: 0; font-size: 0.78rem; color: var(--muted); max-width: 380px; line-height: 1.3; }}
-    .hstatus {{ display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }}
+    /* Tagline folded away on desktop too — the app is self-explanatory and the
+       vertical space is better spent on lots. Still in DOM for SEO/context. */
+    header .tagline {{ display: none; }}
+    .hstatus {{ display: flex; align-items: center; gap: 6px 14px; margin-left: auto; flex-wrap: wrap; }}
     .update-ok {{ font-size: .78rem; color: #22c55e; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap; }}
     .hstats {{ font-size: .78rem; color: var(--muted); white-space: nowrap; }}
     .hstats strong {{ color: var(--ink); }}
@@ -612,15 +614,26 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .search-box.has-text .clear-btn {{ display: flex; }}
     .search-results {{ font-size: 0.78rem; color: var(--muted); }}
     /* Shared app nav (Houses ↔ Finds) — mirrors AH .tbtn pill style */
-    .app-nav {{ display: flex; gap: 6px; }}
-    .app-nav-link {{
-      font-size: 0.7rem; font-weight: 600; padding: 6px 14px;
-      border-radius: 20px; border: 1px solid var(--line);
-      background: var(--panel); color: var(--chip-ink);
-      text-decoration: none; white-space: nowrap; transition: all .15s;
+    /* Segmented page toggle: one control, split in two, so the two-page
+       structure (Houses ↔ Finds) reads instantly and stands apart from links. */
+    .app-nav {{
+      display: inline-flex; padding: 3px; gap: 0;
+      background: var(--accent-soft); border: 1px solid var(--accent);
+      border-radius: 22px;
     }}
-    .app-nav-link:hover {{ border-color: var(--accent); color: var(--accent); }}
-    .app-nav-link.on {{ background: var(--accent); border-color: var(--accent); color: #fff; }}
+    .app-nav-link {{
+      font-size: 0.82rem; font-weight: 700; padding: 7px 18px;
+      border-radius: 18px; border: 0; background: transparent;
+      color: var(--accent); letter-spacing: -0.01em;
+      text-decoration: none; white-space: nowrap; transition: all .18s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }}
+    .app-nav-link:hover {{ color: #fff; background: rgba(58,92,59,.55); }}
+    .app-nav-link.on {{
+      background: var(--accent); color: #fff;
+      box-shadow: 0 1px 4px rgba(58,92,59,.35);
+    }}
+    .app-nav-link.on:hover {{ background: var(--accent); }}
     nav.jump {{ display: flex; gap: 6px; flex-wrap: wrap; }}
     nav.jump a {{
       font-size: 0.7rem;
@@ -736,7 +749,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .card:hover {{ transform: translateY(-3px); box-shadow: var(--shadow-hover); }}
     .card-img {{ position: relative; width: 100%; line-height: 0; background: var(--accent-soft); }}
-    .card-img img {{ width: 100%; height: auto; display: block; }}
+    /* Uniform image crop for a tidy catalogue look (4/3, matches .no-img). */
+    .card-img img {{ width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }}
     .no-img {{
       aspect-ratio: 4/3; display: flex; align-items: center;
       justify-content: center; font-size: 0.8rem; color: var(--muted);
@@ -834,7 +848,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .hstatus {{ margin-left: 0; flex-basis: 100%; gap: 4px 8px; }}
       .update-ok {{ white-space: normal; font-size: .68rem; }}
       .hstats {{ white-space: normal; font-size: .68rem; }}
-      .app-nav-link {{ font-size: .62rem; padding: 4px 10px; }}
+      .app-nav {{ padding: 2px; }}
+      .app-nav-link {{ font-size: .72rem; padding: 5px 13px; }}
       .hrow2 {{ gap: 6px 8px; }}
       .search-box {{ min-width: 0; flex-basis: 100%; max-width: none; }}
       .term-tag {{ font-size: .6rem; padding: 3px 9px; }}
