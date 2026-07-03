@@ -583,17 +583,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .brand .logo {{ font-size: 1.5rem; }}
     .meta {{ font-size: 0.78rem; color: var(--muted); margin-left: auto; }}
     .meta strong {{ color: var(--ink); }}
-    .courier-link {{
-      background: var(--accent); color: #fff;
-      border: none; cursor: pointer;
-      padding: 6px 14px; border-radius: 20px;
-      font-size: 0.7rem; font-family: inherit;
-      text-decoration: none;
-      display: inline-block;
-      font-weight: 600; white-space: nowrap;
-      transition: all 0.15s;
-    }}
-    .courier-link:hover {{ background: #2c4a2d; }}
     .search-box {{
       flex: 1;
       min-width: 200px;
@@ -845,7 +834,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .hstatus {{ margin-left: 0; flex-basis: 100%; gap: 4px 8px; }}
       .update-ok {{ white-space: normal; font-size: .68rem; }}
       .hstats {{ white-space: normal; font-size: .68rem; }}
-      .courier-link {{ font-size: .62rem; padding: 4px 10px; }}
       .app-nav-link {{ font-size: .62rem; padding: 4px 10px; }}
       .hrow2 {{ gap: 6px 8px; }}
       .search-box {{ min-width: 0; flex-basis: 100%; max-width: none; }}
@@ -884,7 +872,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div class="hstatus">
       <span class="update-ok">✅ Successfully updated - {now}</span>
       <span class="hstats"><strong>{total} lots</strong> · {today_total} today · {new_total} new since yesterday</span>
-      <a href="https://my.proovia.delivery/dashboard" target="_blank" rel="noopener" class="courier-link">🚚 Proovia Couriers</a>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">🏛 Houses</a>
         <a href="../finds/" class="app-nav-link on">🌲 Finds</a>
@@ -901,8 +888,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       <nav class="jump">
         {f'<a class="new-pill" href="#" onclick="filterNew(); return false;">✨ {new_total} new</a>' if new_total else ''}
         <a href="#local">📍 Local · {local_local_count}</a>
-        <a href="#uk-wide">🇬🇧 UK Later · {wide_later_count}</a>
-        {f'<a class="today-pill" href="#today">🔥 UK Today · {wide_today_count}</a>' if wide_today_count else ''}
+        <a href="#uk-wide">🇬🇧 Later · {wide_later_count}</a>
+        {f'<a class="today-pill" href="#today">🔥 Today · {wide_today_count}</a>' if wide_today_count else ''}
       </nav>
     </div>
   </header>

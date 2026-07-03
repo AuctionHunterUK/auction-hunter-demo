@@ -66,17 +66,6 @@
     .brand .logo { font-size: 1.5rem; }
     .meta { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
     .meta strong { color: var(--ink); }
-    .courier-link {
-      background: var(--accent); color: #fff;
-      border: none; cursor: pointer;
-      padding: 6px 14px; border-radius: 20px;
-      font-size: 0.7rem; font-family: inherit;
-      text-decoration: none;
-      display: inline-block;
-      font-weight: 600; white-space: nowrap;
-      transition: all 0.15s;
-    }
-    .courier-link:hover { background: #2c4a2d; }
     .search-box {
       flex: 1;
       min-width: 200px;
@@ -328,7 +317,6 @@
       .hstatus { margin-left: 0; flex-basis: 100%; gap: 4px 8px; }
       .update-ok { white-space: normal; font-size: .68rem; }
       .hstats { white-space: normal; font-size: .68rem; }
-      .courier-link { font-size: .62rem; padding: 4px 10px; }
       .app-nav-link { font-size: .62rem; padding: 4px 10px; }
       .hrow2 { gap: 6px 8px; }
       .search-box { min-width: 0; flex-basis: 100%; max-width: none; }
@@ -415,7 +403,6 @@ body.gate-locked{overflow:hidden}
     <div class="hstatus">
       <span class="update-ok">✅ Successfully updated - Friday 03 July 2026, 01:40</span>
       <span class="hstats"><strong>674 lots</strong> · 124 today · 172 new since yesterday</span>
-      <a href="https://my.proovia.delivery/dashboard" target="_blank" rel="noopener" class="courier-link">🚚 Proovia Couriers</a>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">🏛 Houses</a>
         <a href="../finds/" class="app-nav-link on">🌲 Finds</a>
@@ -432,8 +419,8 @@ body.gate-locked{overflow:hidden}
       <nav class="jump">
         <a class="new-pill" href="#" onclick="filterNew(); return false;">✨ 172 new</a>
         <a href="#local">📍 Local · 61</a>
-        <a href="#uk-wide">🇬🇧 UK Later · 513</a>
-        <a class="today-pill" href="#today">🔥 UK Today · 100</a>
+        <a href="#uk-wide">🇬🇧 Later · 513</a>
+        <a class="today-pill" href="#today">🔥 Today · 100</a>
       </nav>
     </div>
   </header>
