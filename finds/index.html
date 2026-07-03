@@ -311,6 +311,37 @@
     }
 
     @media (max-width: 800px) {
+      /* ── COMPACT MOBILE HEADER ──
+         Header un-sticks (scrolls away with content) and shrinks hard so
+         the lots get the screen. Also kills sideways scroll: nowrap items
+         are allowed to wrap, pill rows become horizontal swipers. */
+      html, body { overflow-x: hidden; }
+      header {
+        position: static;             /* scrolls away — frees the whole screen */
+        padding: 8px 12px 8px;
+        gap: 6px 10px;
+      }
+      header .tagline { display: none; }
+      .brand img { height: 26px !important; }
+      .brand h1 { font-size: 1rem; }
+      .demo-tag { font-size: .52rem; padding: 2px 7px; }
+      .hstatus { margin-left: 0; flex-basis: 100%; gap: 4px 8px; }
+      .update-ok { white-space: normal; font-size: .68rem; }
+      .hstats { white-space: normal; font-size: .68rem; }
+      .courier-link { font-size: .62rem; padding: 4px 10px; }
+      .app-nav-link { font-size: .62rem; padding: 4px 10px; }
+      .hrow2 { gap: 6px 8px; }
+      .search-box { min-width: 0; flex-basis: 100%; max-width: none; }
+      .term-tag { font-size: .6rem; padding: 3px 9px; }
+      nav.jump {
+        margin-left: 0; flex-basis: 100%;
+        flex-wrap: nowrap; overflow-x: auto;   /* one swipeable row */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      nav.jump::-webkit-scrollbar { display: none; }
+      nav.jump a { flex-shrink: 0; }
+
       #map-panel { display: none; }
       #cards-area { padding: 0 12px 40px; }
       #map-fab { display: block; }
