@@ -1,0 +1,48 @@
+<!-- ── PRIVATE DEMO LOGIN GATE ─────────────────────────────────────────
+     This app is a private demonstration. It is NOT open to the public.
+     Client-side gate: password is checked as a SHA-256 hash and access
+     lasts for the browser session only. To change the password, run:
+       echo -n "NewPassword" | shasum -a 256
+     and replace GATE_HASH below (in BOTH houses/ and finds/, and in the
+     finds scraper template). -->
+<div id="demo-gate">
+  <div id="demo-gate-card">
+    <img src="logo.png" alt="Auction Hunter" style="height:48px;width:auto;margin-bottom:14px">
+    <h2>Auction Hunter</h2>
+    <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+    <form id="demo-gate-form">
+      <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">Enter demo</button>
+    </form>
+    <p class="dg-err" id="demo-gate-err"></p>
+  </div>
+</div>
+<style>
+#demo-gate{position:fixed;inset:0;z-index:99999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#demo-gate-card{background:#fff;border:1px solid #ecedf0;border-radius:14px;box-shadow:0 8px 30px rgba(20,30,40,.08);padding:38px 40px;text-align:center;max-width:340px;width:90%}
+#demo-gate-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:#111827;margin:0 0 6px}
+#demo-gate-card .dg-sub{font-size:.8rem;color:#6b7280;line-height:1.5;margin:0 0 18px}
+#demo-gate-pw{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box}
+#demo-gate-pw:focus{border-color:#3a5c3b}
+#demo-gate-form button{width:100%;padding:10px 14px;border:none;border-radius:20px;background:#3a5c3b;color:#fff;font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer}
+#demo-gate-form button:hover{background:#2c4a2d}
+.dg-err{font-size:.75rem;color:#b91c1c;min-height:1em;margin:10px 0 0}
+body.gate-locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
+  var KEY='ah_demo_ok';
+  function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
+  if(sessionStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  document.body.classList.add('gate-locked');
+  async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
+  document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var pw=document.getElementById('demo-gate-pw').value;
+    var h=await sha256(pw);
+    if(h===GATE_HASH){sessionStorage.setItem(KEY,h);unlock();}
+    else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
+  });
+})();
+</script>
