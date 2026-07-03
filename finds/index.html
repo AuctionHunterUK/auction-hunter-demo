@@ -343,8 +343,12 @@
       nav.jump a { flex-shrink: 0; }
 
       #map-panel { display: none; }
-      #cards-area { padding: 0 12px 40px; }
-      #map-fab { display: block; }
+      #cards-area { padding: 0 12px 24px; }
+      /* No standalone map on mobile (Ken's call): a cold map with no pin lit
+         answers nothing. Map entrance will be tap-item -> pin (planned).
+         Footer also hidden on mobile to give listings the room. */
+      #map-fab { display: none; }
+      footer { display: none; }
       body.map-open #map-panel {
         display: block;
         position: fixed; inset: 0; z-index: 1550;
