@@ -237,6 +237,26 @@
       font-weight: 500;
       color: var(--muted);
     }
+    #cards-area section h2 .progress {
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      float: right;
+    }
+    #back-to-top {
+      position: fixed; left: 16px; bottom: 16px; z-index: 1400;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 999px;
+      width: 44px; height: 44px;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(40,30,15,0.28);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    #back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
     .masonry { column-count: 4; column-gap: 18px; }
     @media (max-width: 1300px) { .masonry { column-count: 3; } }
     @media (max-width: 1000px) { .masonry { column-count: 2; } }
@@ -477,7 +497,7 @@ body.gate-locked{overflow:hidden}
     <div id="cards-area">
       
     <section id="local" class="local-section">
-      <h2>📍 Local auctions <span class="count">61 lots</span></h2>
+      <h2>📍 Local auctions <span class="count">61 lots</span> <span class="progress" data-total="61"></span></h2>
       <div class="masonry">
     <a class="card" href="https://www.easyliveauction.com/catalogue/lot/3b2cbda0a1f159b172d58aefdaa9fde5/0af8d24542e81eb9357e7ef448a6646f/2-day-auction-appx-2000-lots-to-inc-fine-art-modern-lot-243/" target="_blank" rel="noopener">
       <div class="card-img"><img src="images/f1f82c5d8e36.jpg" alt="VICTORIAN PINE PLANT STAND" width="400" height="300" loading="lazy"></div>
@@ -1108,7 +1128,7 @@ body.gate-locked{overflow:hidden}
     </section>
       
     <section id="today" class="today-section">
-      <h2>🔥 UK-Wide · selling today (Fri 3rd Jul 2026) <span class="count">100 lots</span></h2>
+      <h2>🔥 UK-Wide · selling today (Fri 3rd Jul 2026) <span class="count">100 lots</span> <span class="progress" data-total="100"></span></h2>
       <div class="masonry">
     <a class="card" href="https://www.easyliveauction.com/catalogue/lot/cca19ef73191300dd7f1d2e940e6da13/0af8d24542e81eb9357e7ef448a6646f/timed-household-garden-antiques-and-collectables-sale-lot-216/" target="_blank" rel="noopener">
       <div class="card-img"><img src="images/ddffee96a55c.jpg" alt="Pine framed mirror. 58 x 47cm." width="400" height="300" loading="lazy"></div>
@@ -2202,7 +2222,7 @@ body.gate-locked{overflow:hidden}
     </section>
       
     <section id="uk-wide" class="later-section">
-      <h2>🇬🇧 UK-Wide · later <span class="count">513 lots</span></h2>
+      <h2>🇬🇧 UK-Wide · later <span class="count">513 lots</span> <span class="progress" data-total="513"></span></h2>
       <div class="masonry">
     <a class="card" href="https://www.easyliveauction.com/catalogue/lot/9bcce6e6f1cb6d91388691365dedde89/0af8d24542e81eb9357e7ef448a6646f/antiques-and-general-auction-including-ludwig-1960s70-lot-225/" target="_blank" rel="noopener">
       <div class="card-img"><img src="images/ebce5f30dcc2.jpg" alt="Pine Storage Box" width="400" height="300" loading="lazy"></div>
@@ -7530,6 +7550,7 @@ body.gate-locked{overflow:hidden}
   </div>
 
   <button id="map-fab" onclick="openMobileMap()">🗺 Map</button>
+  <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
 
   <footer>
     Auction Hunter · lots refreshed daily from EasyLive
@@ -8191,6 +8212,45 @@ const PC_MAP = {
     function closeMobileMap() {
       document.body.classList.remove('map-open');
     }
+
+    // ── Scroll progress counter ──
+    (function initScrollProgress() {
+      const cardsArea = document.getElementById('cards-area');
+      if (!cardsArea) return;
+      const sections = Array.from(cardsArea.querySelectorAll('section[id]'));
+      let ticking = false;
+      function updateProgress() {
+        const headerBottom = cardsArea.getBoundingClientRect().top;
+        sections.forEach(section => {
+          const progressEl = section.querySelector('.progress');
+          if (!progressEl) return;
+          const cards = Array.from(section.querySelectorAll('.card')).filter(c => c.offsetParent !== null);
+          const total = cards.length;
+          if (!total) { progressEl.textContent = ''; return; }
+          const passed = cards.filter(c => c.getBoundingClientRect().top < headerBottom).length;
+          progressEl.textContent = passed > 0 ? `${passed} of ${total} seen` : '';
+        });
+        ticking = false;
+      }
+      cardsArea.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(updateProgress); ticking = true; }
+      }, { passive: true });
+      updateProgress();
+    })();
+
+    // ── Back to top ──
+    function scrollCardsToTop() {
+      const cardsArea = document.getElementById('cards-area');
+      if (cardsArea) cardsArea.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    (function initBackToTop() {
+      const cardsArea = document.getElementById('cards-area');
+      const btn = document.getElementById('back-to-top');
+      if (!cardsArea || !btn) return;
+      cardsArea.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', cardsArea.scrollTop > 500);
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
