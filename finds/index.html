@@ -22,6 +22,8 @@
       --chip-ink: #4b5563;
       --local-bg: #f1f5f1;
       --local-border: #3a5c3b;
+      --later-bg: #f6f5f2;
+      --later-border: #a8a196;
       --shadow: 0 1px 3px rgba(20,30,40,0.05), 0 4px 12px rgba(20,30,40,0.05);
       --shadow-hover: 0 4px 10px rgba(20,30,40,0.09), 0 10px 28px rgba(20,30,40,0.10);
       --radius: 10px;
@@ -49,7 +51,13 @@
     /* Tagline folded away on desktop too — the app is self-explanatory and the
        vertical space is better spent on lots. Still in DOM for SEO/context. */
     header .tagline { display: none; }
-    .hstatus { display: flex; align-items: center; gap: 6px 14px; margin-left: auto; flex-wrap: wrap; }
+    .hstatus { display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; }
+    /* headtop holds ONLY brand + toggle — identical markup on both Finds and
+       Houses. It always claims its own full-width line (flex-basis:100%),
+       so its layout depends purely on viewport width, never on how long the
+       page-specific status text below happens to be. That's what guarantees
+       the toggle lands in the same place on both pages. */
+    .headtop { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     .update-ok { font-size: .78rem; color: #22c55e; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
     .hstats { font-size: .78rem; color: var(--muted); white-space: nowrap; }
     .hstats strong { color: var(--ink); }
@@ -201,12 +209,29 @@
       border-radius: var(--radius);
       margin: 36px 0 0;
     }
+    #cards-area section.later-section {
+      background: var(--later-bg);
+      border-left: 4px solid var(--later-border);
+      padding: 28px 24px 32px;
+      border-radius: var(--radius);
+      margin: 36px 0 0;
+    }
     #cards-area section h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       margin-bottom: 18px;
       font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 10px 0;
+      margin: 0 -24px 8px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
+    #cards-area section.local-section h2 { background: var(--local-bg); }
+    #cards-area section.today-section h2 { background: #eef2f6; }
+    #cards-area section.later-section h2 { background: var(--later-bg); }
     #cards-area section h2 .count {
       font-size: 0.82rem;
       font-weight: 500;
@@ -325,10 +350,11 @@
         gap: 6px 10px;
       }
       header .tagline { display: none; }
+      .headtop { flex-basis: 100%; }
       .brand img { height: 26px !important; }
       .brand h1 { font-size: 1rem; }
       .demo-tag { font-size: .52rem; padding: 2px 7px; }
-      .hstatus { margin-left: 0; flex-basis: 100%; gap: 4px 8px; }
+      .hstatus { flex-basis: 100%; gap: 4px 8px; }
       .update-ok { white-space: normal; font-size: .68rem; }
       .hstats { white-space: normal; font-size: .68rem; }
       .app-nav { padding: 2px; }
@@ -399,29 +425,31 @@ body.gate-locked{overflow:hidden}
   var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
   var KEY='ah_demo_ok';
   function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
-  if(sessionStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
   document.body.classList.add('gate-locked');
   async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
   document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
     e.preventDefault();
     var pw=document.getElementById('demo-gate-pw').value;
     var h=await sha256(pw);
-    if(h===GATE_HASH){sessionStorage.setItem(KEY,h);unlock();}
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
     else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
   });
 })();
 </script>
 
   <header>
-    <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Private demo</span></div>
-    <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
-    <div class="hstatus">
-      <span class="update-ok">✅ Successfully updated - Friday 03 July 2026, 22:27</span>
-      <span class="hstats"><strong>674 lots</strong> · 124 today · 0 new since yesterday</span>
+    <div class="headtop">
+      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Private demo</span></div>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">🏛 Houses</a>
         <a href="../finds/" class="app-nav-link on">🌲 Finds</a>
       </nav>
+    </div>
+    <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
+    <div class="hstatus">
+      <span class="update-ok">✅ Successfully updated - Friday 03 July 2026, 22:27</span>
+      <span class="hstats"><strong>674 lots</strong> · 124 today · 0 new since yesterday</span>
     </div>
     <div class="hrow2">
       <div class="search-box" id="searchBox">
@@ -2173,7 +2201,7 @@ body.gate-locked{overflow:hidden}
     </a></div>
     </section>
       
-    <section id="uk-wide" class="">
+    <section id="uk-wide" class="later-section">
       <h2>🇬🇧 UK-Wide · later <span class="count">513 lots</span></h2>
       <div class="masonry">
     <a class="card" href="https://www.easyliveauction.com/catalogue/lot/9bcce6e6f1cb6d91388691365dedde89/0af8d24542e81eb9357e7ef448a6646f/antiques-and-general-auction-including-ludwig-1960s70-lot-225/" target="_blank" rel="noopener">

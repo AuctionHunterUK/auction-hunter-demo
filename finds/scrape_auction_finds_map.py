@@ -412,7 +412,7 @@ def _section_html(title, lots, anchor, seen, postcodes, css_class=""):
     new_pill = f' <span class="new-count">{new_count} new</span>' if new_count else ""
     return f"""
     <section id="{anchor}" class="{css_class}">
-      <h2>{title} <span class="count">{len(lots)} lots</span>{new_pill}</h2>
+      <h2>{title} <span class="count">{len(lots)} lots</span>{new_pill} <span class="progress" data-total="{len(lots)}"></span></h2>
       <div class="masonry">{cards}</div>
     </section>"""
 
@@ -456,14 +456,14 @@ body.gate-locked{overflow:hidden}
   var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
   var KEY='ah_demo_ok';
   function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
-  if(sessionStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
   document.body.classList.add('gate-locked');
   async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
   document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
     e.preventDefault();
     var pw=document.getElementById('demo-gate-pw').value;
     var h=await sha256(pw);
-    if(h===GATE_HASH){sessionStorage.setItem(KEY,h);unlock();}
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
     else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
   });
 })();
@@ -509,7 +509,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     # Render card sections
     local_html = _section_html("📍 Local auctions", local_lots, "local", seen, postcodes, "local-section")
     today_html = _section_html(f"🔥 UK-Wide · selling today ({today_str})", wide_today, "today", seen, postcodes, "today-section") if wide_today else ""
-    later_html = _section_html("🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes, "")
+    later_html = _section_html("🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes, "later-section")
 
     local_local_count = len(local_lots)
     wide_today_count = len(wide_today)
@@ -539,6 +539,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       --chip-ink: #4b5563;
       --local-bg: #f1f5f1;
       --local-border: #3a5c3b;
+      --later-bg: #f6f5f2;
+      --later-border: #a8a196;
       --shadow: 0 1px 3px rgba(20,30,40,0.05), 0 4px 12px rgba(20,30,40,0.05);
       --shadow-hover: 0 4px 10px rgba(20,30,40,0.09), 0 10px 28px rgba(20,30,40,0.10);
       --radius: 10px;
@@ -566,7 +568,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     /* Tagline folded away on desktop too — the app is self-explanatory and the
        vertical space is better spent on lots. Still in DOM for SEO/context. */
     header .tagline {{ display: none; }}
-    .hstatus {{ display: flex; align-items: center; gap: 6px 14px; margin-left: auto; flex-wrap: wrap; }}
+    .hstatus {{ display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; }}
+    /* headtop holds ONLY brand + toggle — identical markup on both Finds and
+       Houses. It always claims its own full-width line (flex-basis:100%),
+       so its layout depends purely on viewport width, never on how long the
+       page-specific status text below happens to be. That's what guarantees
+       the toggle lands in the same place on both pages. */
+    .headtop {{ display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }}
     .update-ok {{ font-size: .78rem; color: #22c55e; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap; }}
     .hstats {{ font-size: .78rem; color: var(--muted); white-space: nowrap; }}
     .hstats strong {{ color: var(--ink); }}
@@ -718,17 +726,58 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       border-radius: var(--radius);
       margin: 36px 0 0;
     }}
+    #cards-area section.later-section {{
+      background: var(--later-bg);
+      border-left: 4px solid var(--later-border);
+      padding: 28px 24px 32px;
+      border-radius: var(--radius);
+      margin: 36px 0 0;
+    }}
+    /* Sticky per-section headers: as the user scrolls through a section it
+       stays pinned just under the main header, so which group (Local/Today/
+       Later) they're browsing is always visible. #cards-area is the scroll
+       container, so top:0 here means "flush against the app header." */
     #cards-area section h2 {{
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       margin-bottom: 18px;
       font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 10px 0;
+      margin: 0 -24px 8px;
+      padding-left: 24px;
+      padding-right: 24px;
     }}
+    #cards-area section.local-section h2 {{ background: var(--local-bg); }}
+    #cards-area section.today-section h2 {{ background: #eef2f6; }}
+    #cards-area section.later-section h2 {{ background: var(--later-bg); }}
     #cards-area section h2 .count {{
       font-size: 0.82rem;
       font-weight: 500;
       color: var(--muted);
     }}
+    #cards-area section h2 .progress {{
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      float: right;
+    }}
+    #back-to-top {{
+      position: fixed; left: 16px; bottom: 16px; z-index: 1400;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 999px;
+      width: 44px; height: 44px;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(40,30,15,0.28);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .18s ease, transform .18s ease;
+    }}
+    #back-to-top.visible {{ opacity: 1; pointer-events: auto; transform: translateY(0); }}
     .masonry {{ column-count: 4; column-gap: 18px; }}
     @media (max-width: 1300px) {{ .masonry {{ column-count: 3; }} }}
     @media (max-width: 1000px) {{ .masonry {{ column-count: 2; }} }}
@@ -842,10 +891,11 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         gap: 6px 10px;
       }}
       header .tagline {{ display: none; }}
+      .headtop {{ flex-basis: 100%; }}
       .brand img {{ height: 26px !important; }}
       .brand h1 {{ font-size: 1rem; }}
       .demo-tag {{ font-size: .52rem; padding: 2px 7px; }}
-      .hstatus {{ margin-left: 0; flex-basis: 100%; gap: 4px 8px; }}
+      .hstatus {{ flex-basis: 100%; gap: 4px 8px; }}
       .update-ok {{ white-space: normal; font-size: .68rem; }}
       .hstats {{ white-space: normal; font-size: .68rem; }}
       .app-nav {{ padding: 2px; }}
@@ -882,15 +932,17 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 <body>
 {gate_html}
   <header>
-    <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Private demo</span></div>
-    <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
-    <div class="hstatus">
-      <span class="update-ok">✅ Successfully updated - {now}</span>
-      <span class="hstats"><strong>{total} lots</strong> · {today_total} today · {new_total} new since yesterday</span>
+    <div class="headtop">
+      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Private demo</span></div>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">🏛 Houses</a>
         <a href="../finds/" class="app-nav-link on">🌲 Finds</a>
       </nav>
+    </div>
+    <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
+    <div class="hstatus">
+      <span class="update-ok">✅ Successfully updated - {now}</span>
+      <span class="hstats"><strong>{total} lots</strong> · {today_total} today · {new_total} new since yesterday</span>
     </div>
     <div class="hrow2">
       <div class="search-box" id="searchBox">
@@ -923,6 +975,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
   </div>
 
   <button id="map-fab" onclick="openMobileMap()">🗺 Map</button>
+  <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
 
   <footer>
     Auction Hunter · lots refreshed daily from EasyLive
@@ -1094,6 +1147,48 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function closeMobileMap() {{
       document.body.classList.remove('map-open');
     }}
+
+    // ── Scroll progress counter ──
+    // Updates each section's "X of Y seen" label as the user scrolls past
+    // cards. Counts only currently-visible cards (offsetParent check) so it
+    // stays accurate when the search box has filtered some lots out.
+    (function initScrollProgress() {{
+      const cardsArea = document.getElementById('cards-area');
+      if (!cardsArea) return;
+      const sections = Array.from(cardsArea.querySelectorAll('section[id]'));
+      let ticking = false;
+      function updateProgress() {{
+        const headerBottom = cardsArea.getBoundingClientRect().top;
+        sections.forEach(section => {{
+          const progressEl = section.querySelector('.progress');
+          if (!progressEl) return;
+          const cards = Array.from(section.querySelectorAll('.card')).filter(c => c.offsetParent !== null);
+          const total = cards.length;
+          if (!total) {{ progressEl.textContent = ''; return; }}
+          const passed = cards.filter(c => c.getBoundingClientRect().top < headerBottom).length;
+          progressEl.textContent = passed > 0 ? `${{passed}} of ${{total}} seen` : '';
+        }});
+        ticking = false;
+      }}
+      cardsArea.addEventListener('scroll', () => {{
+        if (!ticking) {{ requestAnimationFrame(updateProgress); ticking = true; }}
+      }}, {{ passive: true }});
+      updateProgress();
+    }})();
+
+    // ── Back to top ──
+    function scrollCardsToTop() {{
+      const cardsArea = document.getElementById('cards-area');
+      if (cardsArea) cardsArea.scrollTo({{ top: 0, behavior: 'smooth' }});
+    }}
+    (function initBackToTop() {{
+      const cardsArea = document.getElementById('cards-area');
+      const btn = document.getElementById('back-to-top');
+      if (!cardsArea || !btn) return;
+      cardsArea.addEventListener('scroll', () => {{
+        btn.classList.toggle('visible', cardsArea.scrollTop > 500);
+      }}, {{ passive: true }});
+    }})();
   </script>
 </body>
 </html>"""

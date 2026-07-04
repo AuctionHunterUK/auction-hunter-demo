@@ -34,14 +34,14 @@ body.gate-locked{overflow:hidden}
   var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
   var KEY='ah_demo_ok';
   function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
-  if(sessionStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
   document.body.classList.add('gate-locked');
   async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
   document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
     e.preventDefault();
     var pw=document.getElementById('demo-gate-pw').value;
     var h=await sha256(pw);
-    if(h===GATE_HASH){sessionStorage.setItem(KEY,h);unlock();}
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
     else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
   });
 })();

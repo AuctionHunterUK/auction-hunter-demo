@@ -22,15 +22,30 @@ body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;backgro
 .app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
 .app-nav-link.on{background:var(--pine);color:#fff;box-shadow:0 1px 4px rgba(58,92,59,.35)}
 .app-nav-link.on:hover{background:var(--pine)}
-/* Mobile header sizes — mirror the Finds page so the two headers match on phones */
+.demo-tag{font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;padding:3px 9px;border-radius:20px;white-space:nowrap}
+/* headtop holds ONLY brand + toggle — identical markup to the Finds page.
+   Its own layout depends purely on viewport width, never on how long the
+   page-specific status text below happens to be, which is what guarantees
+   the toggle lands in the same place on both pages. */
+.headtop{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+/* Mobile header sizes — mirror the Finds page so the two headers match on phones.
+   Must come AFTER the base .demo-tag rule above: equal-specificity CSS rules are
+   decided by source order, not by which one is inside a media query, so this
+   block previously did nothing on mobile because it sat before the base rule. */
 @media(max-width:767px){
-  header>div:first-child img{height:26px!important}
-  header>div:first-child h1{font-size:1rem!important}
+  .brand img{height:26px!important}
+  .brand h1{font-size:1rem!important}
   .demo-tag{font-size:.52rem;padding:2px 7px}
   .app-nav{padding:2px}
   .app-nav-link{font-size:.72rem;padding:5px 13px}
+  /* Force the same explicit two-row split Finds uses, instead of letting this
+     row wrap organically based on how much status text happens to fit — that
+     made the toggle/logo land in different places between the two pages. */
+  header{align-items:flex-start;padding:8px 12px}
+  .tagline{display:none}
+  .headtop{flex-basis:100%}
+  .hrow2{flex-basis:100%;margin-left:0;flex-wrap:wrap;gap:6px 10px}
 }
-.demo-tag{font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;padding:3px 9px;border-radius:20px;white-space:nowrap}
 
 /* ── HEADER ── */
 header{background:#fff;border-bottom:1px solid var(--line);padding:14px 24px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:1000;flex-wrap:wrap;gap:8px}
@@ -455,35 +470,37 @@ body.gate-locked{overflow:hidden}
   var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
   var KEY='ah_demo_ok';
   function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
-  if(sessionStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
   document.body.classList.add('gate-locked');
   async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
   document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
     e.preventDefault();
     var pw=document.getElementById('demo-gate-pw').value;
     var h=await sha256(pw);
-    if(h===GATE_HASH){sessionStorage.setItem(KEY,h);unlock();}
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
     else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
   });
 })();
 </script>
 
 <header>
-  <div onclick="goHome()" title="Back to start — reset to today's auctions" style="display:flex;align-items:center;gap:10px;cursor:pointer">
-    <img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto">
-    <h1 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;color:#111827;white-space:nowrap;margin:0">Auction Hunter</h1>
-    <span class="demo-tag">🔒 Private demo</span>
-  </div>
-  <p style="margin:0;font-size:0.78rem;color:#6b7280;max-width:380px;line-height:1.3">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
-  <div style="display:flex;align-items:center;gap:8px">
-    <span id="update-status">✅ Loading dates…</span>
-    <span id="updated-badge">1 May 2026</span>
-    <span class="hright" id="hright">Loading…</span>
-    <a href="about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:4px">About</a>
+  <div class="headtop">
+    <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions" style="display:flex;align-items:center;gap:10px;cursor:pointer">
+      <img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto">
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;color:#111827;white-space:nowrap;margin:0">Auction Hunter</h1>
+      <span class="demo-tag">🔒 Private demo</span>
+    </div>
     <nav class="app-nav" aria-label="App pages">
       <a href="../houses/" class="app-nav-link on">🏛 Houses</a>
       <a href="../finds/" class="app-nav-link">🌲 Finds</a>
     </nav>
+  </div>
+  <p class="tagline" style="margin:0;font-size:0.78rem;color:#6b7280;max-width:380px;line-height:1.3">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
+  <div class="hrow2" style="display:flex;align-items:center;gap:8px">
+    <span id="update-status">✅ Loading dates…</span>
+    <span id="updated-badge">1 May 2026</span>
+    <span class="hright" id="hright">Loading…</span>
+    <a href="about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:4px">About</a>
   </div>
 </header>
 <div id="toolbar">
