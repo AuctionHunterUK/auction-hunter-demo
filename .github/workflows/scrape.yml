@@ -1,0 +1,63 @@
+name: Scrape auction data (houses + finds)
+
+on:
+  workflow_dispatch:        # external trigger (cron-job.org) POSTs here
+  schedule:
+    - cron: '0 4 * * *'     # 04:00 UTC = 05:00 BST  (backup; cron-job.org is primary)
+    - cron: '30 4 * * *'    # second attempt in case the first is silently skipped
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "scrape-combined"
+  cancel-in-progress: true
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      # --- HOUSES: auction sale dates -> houses/dates.json ---
+      # The houses scraper uses GITHUB_WORKSPACE as its REPO_DIR, so point it
+      # at the houses/ subdirectory (where its index.html + dates.json live).
+      - name: Scrape house dates
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}/houses
+        run: python houses/scrape_map_dates.py --no-push
+        continue-on-error: true   # a houses failure must not block the finds refresh
+
+      # --- FINDS: pine lot feed -> finds/index.html, data.json, images/ ---
+      - name: Scrape auction finds
+        env:
+          REPO_DIR: ${{ github.workspace }}/finds
+          POSTCODES_FILE: ${{ github.workspace }}/finds/house_postcodes.json
+        run: python finds/scrape_auction_finds_map.py
+
+      # --- Commit everything both scrapers produced, in one push ---
+      - name: Commit and push
+        run: |
+          git config user.name "Auction Hunter Bot"
+          git config user.email "actions@auctionhunter.co.uk"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Auto update: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase --autostash
+          git push --force-with-lease
