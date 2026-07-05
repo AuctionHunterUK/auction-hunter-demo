@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auction Hunter — About</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="About Auction Hunter — a private demonstration combining a UK auction lot feed and auction house map.">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:#f8f9fa;color:#374151;line-height:1.65;padding:64px 20px;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+  .wrap{max-width:640px;width:100%;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:44px 48px}
+  h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
+  .sub{color:#7b8290;font-size:.92rem;margin-bottom:32px}
+  h2{font-size:.78rem;color:#3a5c3b;margin:28px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+  p{font-size:.93rem;color:#4b5563;margin-bottom:12px}
+  a{color:#4b6b8a;text-decoration:none}
+  a:hover{text-decoration:underline}
+  ul{list-style:none;padding:0}
+  ul li{padding:5px 0;font-size:.9rem;color:#4b5563}
+  ul li::before{content:"— ";color:#3a5c3b}
+  .easylive-box{margin-top:28px;background:#f8faf8;border:1px solid #d7e4d7;border-left:4px solid #3a5c3b;border-radius:10px;padding:20px 22px}
+  .easylive-box h2{margin-top:0}
+  .easylive-box p{margin-bottom:10px}
+  .easylive-box p:last-child{margin-bottom:0}
+  .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
+</style>
+</head>
+<body>
+<!-- ── PRIVATE DEMO LOGIN GATE ───────────────────────────────────────── -->
+<div id="demo-gate">
+  <div id="demo-gate-card">
+    <img src="logo.png" alt="Auction Hunter" style="height:48px;width:auto;margin-bottom:14px">
+    <h2>Auction Hunter</h2>
+    <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+    <form id="demo-gate-form">
+      <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">Enter demo</button>
+    </form>
+    <p class="dg-err" id="demo-gate-err"></p>
+  </div>
+</div>
+<style>
+#demo-gate{position:fixed;inset:0;z-index:99999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#demo-gate-card{background:#fff;border:1px solid #ecedf0;border-radius:14px;box-shadow:0 8px 30px rgba(20,30,40,.08);padding:38px 40px;text-align:center;max-width:340px;width:90%}
+#demo-gate-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:#111827;margin:0 0 6px}
+#demo-gate-card .dg-sub{font-size:.8rem;color:#6b7280;line-height:1.5;margin:0 0 18px}
+#demo-gate-pw{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box}
+#demo-gate-pw:focus{border-color:#3a5c3b}
+#demo-gate-form button{width:100%;padding:10px 14px;border:none;border-radius:20px;background:#3a5c3b;color:#fff;font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer}
+#demo-gate-form button:hover{background:#2c4a2d}
+.dg-err{font-size:.75rem;color:#b91c1c;min-height:1em;margin:10px 0 0}
+body.gate-locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  var GATE_HASH='3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26';
+  var KEY='ah_demo_ok';
+  function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  document.body.classList.add('gate-locked');
+  async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
+  document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var pw=document.getElementById('demo-gate-pw').value;
+    var h=await sha256(pw);
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
+    else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
+  });
+})();
+</script>
+
+<div class="wrap">
+  <h1><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto;vertical-align:middle;margin-right:8px">Auction Hunter</h1>
+  <div class="sub">A private demonstration — two tools, one idea</div>
+
+  <p>Auction Hunter is a proof-of-concept for UK antique dealers and collectors: find what's for sale, see where it is, and decide if it's worth the trip. This demo has two pages, working together.</p>
+
+  <h2>Finds</h2>
+  <p>A daily feed of pine furniture lots scraped from EasyLive listings, organised into Local, Today, and Later. Each lot links straight through to bid.</p>
+
+  <h2>Houses</h2>
+  <p>An interactive map of UK auction houses, colour-coded by when their next sale is, with a route planner for finding houses along a journey.</p>
+
+  <h2>What's next</h2>
+  <p>The long-term idea is a subscription product: a free map tier, with paid tiers adding personalised search terms, a saved list of local auction houses, and alerts. This demo doesn't build those yet — it's here to show what the product looks like once they exist.</p>
+
+  <div class="easylive-box">
+    <h2>A note for EasyLive</h2>
+    <p>This demo currently pulls publicly listed auction data from EasyLive to show what this kind of product could look like. It isn't a public product — it's invitation-only, not linked from anywhere public, and not intended for anyone outside this conversation.</p>
+    <p>If this moves beyond a demo, the intention is to work directly with EasyLive on a proper data partnership, rather than continuing to source listings independently.</p>
+  </div>
+
+  <h2>Contact</h2>
+  <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
+
+  <div class="footer">Auction Hunter. Private demo — invitation only.</div>
+</div>
+</body>
+</html>

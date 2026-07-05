@@ -933,10 +933,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 {gate_html}
   <header>
     <div class="headtop">
-      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Private demo</span></div>
+      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Demo</span><a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a></div>
       <nav class="app-nav" aria-label="App pages">
-        <a href="../houses/" class="app-nav-link">🏛 Houses</a>
-        <a href="../finds/" class="app-nav-link on">🌲 Finds</a>
+        <a href="../houses/" class="app-nav-link">Map</a>
+        <a href="../finds/" class="app-nav-link on">Lots</a>
       </nav>
     </div>
     <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
@@ -950,8 +950,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
       </div>
       <span class="search-results" id="searchResults"></span>
-      <span class="term-tag">Current search term: <strong>{terms_str}</strong> <span class="term-soon">· Coming soon: edit search term for next update</span></span>
-      <span class="term-tag">Local auctions: <strong>6 houses</strong> <span class="term-soon">· Coming soon: edit local auctions</span></span>
       <nav class="jump">
         {f'<a class="new-pill" href="#" onclick="filterNew(); return false;">New · {new_total}</a>' if new_total else ''}
         <a href="#local">Local · {local_local_count}</a>

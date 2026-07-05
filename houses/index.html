@@ -97,10 +97,12 @@ header h1{font-family:'Playfair Display',serif;font-size:1rem;color:#111827;whit
 #sbsearch-row{display:none}
 #sblist{background:var(--surface-2);flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 8px}
 #sblist::-webkit-scrollbar{width:3px}
-.si{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow .12s,border-color .12s;border:1px solid var(--line);box-shadow:0 1px 2px 0 rgba(0,0,0,.04)}
+.si{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow .12s,border-color .12s,background .15s;border:1px solid var(--line);box-shadow:0 1px 2px 0 rgba(0,0,0,.04)}
+@keyframes si-pulse{0%{box-shadow:0 0 0 0 rgba(45,74,62,.35)}100%{box-shadow:0 0 0 14px rgba(45,74,62,0)}}
+.si.pulse{animation:si-pulse .8s ease-out}
 .si:hover{box-shadow:0 4px 14px rgba(0,0,0,.07);border-color:#dfe1e6}
 .si:active{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}
-.si.on{border-left:3px solid #2d4a3e;border-color:#2d4a3e #e5e7eb #e5e7eb #e5e7eb}
+.si.on{border-left:4px solid #2d4a3e;border-top-color:#e5e7eb;border-right-color:#e5e7eb;border-bottom-color:#e5e7eb;background:#f1f5f1;box-shadow:0 2px 10px rgba(45,74,62,.18)}
 .si-name{font-size:.85rem;font-weight:600;color:#111827;line-height:1.3;margin-bottom:4px}
 .si-addr{font-size:.7rem;color:#6b7280;margin-bottom:6px}
 .si-title{font-size:.65rem;color:#2d4a3e;margin:3px 0 0 12px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -488,11 +490,12 @@ body.gate-locked{overflow:hidden}
     <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions" style="display:flex;align-items:center;gap:10px;cursor:pointer">
       <img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto">
       <h1 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;color:#111827;white-space:nowrap;margin:0">Auction Hunter</h1>
-      <span class="demo-tag">🔒 Private demo</span>
+      <span class="demo-tag">🔒 Demo</span>
+      <a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a>
     </div>
     <nav class="app-nav" aria-label="App pages">
-      <a href="../houses/" class="app-nav-link on">🏛 Houses</a>
-      <a href="../finds/" class="app-nav-link">🌲 Finds</a>
+      <a href="../houses/" class="app-nav-link on">Map</a>
+      <a href="../finds/" class="app-nav-link">Lots</a>
     </nav>
   </div>
   <p class="tagline" style="margin:0;font-size:0.78rem;color:#6b7280;max-width:380px;line-height:1.3">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
@@ -500,7 +503,6 @@ body.gate-locked{overflow:hidden}
     <span id="update-status">✅ Loading dates…</span>
     <span id="updated-badge">1 May 2026</span>
     <span class="hright" id="hright">Loading…</span>
-    <a href="about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:4px">About</a>
   </div>
 </header>
 <div id="toolbar">
@@ -1003,12 +1005,19 @@ function buildSB(houses){
 }
 
 function hlSB(id){
-  document.querySelectorAll('.si').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.si').forEach(e=>e.classList.remove('on','pulse'));
   const el=document.querySelector(`.si[data-id="${id}"]`);
   if(el){
     el.classList.add('on');
     // Only scroll into view on desktop — on mobile the sheet closes anyway
     if(window.innerWidth >= 768) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+    // Brief pulse so the eye catches it the instant it lands, on top of the
+    // sustained tint/border. Re-triggerable: force reflow so repeated clicks
+    // on the same house restart the animation rather than doing nothing.
+    requestAnimationFrame(()=>{
+      el.classList.add('pulse');
+      setTimeout(()=>el.classList.remove('pulse'), 850);
+    });
   }
 }
 
