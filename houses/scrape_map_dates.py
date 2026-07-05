@@ -18,9 +18,13 @@ MONTHS = {"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,
 HEADERS = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
 
 # Paths
-# On GitHub Actions, GITHUB_WORKSPACE is the checked-out repo root.
-# Locally, fall back to the cloned repo under ~/auction-dates/auction-map.
-if os.environ.get("GITHUB_WORKSPACE"):
+# REPO_DIR points at the folder holding this app's index.html + dates.json.
+# Prefer an explicit REPO_DIR env var (set by the workflow) — do NOT rely on
+# GITHUB_WORKSPACE: it is a reserved GitHub Actions variable that cannot be
+# overridden, so it always points at the repo ROOT, not the houses/ subfolder.
+if os.environ.get("REPO_DIR"):
+    REPO_DIR = Path(os.environ["REPO_DIR"])
+elif os.environ.get("GITHUB_WORKSPACE"):
     REPO_DIR = Path(os.environ["GITHUB_WORKSPACE"])
 else:
     REPO_DIR = Path.home() / "auction-dates" / "auction-map"

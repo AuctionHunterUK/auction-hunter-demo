@@ -33,11 +33,13 @@ jobs:
           pip install requests beautifulsoup4
 
       # --- HOUSES: auction sale dates -> houses/dates.json ---
-      # The houses scraper uses GITHUB_WORKSPACE as its REPO_DIR, so point it
-      # at the houses/ subdirectory (where its index.html + dates.json live).
+      # Point the houses scraper at the houses/ subdir via REPO_DIR.
+      # NOTE: do NOT use GITHUB_WORKSPACE here — it's a reserved Actions var
+      # that cannot be overridden, so it always resolves to the repo root
+      # (whose index.html is just a redirect stub with no ALL_HOUSES array).
       - name: Scrape house dates
         env:
-          GITHUB_WORKSPACE: ${{ github.workspace }}/houses
+          REPO_DIR: ${{ github.workspace }}/houses
         run: python houses/scrape_map_dates.py --no-push
         continue-on-error: true   # a houses failure must not block the finds refresh
 
