@@ -327,7 +327,8 @@ def house_meta(house, postcodes):
             addr = addr.replace(pc, "").strip().rstrip(",")
         loc = addr
     map_url = f"https://www.google.com/maps/search/?api=1&query={pc.replace(' ', '+')}" if pc else None
-    return {"postcode": pc, "location": loc, "map_url": map_url, "known": True}
+    easylive_url = info.get("url") or None
+    return {"postcode": pc, "location": loc, "map_url": map_url, "easylive_url": easylive_url, "known": True}
 
 
 # --- HTML rendering -------------------------------------------------------
@@ -374,15 +375,17 @@ def _card_html(lot, is_new, postcodes):
     new_badge = '<span class="new-badge">NEW</span>' if is_new else ""
 
     h = house_meta(lot.get("house", ""), postcodes)
-    if h["known"] and h["map_url"]:
+    if h["known"] and (h["easylive_url"] or h["map_url"]):
+        link = h["easylive_url"] or h["map_url"]
+        dest_label = "EasyLive" if h["easylive_url"] else "map"
         tooltip = f'📍 {h["postcode"]}'
         if h["location"]:
             tooltip += f' · {h["location"]}'
-        tooltip += ' · click for map'
+        tooltip += f' · click for {dest_label}'
         house_html_str = (
             f'<span class="house" data-tip="{tooltip}" '
             f'onclick="event.preventDefault(); event.stopPropagation(); '
-            f"window.open('{h['map_url']}','_blank'); "
+            f"window.open('{link}','_blank'); "
             f'">{lot["house"]} <span class="pc">{h["postcode"]}</span></span>'
         )
     elif h["known"]:
@@ -499,11 +502,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         pc = info.get("postcode", "")
         lat = info.get("lat")
         lng = info.get("lng")
+        url = info.get("url", "")
         if pc and lat and lng:
             pc_key = pc.replace(" ", "").upper()
             n_esc = info["name"] if "name" in info else name
             n_esc = json.dumps(n_esc)
-            pc_entries.append(f'  "{pc_key}":{{name:{n_esc},lat:{lat},lng:{lng}}}')
+            u_esc = json.dumps(url)
+            pc_entries.append(f'  "{pc_key}":{{name:{n_esc},lat:{lat},lng:{lng},url:{u_esc}}}')
     pc_map_js = "const PC_MAP = {\n" + ",\n".join(pc_entries) + "\n};"
 
     # Render card sections
