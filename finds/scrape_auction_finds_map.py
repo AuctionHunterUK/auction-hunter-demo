@@ -480,7 +480,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         seen = set()
     if postcodes is None:
         postcodes = ({}, {})
-    now       = datetime.now().strftime("%A %d %B %Y, %H:%M")
+    now       = datetime.now().strftime("%A %d %B, %H:%M")
     gate_html = DEMO_GATE_HTML
     terms_str = ", ".join(SEARCH_TERMS)
     total     = len(local_lots) + len(wide_lots)
@@ -591,7 +591,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .term-tag .term-soon {{ color: var(--muted); font-weight: 400; }}
     @media (max-width: 700px) {{ .term-tag .term-soon {{ display: none; }} }}
-    header nav.jump {{ flex-basis: auto; margin: 0; padding: 0; margin-left: auto; }}
+    header nav.jump {{ flex-basis: auto; margin: 0; padding: 0; }}
     .brand {{ display: flex; align-items: center; gap: 10px; }}
     .demo-tag {{ font-size: .62rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }}
     .brand h1 {{ font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; color: #111827; white-space: nowrap; }}
@@ -938,7 +938,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 {gate_html}
   <header>
     <div class="headtop">
-      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><span class="demo-tag">🔒 Demo</span><a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a></div>
+      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a></div>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">Map</a>
         <a href="../finds/" class="app-nav-link on">Lots</a>

@@ -490,7 +490,6 @@ body.gate-locked{overflow:hidden}
     <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions" style="display:flex;align-items:center;gap:10px;cursor:pointer">
       <img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto">
       <h1 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;color:#111827;white-space:nowrap;margin:0">Auction Hunter</h1>
-      <span class="demo-tag">🔒 Demo</span>
       <a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a>
     </div>
     <nav class="app-nav" aria-label="App pages">
@@ -1561,7 +1560,7 @@ function setUpdateStatus(msg, col) {
       const scrapedDate = new Date(data.scraped_at || Date.now());
       const dateStr = scrapedDate.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
       const dayName = scrapedDate.toLocaleDateString('en-GB', {weekday:'long'});
-      const fullDateStr = scrapedDate.toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+      const fullDateStr = scrapedDate.toLocaleDateString('en-GB', {day:'2-digit', month:'long'});
       const timeStr = scrapedDate.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', hour12:false});
       
       document.getElementById('update-status').textContent = `✅ Successfully updated - ${dayName} ${fullDateStr}, ${timeStr}`;
