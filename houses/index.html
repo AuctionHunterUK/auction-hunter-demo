@@ -1541,7 +1541,7 @@ function setUpdateStatus(msg, col) {
     // Cache-bust so the browser always pulls today's data, not a stale
     // cached copy. Without this, the "Last updated" badge can lag a day
     // behind the actual scrape because the device served a cached dates.json.
-    const response = await fetch('dates.json?t=' + Date.now(), { cache: 'no-store' });
+    const response = await fetch('dates.json?t=' + new Date().toISOString().slice(0, 10));
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     
