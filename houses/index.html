@@ -33,11 +33,13 @@ body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;backgro
    decided by source order, not by which one is inside a media query, so this
    block previously did nothing on mobile because it sat before the base rule. */
 @media(max-width:767px){
-  .brand img{height:26px!important}
-  .brand h1{font-size:1rem!important}
+  .brand img{height:22px!important}
+  .brand{gap:5px!important}
+  .brand h1{font-size:0.88rem!important}
+  .brand a{font-size:.64rem!important;margin-left:0!important}
   .demo-tag{font-size:.52rem;padding:2px 7px}
   .app-nav{padding:2px}
-  .app-nav-link{font-size:.72rem;padding:5px 13px}
+  .app-nav-link{font-size:.64rem;padding:4px 9px}
   /* Force the same explicit two-row split Finds uses, instead of letting this
      row wrap organically based on how much status text happens to fit — that
      made the toggle/logo land in different places between the two pages. */
