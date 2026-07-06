@@ -6864,19 +6864,22 @@ const PC_MAP = {
       highlightedMarker = m;
     }
 
-    document.querySelectorAll('.house').forEach(el => {
-      const pcRaw = el.querySelector('.pc');
+    // Hover ANYWHERE on a lot card highlights that lot's auction house on the
+    // map (not just hovering the house name) — makes the map earn its place
+    // instead of sitting blank. Postcode is read from the .house .pc inside the card.
+    document.querySelectorAll('.card').forEach(card => {
+      const houseEl = card.querySelector('.house');
+      const pcRaw = card.querySelector('.pc');
       if (!pcRaw) return;
       const pc = pcRaw.textContent.trim().replace(/\s+/g, '').toUpperCase();
-      const card = el.closest('.card');
-      const dateEl = card ? card.querySelector('.saledate') : null;
+      const dateEl = card.querySelector('.saledate');
       const band = saleBand(dateEl ? dateEl.textContent : '');
-      el.addEventListener('mouseenter', () => {
-        el.classList.add('highlighted');
+      card.addEventListener('mouseenter', () => {
+        if (houseEl) houseEl.classList.add('highlighted');
         highlightMarker(pc, band);
       });
-      el.addEventListener('mouseleave', () => {
-        el.classList.remove('highlighted');
+      card.addEventListener('mouseleave', () => {
+        if (houseEl) houseEl.classList.remove('highlighted');
         highlightMarker(null);
       });
     });
