@@ -783,13 +783,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       transition: opacity .18s ease, transform .18s ease;
     }}
     #back-to-top.visible {{ opacity: 1; pointer-events: auto; transform: translateY(0); }}
-    .masonry {{ column-count: 4; column-gap: 18px; }}
-    @media (max-width: 1300px) {{ .masonry {{ column-count: 3; }} }}
+    /* One column scheme for ALL sections so every card is the same size. */
+    .masonry {{ column-count: 3; column-gap: 18px; }}
     @media (max-width: 1000px) {{ .masonry {{ column-count: 2; }} }}
     @media (max-width: 600px)  {{ .masonry {{ column-count: 1; }} }}
-    .local-section .masonry {{ column-count: 3; }}
-    @media (max-width: 1300px) {{ .local-section .masonry {{ column-count: 2; }} }}
-    @media (max-width: 800px)  {{ .local-section .masonry {{ column-count: 1; }} }}
     .card {{
       display: inline-block; width: 100%;
       margin: 0 0 18px;
@@ -803,10 +800,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .card:hover {{ transform: translateY(-3px); box-shadow: var(--shadow-hover); }}
     .card-img {{ position: relative; width: 100%; line-height: 0; background: var(--accent-soft); }}
-    /* Uniform image crop for a tidy catalogue look (4/3, matches .no-img). */
-    .card-img img {{ width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }}
+    /* Uniform SQUARE image crop for a tidy catalogue look. height:auto is
+       essential — the <img> tags carry a height="300" HTML attribute that
+       otherwise overrides aspect-ratio, making cards render at different
+       shapes depending on their column width (3-col local vs 4-col later). */
+    .card-img img {{ width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; display: block; }}
     .no-img {{
-      aspect-ratio: 4/3; display: flex; align-items: center;
+      aspect-ratio: 1/1; display: flex; align-items: center;
       justify-content: center; font-size: 0.8rem; color: var(--muted);
     }}
     .card-body {{ padding: 12px 14px 14px; }}
