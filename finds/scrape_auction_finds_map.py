@@ -901,14 +901,16 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }}
       header .tagline {{ display: none; }}
       .headtop {{ flex-basis: 100%; }}
-      .brand img {{ height: 26px !important; }}
-      .brand h1 {{ font-size: 1rem; }}
+      .brand img {{ height: 24px !important; }}
+      .brand {{ gap: 6px; }}
+      .brand h1 {{ font-size: 0.95rem; }}
+      .brand a {{ display: none; }}   /* hide About here on mobile to free space for the Map/Lots toggle */
       .demo-tag {{ font-size: .52rem; padding: 2px 7px; }}
       .hstatus {{ flex-basis: 100%; gap: 4px 8px; }}
       .update-ok {{ white-space: normal; font-size: .68rem; }}
       .hstats {{ white-space: normal; font-size: .68rem; }}
       .app-nav {{ padding: 2px; }}
-      .app-nav-link {{ font-size: .72rem; padding: 5px 13px; }}
+      .app-nav-link {{ font-size: .7rem; padding: 5px 11px; }}
       .hrow2 {{ gap: 6px 8px; }}
       .search-box {{ min-width: 0; flex-basis: 100%; max-width: none; }}
       .term-tag {{ font-size: .6rem; padding: 3px 9px; }}
