@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-06T02:04:03.822803",
+  "scraped_at": "2026-07-06T16:59:06.783401",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -11,7 +11,7 @@
       {
         "date": "2026-07-10",
         "time": "9:30am",
-        "title": "Day 2  - Books, First Editions many signed sold N/R inc Richard Adams \"Watership"
+        "title": "Day 2  - Books, First Editions Many Signed Sold N/R inc Richard Adams \"Watership"
       }
     ],
     "A 1 Collectables Antiques Auctions": [],
@@ -780,6 +780,11 @@
         "date": "2026-07-15",
         "time": "10:30am",
         "title": "Sale of Jewellery, Watches, Militaria, Silver, China, Furniture, Toys & Collecta"
+      },
+      {
+        "date": "2026-09-09",
+        "time": "10:30am",
+        "title": "Sale of Jewellery, Watches, Militaria, Silver, China, Furniture, Toys & Collecta"
       }
     ],
     "Crow's Auction Gallery Ltd": [
@@ -831,9 +836,21 @@
     ],
     "Davidson-Reid Auctions": [],
     "Dawsons Auctioneers": [],
-    "Deal Auction House": [],
+    "Deal Auction House": [
+      {
+        "date": "2026-07-18",
+        "time": "7pm",
+        "title": "Timed Auction of Antiques, Furniture, Silver, Gold, Paintings, Collectables, Por"
+      }
+    ],
     "Devon Online Auctions": [],
-    "Doncaster Auction Centre": [],
+    "Doncaster Auction Centre": [
+      {
+        "date": "2026-07-09",
+        "time": "9:30am",
+        "title": "We are Pleased to Invite You to Join Another Great Auction from DAC , with Vinta"
+      }
+    ],
     "Dore & Rees Auctions": [
       {
         "date": "2026-07-08",
@@ -854,7 +871,13 @@
       }
     ],
     "Dorset Vintage & Classic Auctions": [],
-    "Drake's Auctions": [],
+    "Drake's Auctions": [
+      {
+        "date": "2026-07-12",
+        "time": "4pm",
+        "title": "Garden, Estate Clearance and Collectibles"
+      }
+    ],
     "Dreweatts 1759": [],
     "Droitwich Auctions Ltd": [
       {
@@ -975,12 +998,12 @@
       {
         "date": "2026-07-15",
         "time": "9:30am",
-        "title": "FINE ART & ANTIQUES"
+        "title": "Fine Art & Antiques"
       },
       {
         "date": "2026-07-16",
         "time": "9:30am",
-        "title": "FINE ART & ANTIQUES"
+        "title": "Fine Art & Antiques"
       }
     ],
     "Embassy Philatelists": [],
@@ -1001,7 +1024,13 @@
         "title": "F Turner & Sons - Public Auction Sale"
       }
     ],
-    "Fieldings Auctioneers Ltd": [],
+    "Fieldings Auctioneers Ltd": [
+      {
+        "date": "2026-07-16",
+        "time": "9:30am",
+        "title": "Centuries of Glass - A One Day Sale"
+      }
+    ],
     "FM Hutchings Commercial Auction": [
       {
         "date": "2026-07-11",
@@ -1022,12 +1051,12 @@
     "FMC Auctions": [
       {
         "date": "2026-07-09",
-        "time": "5pm",
+        "time": "4pm",
         "title": "Machinery & Tool Auction to include Tools, Implements, Garden Items, Vehicles, T"
       },
       {
         "date": "2026-07-10",
-        "time": "5pm",
+        "time": "4pm",
         "title": "Machinery & Tool Auction to include Tools, Implements, Garden Items, Vehicles, T"
       }
     ],
@@ -1272,7 +1301,13 @@
         "title": "House Clearance, Bankrupt and New Stock, Small Collectables, and General Items U"
       }
     ],
-    "Harrisons Auction Centre": [],
+    "Harrisons Auction Centre": [
+      {
+        "date": "2026-07-11",
+        "time": "10am",
+        "title": "General Auction"
+      }
+    ],
     "Harrisons Auction Rooms": [],
     "Harrogate Auction Centre": [],
     "Hartleys Auctions Ltd": [
@@ -1287,6 +1322,16 @@
         "date": "2026-07-19",
         "time": "5:30pm",
         "title": "Train Set Collection"
+      },
+      {
+        "date": "2026-07-26",
+        "time": "5:30pm",
+        "title": "Desk Clip Collection"
+      },
+      {
+        "date": "2026-07-26",
+        "time": "5:30pm",
+        "title": "The Medal Collection"
       }
     ],
     "Hawleys Auctioneers & Valuers": [
@@ -1549,7 +1594,7 @@
       {
         "date": "2026-07-11",
         "time": "10am",
-        "title": "General Sale of Antiques, Collectables and General Items Including Boxed Whiskey"
+        "title": "General Sale of Antiques, Collectables and General Items including Boxed Whiskey"
       },
       {
         "date": "2026-07-25",
@@ -1793,7 +1838,18 @@
         "title": "Modern & Traditional Home- 13th July 2026"
       }
     ],
-    "Lumsden's Auction": [],
+    "Lumsden's Auction": [
+      {
+        "date": "2026-08-15",
+        "time": "10am",
+        "title": "Two Day Antique & Collectable Auction including Vintage Collectable Toys, Furnit"
+      },
+      {
+        "date": "2026-08-16",
+        "time": "10am",
+        "title": "Two Day Antique & Collectable Auction including Vintage Collectable Toys, Furnit"
+      }
+    ],
     "Luxoris Auctions": [
       {
         "date": "2026-07-16",
@@ -1845,7 +1901,7 @@
       {
         "date": "2026-07-11",
         "time": "10am",
-        "title": "Specialist Auction of Vintage Diecast and Toys Plus LEGO"
+        "title": "Specialist Auction of Vintage Diecast and Toys Plus Lego"
       },
       {
         "date": "2026-08-08",
@@ -1956,7 +2012,13 @@
         "title": "Antiques & Collectors"
       }
     ],
-    "Meta Auctions Ltd": [],
+    "Meta Auctions Ltd": [
+      {
+        "date": "2026-07-19",
+        "time": "6pm",
+        "title": "Jewellery and luxury items"
+      }
+    ],
     "Metsab Auctions Ltd": [],
     "Michael J Bowman": [],
     "Millwards": [],
@@ -2025,7 +2087,18 @@
     "Mulready Philatelics": [],
     "Nesbits Auctions Ltd": [],
     "Nick Barber Auctions": [],
-    "NLB Auctions": [],
+    "NLB Auctions": [
+      {
+        "date": "2026-07-31",
+        "time": "11am",
+        "title": "Antiques & Collectables"
+      },
+      {
+        "date": "2026-08-01",
+        "time": "11am",
+        "title": "Antiques & Collectables"
+      }
+    ],
     "Nock Deighton": [],
     "North Coast Auctions": [],
     "North Cornwall Auctions": [
@@ -2320,13 +2393,18 @@
     ],
     "Red Rose Auctions Ltd": [
       {
-        "date": "2026-08-02",
-        "time": "2pm",
+        "date": "2026-07-12",
+        "time": "6pm",
+        "title": "Timed Auction of Antiques, Collectables etc"
+      },
+      {
+        "date": "2026-08-05",
+        "time": "12pm",
         "title": "Live Auction of Antiques, Collectables etc"
       },
       {
-        "date": "2026-09-06",
-        "time": "1pm",
+        "date": "2026-09-02",
+        "time": "12pm",
         "title": "Live Auction of Antiques, Collectables etc"
       }
     ],
@@ -2374,7 +2452,13 @@
         "title": "Antiques & Collectables"
       }
     ],
-    "Riverside Auctions": [],
+    "Riverside Auctions": [
+      {
+        "date": "2026-07-26",
+        "time": "4:40pm",
+        "title": "General Auction to include Quality Ceramics, Silver, Gold, Military, Jewellery &"
+      }
+    ],
     "Rivus Auctions Ltd": [],
     "Robert Bell & Company": [
       {
@@ -2534,7 +2618,7 @@
       {
         "date": "2026-07-13",
         "time": "6pm",
-        "title": "Evening Tool, Hobbies and Gardening Auction"
+        "title": "Evening Tool, Hobbies and Gardening Auction to include, Austin Cambridge Car, Vi"
       },
       {
         "date": "2026-07-24",
@@ -2871,6 +2955,11 @@
         "date": "2026-07-10",
         "time": "10am",
         "title": "Antiques & Interiors"
+      },
+      {
+        "date": "2026-07-14",
+        "time": "10am",
+        "title": "Automobilia Sale"
       }
     ],
     "Tyne Valley Auctions": [],
@@ -2918,7 +3007,13 @@
         "title": "A Dedicated Sale of Antique and Vintage Silver, Spanning Georgian to the 20th Ce"
       }
     ],
-    "Viewback Auctions Omagh": [],
+    "Viewback Auctions Omagh": [
+      {
+        "date": "2026-07-17",
+        "time": "7pm",
+        "title": "House Clearance with Antiques"
+      }
+    ],
     "Wallis & Wallis": [
       {
         "date": "2026-08-03",
