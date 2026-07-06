@@ -917,9 +917,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         flex-wrap: nowrap; overflow-x: auto;   /* one swipeable row */
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        gap: 5px;                              /* tighter so all 4 fit */
       }}
       nav.jump::-webkit-scrollbar {{ display: none; }}
-      nav.jump a {{ flex-shrink: 0; }}
+      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 9px; }}
 
       #map-panel {{ display: none; }}
       #cards-area {{ padding: 0 12px 24px; }}
