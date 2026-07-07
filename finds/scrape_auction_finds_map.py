@@ -1058,17 +1058,43 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         'active=' + act;
     }}
 
+    // Active-section detection via IntersectionObserver. The browser computes
+    // intersections in its own compositor, independent of JS timing, so this is
+    // immune to the stale getBoundingClientRect readings Chrome-on-Samsung
+    // returns during a fast fling/momentum scroll — which is why rect-polling
+    // stuck intermittently on FAST scroll but always worked on SLOW scroll.
+    // This is the standard, reliable scrollspy.
+    var jumpVisible = {{}};
+    function recomputeActive() {{
+      const secs = jumpSections();
+      if (!secs.length) return;
+      // current = the LAST section (in page order) currently crossing the
+      // top-40% detection band; fall back to the first if none are.
+      let current = secs[0].id;
+      secs.forEach(sec => {{ if (jumpVisible[sec.id]) current = sec.id; }});
+      setActiveJump(current);
+    }}
+    function initJumpObserver() {{
+      const secs = jumpSections();
+      if (!secs.length || !('IntersectionObserver' in window)) {{ updateJumpSpy(); return; }}
+      const sc = jumpScroller();
+      const root = (sc === document.scrollingElement || sc === document.documentElement) ? null : sc;
+      // Shrink the root's bottom by 60% → the "active band" is the TOP 40% of the
+      // scroll viewport. A section is current while any of it sits in that band.
+      // Mirrors the previous 40%-line behaviour, but computed by the browser.
+      const io = new IntersectionObserver((entries) => {{
+        entries.forEach(e => {{ jumpVisible[e.target.id] = e.isIntersecting; }});
+        recomputeActive();
+        jumpDebug();
+      }}, {{ root: root, rootMargin: '0px 0px -60% 0px', threshold: 0 }});
+      secs.forEach(sec => io.observe(sec));
+    }}
+
+    // Fallback / initial paint only (used if IntersectionObserver is missing).
     function updateJumpSpy() {{
       const secs = jumpSections();
       if (!secs.length) return;
       let current = secs[0].id;
-      // Detection line at 40% of the viewport height: the current bunch is the
-      // LAST section whose heading has scrolled above that line. A fixed small
-      // px line (e.g. 140) was too strict — tapping a section triggers a long
-      // smooth-scroll during which lazy images above load in and push the target
-      // down, so it lands short of the line and the green didn't advance. A line
-      // at 40% of the screen is forgiving enough to catch that and is the
-      // standard "whatever fills the upper-middle of the screen is current".
       const line = Math.max(120, (window.innerHeight || 600) * 0.4);
       secs.forEach(sec => {{
         if (sec.getBoundingClientRect().top <= line) current = sec.id;
@@ -1082,20 +1108,11 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }}));
-      // Recompute EVERY frame. An earlier version only recomputed when the
-      // scroll position changed (a perf optimisation), but Chrome-on-Samsung
-      // returns stale getBoundingClientRect values during a fling/momentum
-      // scroll, so the last reading was wrong AND the "position unchanged at
-      // rest" check meant it never recalculated to correct itself — the green
-      // froze on the wrong button (intermittently, depending on fling timing).
-      // iPhone/Safari read accurately mid-scroll so it never showed there.
-      // Computing every frame is cheap (a few rect reads) and guarantees the
-      // state is always correct the instant scrolling settles.
-      (function tick() {{
-        updateJumpSpy();
-        jumpDebug();
-        requestAnimationFrame(tick);
-      }})();
+      initJumpObserver();
+      updateJumpSpy();                     // correct green on first paint
+      // Debug overlay refresh (only when ?debug=1) — IO callbacks also refresh
+      // it; this keeps the numbers live between callbacks.
+      if (JUMP_DEBUG) (function dbg(){{ jumpDebug(); requestAnimationFrame(dbg); }})();
     }});
 
     function normalizeSearch(text) {{
