@@ -1082,19 +1082,17 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }}));
-      // Bulletproof position tracking: a requestAnimationFrame loop that
-      // recomputes the active section whenever the page visually moves. The key
-      // is the on-screen position of the first section heading — this changes
-      // for ANY scroll of ANY element (window, #cards-area, whatever the finger
-      // or a programmatic scroll moved). Earlier versions watched specific
-      // elements' scrollTop, but tapping a button scrolls a different element
-      // than a finger-drag does, so the watched value stopped changing and the
-      // green stuck. Reading a rect sidesteps that entirely.
-      let lastKey = null;
+      // Recompute EVERY frame. An earlier version only recomputed when the
+      // scroll position changed (a perf optimisation), but Chrome-on-Samsung
+      // returns stale getBoundingClientRect values during a fling/momentum
+      // scroll, so the last reading was wrong AND the "position unchanged at
+      // rest" check meant it never recalculated to correct itself — the green
+      // froze on the wrong button (intermittently, depending on fling timing).
+      // iPhone/Safari read accurately mid-scroll so it never showed there.
+      // Computing every frame is cheap (a few rect reads) and guarantees the
+      // state is always correct the instant scrolling settles.
       (function tick() {{
-        const s0 = jumpSections()[0];
-        const key = s0 ? Math.round(s0.getBoundingClientRect().top) : 0;
-        if (key !== lastKey) {{ lastKey = key; updateJumpSpy(); }}
+        updateJumpSpy();
         jumpDebug();
         requestAnimationFrame(tick);
       }})();
