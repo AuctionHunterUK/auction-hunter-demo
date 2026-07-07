@@ -6416,18 +6416,17 @@ const PC_MAP = {
         scrollToSection(a.dataset.target);
       }));
       // Bulletproof position tracking: a requestAnimationFrame loop that
-      // recomputes the active section whenever ANY scroll offset changes.
-      // Scroll-event listeners proved unreliable on mobile (the page scroll
-      // wasn't reaching our handler, so the green stuck on the last click).
-      // This loop doesn't care which element scrolls or whether a scroll event
-      // fires — it just watches the numbers. updateJumpSpy is cheap (3 rect
-      // reads) and we only recompute when the position actually changed.
-      let lastKey = '';
+      // recomputes the active section whenever the page visually moves. The key
+      // is the on-screen position of the first section heading — this changes
+      // for ANY scroll of ANY element (window, #cards-area, whatever the finger
+      // or a programmatic scroll moved). Earlier versions watched specific
+      // elements' scrollTop, but tapping a button scrolls a different element
+      // than a finger-drag does, so the watched value stopped changing and the
+      // green stuck. Reading a rect sidesteps that entirely.
+      let lastKey = null;
       (function tick() {
-        const ca = document.getElementById('cards-area');
-        const key = (window.scrollY || 0) + '/' +
-                    (document.scrollingElement ? document.scrollingElement.scrollTop : 0) + '/' +
-                    (ca ? ca.scrollTop : 0);
+        const s0 = jumpSections()[0];
+        const key = s0 ? Math.round(s0.getBoundingClientRect().top) : 0;
         if (key !== lastKey) { lastKey = key; updateJumpSpy(); }
         requestAnimationFrame(tick);
       })();
