@@ -1036,6 +1036,28 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       // is hidden underneath it. Small -8px breathing gap.
       sc.scrollTo({{ top: sc.scrollTop + delta - 8, behavior: 'smooth' }});
     }}
+    // Debug overlay (only when URL has ?debug=1) — prints live scrollspy numbers
+    // so we can diagnose device-specific behaviour (e.g. Chrome-on-Samsung)
+    // without guessing. Reports each section heading's viewport-top, the
+    // detection line, and which button is active.
+    var JUMP_DEBUG = /[?&]debug=1/.test(location.search);
+    var jumpDbgEl = null;
+    function jumpDebug() {{
+      if (!JUMP_DEBUG) return;
+      if (!jumpDbgEl) {{
+        jumpDbgEl = document.createElement('div');
+        jumpDbgEl.style.cssText = 'position:fixed;left:4px;bottom:4px;z-index:99998;background:rgba(0,0,0,.85);color:#0f0;font:11px/1.35 monospace;padding:6px 8px;border-radius:6px;max-width:60vw;pointer-events:none;white-space:pre';
+        document.body.appendChild(jumpDbgEl);
+      }}
+      const line = Math.max(120, (window.innerHeight || 600) * 0.4);
+      const rows = jumpSections().map(s => s.id.padEnd(8) + Math.round(s.getBoundingClientRect().top));
+      const act = [...document.querySelectorAll('nav.jump a.active')].map(a => a.dataset.target).join(',') || '(none)';
+      jumpDbgEl.textContent =
+        'line=' + Math.round(line) + '  vh=' + (window.innerHeight||0) + '\\n' +
+        rows.join('\\n') + '\\n' +
+        'active=' + act;
+    }}
+
     function updateJumpSpy() {{
       const secs = jumpSections();
       if (!secs.length) return;
@@ -1073,6 +1095,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         const s0 = jumpSections()[0];
         const key = s0 ? Math.round(s0.getBoundingClientRect().top) : 0;
         if (key !== lastKey) {{ lastKey = key; updateJumpSpy(); }}
+        jumpDebug();
         requestAnimationFrame(tick);
       }})();
     }});
