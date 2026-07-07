@@ -6393,17 +6393,25 @@ const PC_MAP = {
     }
     function updateJumpSpy() {
       const secs = jumpSections();
-      let current = secs.length ? secs[0].id : 'local';
-      // Viewport-relative detection: the current bunch is the LAST section whose
-      // heading has scrolled up to within ~140px of the top of the screen.
-      // getBoundingClientRect().top is always relative to the visible viewport,
-      // so this works identically whether the WINDOW scrolls (mobile — header
-      // scrolls away) or #cards-area scrolls internally (desktop). The earlier
-      // version subtracted the scroll-container's own offset, which broke on
-      // mobile where the window is the scroller (green stuck on the last click).
+      if (!secs.length) return;
+      let current = secs[0].id;
+      // Detection line at 40% of the viewport height: the current bunch is the
+      // LAST section whose heading has scrolled above that line. A fixed small
+      // px line (e.g. 140) was too strict — tapping a section triggers a long
+      // smooth-scroll during which lazy images above load in and push the target
+      // down, so it lands short of the line and the green didn't advance. A line
+      // at 40% of the screen is forgiving enough to catch that and is the
+      // standard "whatever fills the upper-middle of the screen is current".
+      const line = Math.max(120, (window.innerHeight || 600) * 0.4);
       secs.forEach(sec => {
-        if (sec.getBoundingClientRect().top <= 140) current = sec.id;
+        if (sec.getBoundingClientRect().top <= line) current = sec.id;
       });
+      // Bottom-of-page guard: the LAST section can't always scroll its heading
+      // above the line (not enough content below). If we're at the bottom, it's
+      // unambiguously the section being viewed.
+      const sc = jumpScroller();
+      const atBottom = (sc.scrollTop + sc.clientHeight) >= (sc.scrollHeight - 4);
+      if (atBottom) current = secs[secs.length - 1].id;
       setActiveJump(current);
     }
     document.addEventListener('DOMContentLoaded', () => {
