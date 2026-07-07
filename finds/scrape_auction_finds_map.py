@@ -659,10 +659,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       transition: 0.15s;
     }}
     nav.jump a:hover {{ background: var(--accent); color: var(--panel); }}
-    nav.jump .today-pill {{ background: var(--highlight); color: #fff; }}
-    nav.jump .today-pill:hover {{ background: #3d5a75; }}
-    nav.jump .new-pill {{ background: var(--new-bg); color: #fff; }}
-    nav.jump .new-pill:hover {{ background: #2c4a2d; }}
+    /* Active = the section currently in view (scrollspy) or just clicked.
+       One green at a time; overrides hover so it stays lit. */
+    nav.jump a.active {{ background: var(--accent); color: var(--panel); }}
     .new-badge {{
       position: absolute; top: 10px; left: 10px;
       background: var(--new-bg); color: #fff;
@@ -962,11 +961,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
       </div>
       <span class="search-results" id="searchResults"></span>
-      <nav class="jump">
-        {f'<a class="new-pill" href="#" onclick="filterNew(); return false;">New · {new_total}</a>' if new_total else ''}
-        <a href="#local">Local · {local_local_count}</a>
-        <a href="#uk-wide">Later · {wide_later_count}</a>
-        {f'<a class="today-pill" href="#today">Today · {wide_today_count}</a>' if wide_today_count else ''}
+      <nav class="jump" aria-label="Jump to section">
+        <a href="#local" data-target="local">Local · {local_local_count}</a>
+        {f'<a href="#today" data-target="today">UK Today · {wide_today_count}</a>' if wide_today_count else ''}
+        <a href="#uk-wide" data-target="uk-wide">UK Later · {wide_later_count}</a>
       </nav>
     </div>
   </header>
@@ -996,14 +994,68 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
     // ── SEARCH ──
 
-    let newOnly = false;
-    function filterNew() {{
-      newOnly = !newOnly;
-      document.querySelectorAll('.card').forEach(c => {{
-        const isNew = c.querySelector('.new-badge');
-        c.style.display = (newOnly && !isNew) ? 'none' : '';
-      }});
+    // ── SECTION NAV (scrollspy) ──
+    // Three buttons (Local / UK Today / UK Later) are pure navigation +
+    // position indicator — NOT filters. Click = smooth-scroll to that bunch;
+    // the button for whichever bunch is currently in view goes green on its
+    // own as you scroll. #cards-area is the scroll container on desktop; on
+    // mobile the window scrolls — detect whichever actually overflows.
+    function jumpScroller() {{
+      const ca = document.getElementById('cards-area');
+      if (ca && ca.scrollHeight > ca.clientHeight + 2) return ca;
+      return document.scrollingElement || document.documentElement;
     }}
+    function jumpSections() {{
+      return ['local', 'today', 'uk-wide']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+    }}
+    function jumpLinks() {{ return document.querySelectorAll('nav.jump a[data-target]'); }}
+    function setActiveJump(id) {{
+      jumpLinks().forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    }}
+    function scrollToSection(id) {{
+      const sc = jumpScroller();
+      // Local is the first bunch / default view → go right to the very top.
+      if (id === 'local') {{
+        sc.scrollTo({{ top: 0, behavior: 'smooth' }});
+        return;
+      }}
+      const sec = document.getElementById(id);
+      if (!sec) return;
+      const scRect = (sc === document.scrollingElement || sc === document.documentElement)
+        ? {{ top: 0 }} : sc.getBoundingClientRect();
+      const delta = sec.getBoundingClientRect().top - scRect.top;
+      // Align the section (and its sticky heading) flush to the top of the
+      // scroll viewport; the app header sits outside #cards-area so nothing
+      // is hidden underneath it. Small -8px breathing gap.
+      sc.scrollTo({{ top: sc.scrollTop + delta - 8, behavior: 'smooth' }});
+    }}
+    function updateJumpSpy() {{
+      const sc = jumpScroller();
+      const topRef = (sc === document.scrollingElement || sc === document.documentElement)
+        ? 0 : sc.getBoundingClientRect().top;
+      const secs = jumpSections();
+      let current = secs.length ? secs[0].id : 'local';
+      // The current bunch = the last section whose top has passed ~120px below
+      // the viewport top (i.e. we've scrolled into it).
+      secs.forEach(sec => {{
+        if (sec.getBoundingClientRect().top - topRef <= 120) current = sec.id;
+      }});
+      setActiveJump(current);
+    }}
+    document.addEventListener('DOMContentLoaded', () => {{
+      jumpLinks().forEach(a => a.addEventListener('click', e => {{
+        e.preventDefault();
+        scrollToSection(a.dataset.target);
+      }}));
+      const sc = jumpScroller();
+      const spyTarget = (sc === document.scrollingElement || sc === document.documentElement) ? window : sc;
+      spyTarget.addEventListener('scroll', () => {{
+        window.requestAnimationFrame(updateJumpSpy);
+      }}, {{ passive: true }});
+      updateJumpSpy();
+    }});
 
     function normalizeSearch(text) {{
       return text
@@ -1029,8 +1081,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       else {{ searchBox.classList.remove('has-text'); }}
       if (!query) {{
         document.querySelectorAll('.card').forEach(c => {{
-          if (newOnly && !c.querySelector('.new-badge')) {{ c.style.display = 'none'; }}
-          else {{ c.style.display = ''; }}
+          c.style.display = '';
         }});
         resultsEl.textContent = '';
         return;
@@ -1046,8 +1097,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         const queryWords = normalizedQuery.split(/\s+/);
         const matches = queryWords.every(word => normalizedTitle.includes(word));
         if (matches) {{
-          if (newOnly && !card.querySelector('.new-badge')) {{ card.style.display = 'none'; }}
-          else {{ card.style.display = ''; visibleCount++; }}
+          card.style.display = ''; visibleCount++;
         }} else {{ card.style.display = 'none'; }}
       }});
       resultsEl.innerHTML = '<strong>' + visibleCount + '</strong> of ' + totalCount + ' lots';
