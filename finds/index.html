@@ -6402,13 +6402,16 @@ const PC_MAP = {
     document.addEventListener('DOMContentLoaded', () => {
       jumpLinks().forEach(a => a.addEventListener('click', e => {
         e.preventDefault();
+        setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }));
-      const sc = jumpScroller();
-      const spyTarget = (sc === document.scrollingElement || sc === document.documentElement) ? window : sc;
-      spyTarget.addEventListener('scroll', () => {
-        window.requestAnimationFrame(updateJumpSpy);
-      }, { passive: true });
+      // The scroller differs by breakpoint: #cards-area on desktop, the window
+      // on mobile (header scrolls away). Listen on BOTH so the green always
+      // tracks — attaching to only one left it stuck on mobile.
+      const onScroll = () => window.requestAnimationFrame(updateJumpSpy);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      const ca = document.getElementById('cards-area');
+      if (ca) ca.addEventListener('scroll', onScroll, { passive: true });
       updateJumpSpy();
     });
 
