@@ -658,7 +658,12 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       font-weight: 500;
       transition: 0.15s;
     }}
-    nav.jump a:hover {{ background: var(--accent); color: var(--panel); }}
+    /* Hover only on real pointer devices — on touchscreens :hover "sticks" to
+       the tapped button until you tap elsewhere, which looked like the active
+       indicator was stuck on. Guarding with (hover:hover) stops that. */
+    @media (hover: hover) {{
+      nav.jump a:hover {{ background: var(--accent); color: var(--panel); }}
+    }}
     /* Active = the section currently in view (scrollspy) or just clicked.
        One green at a time; overrides hover so it stays lit. */
     nav.jump a.active {{ background: var(--accent); color: var(--panel); }}
@@ -1049,6 +1054,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     document.addEventListener('DOMContentLoaded', () => {{
       jumpLinks().forEach(a => a.addEventListener('click', e => {{
         e.preventDefault();
+        a.blur();                          // drop focus so no sticky :focus/:hover on touch
         setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }}));
