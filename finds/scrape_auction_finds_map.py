@@ -1077,16 +1077,19 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function initJumpObserver() {{
       const secs = jumpSections();
       if (!secs.length || !('IntersectionObserver' in window)) {{ updateJumpSpy(); return; }}
-      const sc = jumpScroller();
-      const root = (sc === document.scrollingElement || sc === document.documentElement) ? null : sc;
-      // Shrink the root's bottom by 60% → the "active band" is the TOP 40% of the
-      // scroll viewport. A section is current while any of it sits in that band.
-      // Mirrors the previous 40%-line behaviour, but computed by the browser.
+      // root:null = observe each section relative to the actual SCREEN/viewport,
+      // NOT a specific scroll container. This is the crucial fix: on desktop
+      // #cards-area scrolls internally, but on mobile (esp. Chrome-on-Samsung)
+      // the whole PAGE scrolls (the header scrolls away). Pinning the observer
+      // to #cards-area meant that on Samsung the sections barely moved relative
+      // to the observed root, so the green stuck during a fast fling. Viewport
+      // intersection always reflects what's actually on screen, whatever scrolls.
+      // rootMargin bottom -60% → the "active band" is the top 40% of the screen.
       const io = new IntersectionObserver((entries) => {{
         entries.forEach(e => {{ jumpVisible[e.target.id] = e.isIntersecting; }});
         recomputeActive();
         jumpDebug();
-      }}, {{ root: root, rootMargin: '0px 0px -60% 0px', threshold: 0 }});
+      }}, {{ root: null, rootMargin: '0px 0px -60% 0px', threshold: 0 }});
       secs.forEach(sec => io.observe(sec));
     }}
 
