@@ -1051,12 +1051,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       secs.forEach(sec => {{
         if (sec.getBoundingClientRect().top <= line) current = sec.id;
       }});
-      // Bottom-of-page guard: the LAST section can't always scroll its heading
-      // above the line (not enough content below). If we're at the bottom, it's
-      // unambiguously the section being viewed.
-      const sc = jumpScroller();
-      const atBottom = (sc.scrollTop + sc.clientHeight) >= (sc.scrollHeight - 4);
-      if (atBottom) current = secs[secs.length - 1].id;
       setActiveJump(current);
     }}
     document.addEventListener('DOMContentLoaded', () => {{
