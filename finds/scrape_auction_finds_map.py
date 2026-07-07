@@ -1032,15 +1032,17 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       sc.scrollTo({{ top: sc.scrollTop + delta - 8, behavior: 'smooth' }});
     }}
     function updateJumpSpy() {{
-      const sc = jumpScroller();
-      const topRef = (sc === document.scrollingElement || sc === document.documentElement)
-        ? 0 : sc.getBoundingClientRect().top;
       const secs = jumpSections();
       let current = secs.length ? secs[0].id : 'local';
-      // The current bunch = the last section whose top has passed ~120px below
-      // the viewport top (i.e. we've scrolled into it).
+      // Viewport-relative detection: the current bunch is the LAST section whose
+      // heading has scrolled up to within ~140px of the top of the screen.
+      // getBoundingClientRect().top is always relative to the visible viewport,
+      // so this works identically whether the WINDOW scrolls (mobile — header
+      // scrolls away) or #cards-area scrolls internally (desktop). The earlier
+      // version subtracted the scroll-container's own offset, which broke on
+      // mobile where the window is the scroller (green stuck on the last click).
       secs.forEach(sec => {{
-        if (sec.getBoundingClientRect().top - topRef <= 120) current = sec.id;
+        if (sec.getBoundingClientRect().top <= 140) current = sec.id;
       }});
       setActiveJump(current);
     }}
@@ -1050,11 +1052,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }}));
-      // The scroller differs by breakpoint: #cards-area on desktop, the window
-      // on mobile (header scrolls away). Listen on BOTH so the green always
-      // tracks — attaching to only one left it stuck on mobile.
+      // Catch scroll from whichever element actually scrolls. window covers
+      // mobile (page scroll); #cards-area covers desktop (inner panel). The
+      // capture-phase document listener is a belt-and-braces catch-all, since
+      // scroll events don't bubble but DO fire in the capture phase.
       const onScroll = () => window.requestAnimationFrame(updateJumpSpy);
       window.addEventListener('scroll', onScroll, {{ passive: true }});
+      document.addEventListener('scroll', onScroll, {{ passive: true, capture: true }});
       const ca = document.getElementById('cards-area');
       if (ca) ca.addEventListener('scroll', onScroll, {{ passive: true }});
       updateJumpSpy();
