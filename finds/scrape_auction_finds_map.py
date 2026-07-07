@@ -1052,16 +1052,22 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         setActiveJump(a.dataset.target);   // instant single-green, no stale state
         scrollToSection(a.dataset.target);
       }}));
-      // Catch scroll from whichever element actually scrolls. window covers
-      // mobile (page scroll); #cards-area covers desktop (inner panel). The
-      // capture-phase document listener is a belt-and-braces catch-all, since
-      // scroll events don't bubble but DO fire in the capture phase.
-      const onScroll = () => window.requestAnimationFrame(updateJumpSpy);
-      window.addEventListener('scroll', onScroll, {{ passive: true }});
-      document.addEventListener('scroll', onScroll, {{ passive: true, capture: true }});
-      const ca = document.getElementById('cards-area');
-      if (ca) ca.addEventListener('scroll', onScroll, {{ passive: true }});
-      updateJumpSpy();
+      // Bulletproof position tracking: a requestAnimationFrame loop that
+      // recomputes the active section whenever ANY scroll offset changes.
+      // Scroll-event listeners proved unreliable on mobile (the page scroll
+      // wasn't reaching our handler, so the green stuck on the last click).
+      // This loop doesn't care which element scrolls or whether a scroll event
+      // fires — it just watches the numbers. updateJumpSpy is cheap (3 rect
+      // reads) and we only recompute when the position actually changed.
+      let lastKey = '';
+      (function tick() {{
+        const ca = document.getElementById('cards-area');
+        const key = (window.scrollY || 0) + '/' +
+                    (document.scrollingElement ? document.scrollingElement.scrollTop : 0) + '/' +
+                    (ca ? ca.scrollTop : 0);
+        if (key !== lastKey) {{ lastKey = key; updateJumpSpy(); }}
+        requestAnimationFrame(tick);
+      }})();
     }});
 
     function normalizeSearch(text) {{
