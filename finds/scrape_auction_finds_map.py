@@ -658,14 +658,21 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       font-weight: 500;
       transition: 0.15s;
     }}
-    /* Hover only on real pointer devices — on touchscreens :hover "sticks" to
-       the tapped button until you tap elsewhere, which looked like the active
-       indicator was stuck on. Guarding with (hover:hover) stops that. */
+    /* Hover affordance for desktop mouse users only — a SUBTLE grey tint, NOT
+       the accent green. Critical: it must never paint the SAME green as .active.
+       On touch, :hover "sticks" to a tapped element until you tap elsewhere, and
+       some Android devices (notably Samsung, S-Pen/hover-capable) FALSELY match
+       @media (hover: hover), defeating the guard — so a tapped pill kept the
+       sticky hover-green and looked like the active indicator was stuck on
+       (the entire ~9-round "Samsung sticky green" saga was THIS, not a repaint
+       bug). Making hover a distinct subtle tint means even a stuck hover is
+       harmless and never reads as active. .active (JS-controlled) is the ONLY
+       thing that ever goes green. */
     @media (hover: hover) {{
-      nav.jump a:hover {{ background: var(--accent); color: var(--panel); }}
+      nav.jump a:hover {{ background: #e5e7eb; color: var(--ink); }}
     }}
     /* Active = the section currently in view (scrollspy) or just clicked.
-       One green at a time; overrides hover so it stays lit. */
+       The ONLY green state; set purely by the .active JS class. */
     nav.jump a.active {{ background: var(--accent); color: var(--panel); }}
     .new-badge {{
       position: absolute; top: 10px; left: 10px;
