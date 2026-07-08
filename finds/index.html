@@ -396,18 +396,37 @@
       .hrow2 { gap: 6px 8px; }
       .search-box { min-width: 0; flex-basis: 100%; max-width: none; }
       .term-tag { font-size: .6rem; padding: 3px 9px; }
+      /* MOBILE: pin the jump bar to the BOTTOM of the viewport so it NEVER
+         scrolls off-screen. THIS is the structural fix for the Chrome-on-Samsung
+         stale-repaint bug (~9 rounds): the trigger was the buttons scrolling out
+         of view and back — Blink on that GPU driver re-composited them with stale
+         pixels on fast re-entry. If they never leave the viewport, there's no
+         re-entry repaint to botch. Bottom bar = natural mobile pattern, thumb-
+         reachable, never overlaps the scroll-away header. position:fixed also
+         sidesteps our double-scroller ambiguity (pins to viewport regardless of
+         whether the window or #cards-area scrolls). */
       nav.jump {
-        margin-left: 0; flex-basis: 100%;
-        flex-wrap: nowrap; overflow-x: auto;   /* one swipeable row */
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 5px;                              /* tighter so all 4 fit */
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200;
+        margin: 0; padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        display: flex; justify-content: center; gap: 6px;
+        flex-basis: auto; flex-wrap: nowrap; overflow-x: auto;
+        background: var(--panel); border-top: 1px solid var(--line);
+        box-shadow: 0 -2px 10px rgba(0,0,0,.06);
+        -webkit-overflow-scrolling: touch; scrollbar-width: none;
       }
       nav.jump::-webkit-scrollbar { display: none; }
-      nav.jump a { flex-shrink: 0; font-size: 0.62rem; padding: 5px 9px; }
+      nav.jump a { flex-shrink: 0; font-size: 0.68rem; padding: 7px 14px; }
+      /* The header's backdrop-filter makes it the containing block for any
+         fixed descendant — that would trap the bar INSIDE the header instead of
+         pinning it to the viewport. Header is static + scrolls away on mobile so
+         the blur is pointless here; drop it so the fixed bar escapes to the
+         viewport. (.hrow2 has no transform/filter, so header is the only trap.) */
+      header { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
       #map-panel { display: none; }
-      #cards-area { padding: 0 12px 24px; }
+      /* Bottom padding (76px) clears the fixed bottom jump bar so the last
+         cards aren't hidden behind it. */
+      #cards-area { padding: 0 12px 76px; }
       /* No standalone map on mobile (Ken's call): a cold map with no pin lit
          answers nothing. Map entrance will be tap-item -> pin (planned).
          Footer also hidden on mobile to give listings the room. */
