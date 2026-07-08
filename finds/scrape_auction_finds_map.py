@@ -657,18 +657,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       text-decoration: none;
       font-weight: 500;
       transition: 0.15s;
-      /* Promote each pill to its own GPU compositor layer. On mobile the header
-         (and these buttons) scroll off-screen; Chrome-on-Samsung was re-painting
-         them with STALE pixels when they scrolled back into view during a fast
-         momentum scroll — so a button looked green even though its .active class
-         had already been removed (confirmed: debug showed correct active state,
-         wrong colour on screen). Own-layer promotion forces a correct
-         re-composite on re-entry. translateZ(0)+backface-visibility is the
-         standard remedy. */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }}
     /* Hover only on real pointer devices — on touchscreens :hover "sticks" to
        the tapped button until you tap elsewhere, which looked like the active
@@ -1030,17 +1018,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function jumpLinks() {{ return document.querySelectorAll('nav.jump a[data-target]'); }}
     var jumpActiveId = null;
     function setActiveJump(id) {{
-      if (id === jumpActiveId) return;   // no change → nothing to repaint
+      if (id === jumpActiveId) return;   // no change → skip redundant DOM work
       jumpActiveId = id;
-      jumpLinks().forEach(a => {{
-        const on = a.dataset.target === id;
-        a.classList.toggle('active', on);
-        // Force Chrome-on-Samsung to actually re-paint the pill. Own-layer
-        // promotion (translateZ in CSS) handles most cases, but nudging the
-        // layer with a tiny transform toggle guarantees the stale-green pixels
-        // are discarded when the header scrolls back into view after a fling.
-        a.style.transform = on ? 'translateZ(0) scale(1.0001)' : 'translateZ(0)';
-      }});
+      jumpLinks().forEach(a => a.classList.toggle('active', a.dataset.target === id));
     }}
     function scrollToSection(id) {{
       const sc = jumpScroller();
