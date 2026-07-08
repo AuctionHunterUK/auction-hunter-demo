@@ -572,17 +572,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     /* Tagline shown on desktop, matching Houses — hidden only on mobile
        (see the mobile media query below) to keep the phone header compact. */
-    header .tagline {{ font-size: .78rem; color: #6b7280; margin: 2px 0 0; max-width: 480px; line-height: 1.3; }}
-    .hstatus {{ display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; }}
-    /* headtop holds ONLY brand + toggle — identical markup on both Finds and
-       Houses. It always claims its own full-width line (flex-basis:100%),
-       so its layout depends purely on viewport width, never on how long the
-       page-specific status text below happens to be. That's what guarantees
-       the toggle lands in the same place on both pages. */
-    .headtop {{ display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }}
-    .update-ok {{ font-size: .78rem; color: #22c55e; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap; }}
-    .hstats {{ font-size: .78rem; color: var(--muted); white-space: nowrap; }}
-    .hstats strong {{ color: var(--ink); }}
+    header .tagline {{ font-size: .78rem; color: #6b7280; margin: 2px 0 0; max-width: 480px; line-height: 1.3; flex-basis: 100%; }}
+    /* headtop holds brand + search + toggle in a single compact row */
+    .headtop {{ display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; flex: 1; }}
     .hrow2 {{ flex-basis: 100%; display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }}
     .term-tag {{
       font-size: 0.74rem; color: var(--accent); font-weight: 600;
@@ -691,6 +683,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       border-top: 1px solid var(--accent-soft);
     }}
     footer a {{ color: var(--accent); text-decoration: none; }}
+    .footer-timestamp {{ font-size: 0.75rem; color: #9ca3af; }}
 
     #main-layout {{
       display: flex;
@@ -916,15 +909,12 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .brand img {{ height: 22px !important; }}
       .brand {{ gap: 5px; }}
       .brand h1 {{ font-size: 0.88rem; }}
-      .brand a {{ font-size: .64rem !important; margin-left: 0 !important; }}
       .demo-tag {{ font-size: .52rem; padding: 2px 7px; }}
-      .hstatus {{ flex-basis: 100%; gap: 4px 8px; }}
-      .update-ok {{ white-space: normal; font-size: .68rem; }}
-      .hstats {{ white-space: normal; font-size: .68rem; }}
       .app-nav {{ padding: 2px; }}
       .app-nav-link {{ font-size: .64rem; padding: 4px 9px; }}
+      .search-box {{ min-width: 0; max-width: none; flex: 1; }}
+      .search-box input {{ font-size: 0.8rem; padding: 7px 32px 7px 10px; }}
       .hrow2 {{ gap: 6px 8px; }}
-      .search-box {{ min-width: 0; flex-basis: 100%; max-width: none; }}
       .term-tag {{ font-size: .6rem; padding: 3px 9px; }}
       nav.jump {{
         margin-left: 0; flex-basis: 100%;
@@ -951,28 +941,47 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       body.map-open #map-close {{ display: block; }}
       body.map-open #map-fab {{ display: none; }}
     }}
+
+    /* Edge-to-edge cards on mobile — CHANGE 4 */
+    @media (max-width: 640px) {{
+      #cards-area {{ padding: 0 8px 24px; }}
+      #cards-area section {{
+        margin: 24px 0 0;
+      }}
+      #cards-area section.local-section,
+      #cards-area section.today-section,
+      #cards-area section.later-section {{
+        padding: 20px 12px 24px;
+        margin: 24px 0 0;
+      }}
+      #cards-area section h2 {{
+        margin: 0 -12px 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }}
+      .masonry {{ gap: 12px; }}
+      .card {{
+        margin: 0;
+      }}
+    }}
   </style>
 </head>
 <body>
 {gate_html}
   <header>
     <div class="headtop">
-      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1><a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a></div>
+      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1></div>
+      <div class="search-box" id="searchBox">
+        <input type="text" id="searchInput" placeholder="Search items..." oninput="searchItems()">
+        <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
+      </div>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">Map</a>
         <a href="../finds/" class="app-nav-link on">Lots</a>
       </nav>
     </div>
     <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
-    <div class="hstatus">
-      <span class="update-ok">✅ Successfully updated - {now}</span>
-      <span class="hstats"><strong>{total} lots</strong> · {today_total} today · {new_total} new since yesterday</span>
-    </div>
     <div class="hrow2">
-      <div class="search-box" id="searchBox">
-        <input type="text" id="searchInput" placeholder="🔍 Search items below (e.g. bedside cupboard, chest of drawers...)" oninput="searchItems()">
-        <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
-      </div>
       <span class="search-results" id="searchResults"></span>
       <nav class="jump" aria-label="Jump to section">
         <a href="#local" data-target="local">Local · {local_local_count}</a>
@@ -999,7 +1008,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
   <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
 
   <footer>
-    Auction Hunter · lots refreshed daily from EasyLive
+    Auction Hunter · lots refreshed daily from EasyLive · <a href="../about.html">About</a> · <span class="footer-timestamp">updated {now}</span>
   </footer>
 
   <script>
