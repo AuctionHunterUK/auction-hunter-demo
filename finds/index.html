@@ -137,16 +137,17 @@
       transition: 0.15s;
     }
     /* Hover affordance for desktop mouse users only — a SUBTLE grey tint, NOT
-       the accent green. Critical: it must never paint the SAME green as .active.
-       On touch, :hover "sticks" to a tapped element until you tap elsewhere, and
-       some Android devices (notably Samsung, S-Pen/hover-capable) FALSELY match
-       @media (hover: hover), defeating the guard — so a tapped pill kept the
-       sticky hover-green and looked like the active indicator was stuck on
-       (the entire ~9-round "Samsung sticky green" saga was THIS, not a repaint
-       bug). Making hover a distinct subtle tint means even a stuck hover is
-       harmless and never reads as active. .active (JS-controlled) is the ONLY
-       thing that ever goes green. */
-    @media (hover: hover) {
+       the accent green. TWO layers of defence against the Samsung sticky-green:
+       (1) the compound query `(hover:hover) and (pointer:fine)` — an S-Pen
+       Samsung reports hover:hover (pen CAN hover) but its PRIMARY pointer is
+       coarse (finger), so the single `hover:hover` guard LEAKS on it while the
+       compound one holds; this stops hover styling applying on touch at all.
+       (2) even if some device still leaks, the tint is a harmless grey, never
+       the accent green — so a stuck tap-hover can never be mistaken for the
+       active state. (The entire ~9-round "Samsung sticky green" saga was a
+       sticky tap-:hover painting the SAME green as .active, not a repaint bug.)
+       .active (JS-controlled) is the ONLY thing that ever goes green. */
+    @media (hover: hover) and (pointer: fine) {
       nav.jump a:hover { background: #e5e7eb; color: var(--ink); }
     }
     /* Active = the section currently in view (scrollspy) or just clicked.
