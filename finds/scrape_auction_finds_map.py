@@ -1170,7 +1170,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           html += `<div class="house-popup-sales-title">Upcoming Sales</div>`;
           data.sales.forEach(sale => {{
             html += `<div class="house-popup-sale">`;
-            html += `<span class="house-popup-sale-date">${{sale.date}}</span>`;
+            // Format date from YYYY-MM-DD to DD-MM-YYYY
+            const [y, m, d] = sale.date.split('-');
+            html += `<span class="house-popup-sale-date">${{d}}-${{m}}-${{y}}</span>`;
             if (sale.time) {{
               html += `<span class="house-popup-sale-time">${{sale.time}}</span>`;
             }}
