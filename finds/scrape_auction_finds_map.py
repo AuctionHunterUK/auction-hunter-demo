@@ -318,7 +318,7 @@ def house_meta(house, postcodes):
         or _find_truncated(house, raw)
     )
     if not info:
-        return {"postcode": None, "location": None, "map_url": None, "known": False}
+        return {"postcode": None, "location": None, "map_url": None, "known": False, "key": None, "info": None}
     pc = info.get("postcode", "")
     loc = info.get("location") or ""
     if not loc and info.get("address"):
@@ -328,7 +328,9 @@ def house_meta(house, postcodes):
         loc = addr
     map_url = f"https://www.google.com/maps/search/?api=1&query={pc.replace(' ', '+')}" if pc else None
     easylive_url = info.get("url") or None
-    return {"postcode": pc, "location": loc, "map_url": map_url, "easylive_url": easylive_url, "known": True}
+    # Generate stable key for popup lookup
+    key = _normalize(house) or house.lower().strip()
+    return {"postcode": pc, "location": loc, "map_url": map_url, "easylive_url": easylive_url, "known": True, "key": key, "info": info}
 
 
 # --- HTML rendering -------------------------------------------------------
@@ -383,14 +385,14 @@ def _card_html(lot, is_new, postcodes):
             tooltip += f' · {h["location"]}'
         tooltip += f' · click for {dest_label}'
         house_html_str = (
-            f'<span class="house" data-tip="{tooltip}" '
+            f'<span class="house" data-tip="{tooltip}" data-house-key="{h["key"]}" '
             f'onclick="event.preventDefault(); event.stopPropagation(); '
             f"window.open('{link}','_blank'); "
             f'">{lot["house"]} <span class="pc">{h["postcode"]}</span></span>'
         )
     elif h["known"]:
         loc = h["location"] or "location on file"
-        house_html_str = f'<span class="house" data-tip="🌍 {loc}">{lot["house"]} <span class="pc pc-intl">{loc}</span></span>'
+        house_html_str = f'<span class="house" data-tip="🌍 {loc}" data-house-key="{h["key"]}">{lot["house"]} <span class="pc pc-intl">{loc}</span></span>'
     else:
         house_html_str = f'<span class="house unknown" data-tip="📍 postcode unknown">{lot["house"]} <span class="pc-unknown">?</span></span>'
 
@@ -515,6 +517,56 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     local_html = _section_html("📍 Local auctions", local_lots, "local", seen, postcodes, "local-section")
     today_html = _section_html(f"🔥 UK-Wide · selling today ({today_str})", wide_today, "today", seen, postcodes, "today-section") if wide_today else ""
     later_html = _section_html("🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes, "later-section")
+
+    # Collect unique houses for popup data
+    all_lots = local_lots + wide_lots
+    house_popup_data = {}
+    for lot in all_lots:
+        house_name = lot.get("house", "")
+        if not house_name:
+            continue
+        h = house_meta(house_name, postcodes)
+        if not h["known"] or not h["key"]:
+            continue
+        key = h["key"]
+        if key in house_popup_data:
+            continue
+        # Build popup data entry
+        info = h.get("info") or {}
+        entry = {
+            "name": house_name,
+            "address": info.get("address", ""),
+            "url": info.get("url", "")
+        }
+        house_popup_data[key] = entry
+    
+    # Load sale dates and attach to house data
+    dates_file = REPO_DIR.parent / "houses" / "dates.json"
+    if dates_file.exists():
+        try:
+            dates_data = json.loads(dates_file.read_text())
+            houses_dates = dates_data.get("houses", {})
+            for key, entry in house_popup_data.items():
+                house_name = entry["name"]
+                # Try exact match, then normalized
+                sales = houses_dates.get(house_name) or houses_dates.get(_normalize(house_name))
+                if sales and isinstance(sales, list):
+                    # Take up to 2 upcoming sales
+                    entry["sales"] = sales[:2]
+        except Exception:
+            pass  # If dates can't be loaded, just omit sales data
+    
+    # Generate HOUSE_POPUP_DATA JS object
+    house_data_entries = []
+    for key, entry in house_popup_data.items():
+        key_esc = json.dumps(key)
+        name_esc = json.dumps(entry.get("name", ""))
+        addr_esc = json.dumps(entry.get("address", ""))
+        url_esc = json.dumps(entry.get("url", ""))
+        sales_list = entry.get("sales", [])
+        sales_json = json.dumps(sales_list)
+        house_data_entries.append(f'  {key_esc}:{{name:{name_esc},address:{addr_esc},url:{url_esc},sales:{sales_json}}}')
+    house_popup_js = "const HOUSE_POPUP_DATA = {\\n" + ",\\n".join(house_data_entries) + "\\n};"
 
     local_local_count = len(local_lots)
     wide_today_count = len(wide_today)
@@ -831,6 +883,79 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .house:hover {{ color: var(--accent); border-bottom-color: var(--accent); }}
     .house.highlighted {{ color: var(--highlight); border-bottom-color: var(--highlight); }}
     .house.unknown {{ opacity: 0.7; }}
+
+    /* House popup — desktop hover only */
+    .house-popup {{
+      position: absolute;
+      z-index: 1500;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-hover);
+      padding: 14px 16px;
+      min-width: 220px;
+      max-width: 280px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }}
+    .house-popup.visible {{ opacity: 1; }}
+    .house-popup-name {{
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }}
+    .house-popup-address {{
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }}
+    .house-popup-url {{
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+      border-bottom: 1px solid transparent;
+    }}
+    .house-popup-url:hover {{ border-bottom-color: var(--accent); }}
+    .house-popup-sales {{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }}
+    .house-popup-sales-title {{
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }}
+    .house-popup-sale {{
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+    }}
+    .house-popup-sale-date {{
+      font-weight: 600;
+      color: var(--ink);
+    }}
+    .house-popup-sale-time {{
+      color: var(--muted);
+      margin-left: 4px;
+    }}
+    .house-popup-sale-title {{
+      color: var(--muted);
+      font-size: 0.72rem;
+      margin-top: 2px;
+      line-height: 1.3;
+    }}
     .pc {{
       display: inline-block; margin-left: 4px;
       background: var(--accent-soft); color: var(--accent);
@@ -1013,6 +1138,112 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
   <script>
 {pc_map_js}
+
+{house_popup_js}
+
+    // ── HOUSE POPUP (desktop hover only) ──
+    (function initHousePopup() {{
+      // Guard: only run on devices with true hover support
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      
+      const popup = document.createElement('div');
+      popup.className = 'house-popup';
+      document.body.appendChild(popup);
+      
+      let showTimer = null;
+      let currentHouse = null;
+      
+      function showPopup(houseEl, key) {{
+        const data = HOUSE_POPUP_DATA[key];
+        if (!data) return;
+        
+        // Build popup content
+        let html = `<div class="house-popup-name">${{data.name}}</div>`;
+        if (data.address) {{
+          html += `<div class="house-popup-address">${{data.address}}</div>`;
+        }}
+        if (data.url) {{
+          html += `<a href="${{data.url}}" class="house-popup-url" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on EasyLive ↗</a>`;
+        }}
+        if (data.sales && data.sales.length) {{
+          html += `<div class="house-popup-sales">`;
+          html += `<div class="house-popup-sales-title">Upcoming Sales</div>`;
+          data.sales.forEach(sale => {{
+            html += `<div class="house-popup-sale">`;
+            html += `<span class="house-popup-sale-date">${{sale.date}}</span>`;
+            if (sale.time) {{
+              html += `<span class="house-popup-sale-time">${{sale.time}}</span>`;
+            }}
+            if (sale.title) {{
+              html += `<div class="house-popup-sale-title">${{sale.title}}</div>`;
+            }}
+            html += `</div>`;
+          }});
+          html += `</div>`;
+        }}
+        
+        popup.innerHTML = html;
+        
+        // Position popup near the house element
+        const rect = houseEl.getBoundingClientRect();
+        const vpWidth = window.innerWidth;
+        const vpHeight = window.innerHeight;
+        
+        // Show popup briefly to measure it
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        const popupRect = popup.getBoundingClientRect();
+        popup.classList.remove('visible');
+        popup.style.visibility = '';
+        
+        // Default: below and aligned to left edge
+        let top = rect.bottom + window.scrollY + 8;
+        let left = rect.left + window.scrollX;
+        
+        // If popup would go off right edge, align to right edge of element
+        if (left + popupRect.width > vpWidth - 16) {{
+          left = Math.max(16, rect.right + window.scrollX - popupRect.width);
+        }}
+        
+        // If popup would go off bottom, show above instead
+        if (rect.bottom + popupRect.height + 16 > vpHeight) {{
+          top = rect.top + window.scrollY - popupRect.height - 8;
+        }}
+        
+        // Clamp to viewport
+        left = Math.max(16, Math.min(left, vpWidth - popupRect.width - 16));
+        top = Math.max(16, top);
+        
+        popup.style.left = left + 'px';
+        popup.style.top = top + 'px';
+        popup.classList.add('visible');
+        currentHouse = houseEl;
+      }}
+      
+      function hidePopup() {{
+        popup.classList.remove('visible');
+        currentHouse = null;
+      }}
+      
+      // Attach hover handlers to all .house elements with data-house-key
+      document.addEventListener('DOMContentLoaded', () => {{
+        document.querySelectorAll('.house[data-house-key]').forEach(houseEl => {{
+          houseEl.addEventListener('mouseenter', () => {{
+            const key = houseEl.dataset.houseKey;
+            if (!key) return;
+            // Delay to avoid flicker on casual mouse movement
+            showTimer = setTimeout(() => {{
+              showPopup(houseEl, key);
+            }}, 200);
+          }});
+          
+          houseEl.addEventListener('mouseleave', () => {{
+            clearTimeout(showTimer);
+            hidePopup();
+          }});
+        }});
+      }});
+    }})();
 
     // ── SEARCH ──
 
