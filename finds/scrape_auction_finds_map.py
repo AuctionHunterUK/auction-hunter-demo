@@ -566,7 +566,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         sales_list = entry.get("sales", [])
         sales_json = json.dumps(sales_list)
         house_data_entries.append(f'  {key_esc}:{{name:{name_esc},address:{addr_esc},url:{url_esc},sales:{sales_json}}}')
-    house_popup_js = "const HOUSE_POPUP_DATA = {\n" + ",\n".join(house_data_entries) + "\n};"
+    house_popup_js = "const HOUSE_POPUP_DATA = {\\n" + ",\\n".join(house_data_entries) + "\\n};"
 
     local_local_count = len(local_lots)
     wide_today_count = len(wide_today)
