@@ -32,6 +32,10 @@
   .easylive-box h2{margin-top:0}
   .easylive-box p{margin-bottom:10px}
   .easylive-box p:last-child{margin-bottom:0}
+  .monitoring-box{margin-top:16px;background:#fbfcfa;border:1px solid #dfe6df;border-left:4px solid #6f8f70;border-radius:10px;padding:20px 22px}
+  .monitoring-box h2{margin-top:0}
+  .monitoring-box p{margin-bottom:10px}
+  .monitoring-box p:last-child{margin-bottom:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand{gap:5px}.brand img{height:22px}.brand h1{font-size:.88rem}.app-nav{padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
 </style>
@@ -103,30 +107,38 @@ body.gate-locked{overflow:hidden}
 </header>
 
 <main class="about-main"><div class="wrap">
-  <h1><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto;vertical-align:middle;margin-right:8px">Auction Hunter</h1>
-  <div class="sub">A private demonstration — two tools, one idea</div>
+  <h1>About Auction Hunter</h1>
+  <div class="sub"><em>A private demonstration — two tools, one idea</em></div>
 
-  <p>Auction Hunter is a proof-of-concept for UK antique dealers and collectors: find what's for sale, see where it is, and decide if it's worth the trip. This demo has two pages, working together.</p>
+  <p>Auction Hunter is a proof of concept for UK antique dealers and collectors: find what is for sale, see where it is, and decide whether it is worth the trip. The demonstration brings two complementary tools together.</p>
 
   <h2>Lots</h2>
-  <p>A daily feed of pine furniture lots pulled from EasyLive's public listings, organised into Local, Today, and Later. Each lot links straight through to bid.</p>
+  <p>A regularly updated catalogue of pine furniture appearing in UK auctions, organised into Local, Today and Later. Every item links directly to its original EasyLive Auction listing for full details and bidding.</p>
 
   <h2>Map</h2>
-  <p>An interactive map of UK auction houses, colour-coded by when their next sale is, with a route planner for finding houses along a journey.</p>
+  <p>An interactive map of UK auction houses, colour-coded according to when their next sale takes place. It also includes a route planner for discovering auction houses along a journey.</p>
 
-  <h2>What's next</h2>
-  <p>The long-term idea is a subscription product: a free map tier, with paid tiers adding personalised search terms, a saved list of local auction houses, and alerts. This demo doesn't build those yet — it's here to show what the product looks like once they exist.</p>
+  <h2>What’s next</h2>
+  <p>The longer-term idea is a subscription service with a free auction-house map and optional paid features such as personalised search terms, a saved selection of local auction houses and alerts for newly listed items.</p>
+  <p>These features are represented in the demonstration to communicate the product idea; they are not yet being offered as a commercial service.</p>
 
   <div class="easylive-box">
-    <h2>A note for EasyLive</h2>
-    <p>This demo currently pulls publicly listed auction data from EasyLive to show what this kind of product could look like. It isn't a public product — it's invitation-only, not linked from anywhere public, and not intended for anyone outside this conversation.</p>
-    <p>If this moves beyond a demo, the intention is to work directly with EasyLive on a proper data partnership, rather than continuing to source listings independently.</p>
+    <h2>Working responsibly with auction data</h2>
+    <p>All lot and auction information displayed in this demonstration is sourced from EasyLive Auction. Rights in the listings, descriptions and imagery remain with EasyLive, the participating auctioneers and their respective rights holders.</p>
+    <p>Auction Hunter is currently a password-protected, invitation-only demonstration created to explore a potential partnership with EasyLive. It is not being offered as a commercial service, and every lot links directly back to EasyLive for viewing and bidding.</p>
+    <p>We recognise that EasyLive’s <a href="https://www.easyliveauction.com/legal/site-usage-terms/" target="_blank" rel="noopener noreferrer">published site-usage terms</a> require written permission for automated data collection. Any development beyond this demonstration would therefore be undertaken through an agreed data-access arrangement or partnership. We will promptly remove any information or imagery at the request of EasyLive or the relevant rights holder.</p>
+  </div>
+
+  <div class="monitoring-box">
+    <h2>Proposed data-use monitoring</h2>
+    <p>A future partnership could also include an analytics-based monitoring capability designed to help protect catalogue information. It could examine access patterns and flag unusual automated collection, bulk extraction or catalogue reuse for investigation.</p>
+    <p>This would be a proposed detection and alerting tool—not an automatic accusation or enforcement system—with its rules, thresholds and reporting agreed directly with EasyLive.</p>
   </div>
 
   <h2>Contact</h2>
   <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
 
-  <div class="footer">Auction Hunter. Private demo — invitation only.</div>
+  <div class="footer">Auction Hunter. Private demonstration — invitation only.</div>
 </div></main>
 </body>
 </html>
