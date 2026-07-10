@@ -15,43 +15,37 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;background:#f9fafb;touch-action:manipulation}
 
-/* ── SHARED APP NAV (Houses ↔ Finds) ── */
-/* Segmented page toggle (matches Finds page): one control split in two so the two-page structure reads instantly. */
-.app-nav{display:inline-flex;padding:3px;gap:0;margin-left:8px;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
+/* ── SHARED HEADER CONTRACT (keep in sync with finds/scrape_auction_finds_map.py) ── */
+header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex-shrink:0;z-index:1000}
+.headtop{display:grid;grid-template-columns:max-content minmax(0,400px) max-content;align-items:center;column-gap:12px;min-height:40px}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand img{height:40px;width:auto}
+.brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap;margin:0}
+.search-box{position:relative}
+.search-box-spacer{height:35px;visibility:hidden;pointer-events:none}
+.tagline{font-size:.78rem;color:#6b7280;margin:2px 0 0;max-width:480px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrow2{min-height:26px;display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
+.header-about{font-size:.78rem;color:#6b7280;text-decoration:none;white-space:nowrap}
+.header-about:hover{color:var(--pine)}
+.app-nav{display:inline-flex;padding:3px;gap:0;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
 .app-nav-link{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;border:0;background:transparent;color:var(--pine);letter-spacing:-.01em;text-decoration:none;white-space:nowrap;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
 .app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
 .app-nav-link.on{background:var(--pine);color:#fff;box-shadow:0 1px 4px rgba(58,92,59,.35)}
 .app-nav-link.on:hover{background:var(--pine)}
-.demo-tag{font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;padding:3px 9px;border-radius:20px;white-space:nowrap}
-/* headtop holds ONLY brand + toggle — identical markup to the Finds page.
-   Its own layout depends purely on viewport width, never on how long the
-   page-specific status text below happens to be, which is what guarantees
-   the toggle lands in the same place on both pages. */
-.headtop{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-/* Mobile header sizes — mirror the Finds page so the two headers match on phones.
-   Must come AFTER the base .demo-tag rule above: equal-specificity CSS rules are
-   decided by source order, not by which one is inside a media query, so this
-   block previously did nothing on mobile because it sat before the base rule. */
-@media(max-width:767px){
+@media(max-width:800px){
+  header{padding:8px 12px}
+  .headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}
   .brand img{height:22px!important}
   .brand{gap:5px!important}
   .brand h1{font-size:0.88rem!important}
-  .brand a{font-size:.64rem!important;margin-left:0!important}
-  .demo-tag{font-size:.52rem;padding:2px 7px}
   .app-nav{padding:2px}
   .app-nav-link{font-size:.64rem;padding:4px 9px}
-  /* Force the same explicit two-row split Finds uses, instead of letting this
-     row wrap organically based on how much status text happens to fit — that
-     made the toggle/logo land in different places between the two pages. */
-  header{align-items:flex-start;padding:8px 12px!important}
   .tagline{display:none}
-  .headtop{flex-basis:100%}
-  .hrow2{flex-basis:100%;margin-left:0;flex-wrap:wrap;gap:6px 10px}
+  .search-box-spacer{height:33px}
+  .hrow2{min-height:23px;gap:6px 8px}
+  .header-about{font-size:.64rem}
 }
 
-/* ── HEADER ── */
-header{background:#fff;border-bottom:1px solid var(--line);padding:14px 24px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:1000;flex-wrap:wrap;gap:8px}
-header h1{font-family:'Playfair Display',serif;font-size:1rem;color:#111827;white-space:nowrap}
 .htag{font-size:.6rem;background:rgba(45,74,62,.1);color:#2d4a3e;border:1px solid rgba(45,74,62,.2);padding:2px 7px;border-radius:10px;letter-spacing:.06em;text-transform:uppercase;display:none}
 @media(min-width:480px){.htag{display:inline}}
 #update-status{font-size:.78rem;color:#22c55e;font-weight:600;display:flex;align-items:center;gap:4px}
@@ -489,21 +483,22 @@ body.gate-locked{overflow:hidden}
 
 <header>
   <div class="headtop">
-    <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions" style="display:flex;align-items:center;gap:10px;cursor:pointer">
-      <img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto">
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;color:#111827;white-space:nowrap;margin:0">Auction Hunter</h1>
-      <a href="../about.html" style="font-size:.78rem;color:#6b7280;text-decoration:none;margin-left:2px">About</a>
+    <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions">
+      <img src="logo.png" alt="Auction Hunter">
+      <h1>Auction Hunter</h1>
     </div>
+    <div class="search-box search-box-spacer" aria-hidden="true"></div>
     <nav class="app-nav" aria-label="App pages">
       <a href="../houses/" class="app-nav-link on">Map</a>
       <a href="../finds/" class="app-nav-link">Lots</a>
     </nav>
   </div>
-  <p class="tagline" style="margin:0;font-size:0.78rem;color:#6b7280;max-width:380px;line-height:1.3">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
-  <div class="hrow2" style="display:flex;align-items:center;gap:8px">
+  <p class="tagline">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
+  <div class="hrow2">
     <span id="update-status">✅ Loading dates…</span>
     <span id="updated-badge">1 May 2026</span>
     <span class="hright" id="hright">Loading…</span>
+    <a class="header-about" href="../about.html" onclick="event.stopPropagation()">About</a>
   </div>
 </header>
 <div id="toolbar">
