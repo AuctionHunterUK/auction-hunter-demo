@@ -1,4 +1,4 @@
-import os, re, json, time, hashlib, logging, requests, subprocess
+import os, re, json, time, hashlib, logging, requests, subprocess, html
 from pathlib import Path
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -296,15 +296,15 @@ def _find_truncated(name, raw):
     stem = name[:-3].strip().lower()
     if len(stem) < 6:
         return None
-    matches = [info for full, info in raw.items() if full.lower().startswith(stem)]
+    matches = [(full, info) for full, info in raw.items() if full.lower().startswith(stem)]
     if len(matches) == 1:
         return matches[0]
     nstem = _normalize(name)
     if nstem and len(nstem) >= 6:
-        nmatches = [info for full, info in raw.items() if _normalize(full).startswith(nstem)]
+        nmatches = [(full, info) for full, info in raw.items() if _normalize(full).startswith(nstem)]
         if len(nmatches) == 1:
             return nmatches[0]
-        rev = [info for full, info in raw.items() if nstem.startswith(_normalize(full)) and len(_normalize(full)) >= 6]
+        rev = [(full, info) for full, info in raw.items() if nstem.startswith(_normalize(full)) and len(_normalize(full)) >= 6]
         if len(rev) == 1:
             return rev[0]
     return None
@@ -312,13 +312,25 @@ def _find_truncated(name, raw):
 
 def house_meta(house, postcodes):
     raw, norm = postcodes
-    info = (
-        raw.get(house)
-        or norm.get(_normalize(house))
-        or _find_truncated(house, raw)
-    )
+    canonical_name = house if house in raw else None
+    info = raw.get(house)
     if not info:
-        return {"postcode": None, "location": None, "map_url": None, "known": False}
+        normalized_house = _normalize(house)
+        info = norm.get(normalized_house)
+        if info:
+            canonical_name = next(
+                (name for name, candidate in raw.items()
+                 if _normalize(name) == normalized_house),
+                house,
+            )
+    if not info:
+        truncated_match = _find_truncated(house, raw)
+        if truncated_match:
+            canonical_name, info = truncated_match
+    if not info:
+        return {"postcode": None, "location": None, "map_url": None,
+                "easylive_url": None, "canonical_name": None, "key": None,
+                "address": None, "known": False}
     pc = info.get("postcode", "")
     loc = info.get("location") or ""
     if not loc and info.get("address"):
@@ -328,7 +340,10 @@ def house_meta(house, postcodes):
         loc = addr
     map_url = f"https://www.google.com/maps/search/?api=1&query={pc.replace(' ', '+')}" if pc else None
     easylive_url = info.get("url") or None
-    return {"postcode": pc, "location": loc, "map_url": map_url, "easylive_url": easylive_url, "known": True}
+    return {"postcode": pc, "location": loc, "map_url": map_url,
+            "easylive_url": easylive_url, "canonical_name": canonical_name,
+            "key": _normalize(canonical_name), "address": info.get("address") or loc,
+            "known": True}
 
 
 # --- HTML rendering -------------------------------------------------------
@@ -375,6 +390,7 @@ def _card_html(lot, is_new, postcodes):
     new_badge = '<span class="new-badge">NEW</span>' if is_new else ""
 
     h = house_meta(lot.get("house", ""), postcodes)
+    house_key_attr = f' data-house-key="{html.escape(h["key"], quote=True)}"' if h["key"] else ""
     if h["known"] and (h["easylive_url"] or h["map_url"]):
         link = h["easylive_url"] or h["map_url"]
         dest_label = "EasyLive" if h["easylive_url"] else "map"
@@ -383,14 +399,14 @@ def _card_html(lot, is_new, postcodes):
             tooltip += f' · {h["location"]}'
         tooltip += f' · click for {dest_label}'
         house_html_str = (
-            f'<span class="house" data-tip="{tooltip}" '
+            f'<span class="house" data-tip="{tooltip}"{house_key_attr} '
             f'onclick="event.preventDefault(); event.stopPropagation(); '
             f"window.open('{link}','_blank'); "
             f'">{lot["house"]} <span class="pc">{h["postcode"]}</span></span>'
         )
     elif h["known"]:
         loc = h["location"] or "location on file"
-        house_html_str = f'<span class="house" data-tip="🌍 {loc}">{lot["house"]} <span class="pc pc-intl">{loc}</span></span>'
+        house_html_str = f'<span class="house" data-tip="🌍 {loc}"{house_key_attr}>{lot["house"]} <span class="pc pc-intl">{loc}</span></span>'
     else:
         house_html_str = f'<span class="house unknown" data-tip="📍 postcode unknown">{lot["house"]} <span class="pc-unknown">?</span></span>'
 
@@ -492,6 +508,63 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     wide_today  = [l for l in wide_lots  if _is_today(l, today_str)]
     wide_later  = [l for l in wide_lots  if not _is_today(l, today_str)]
     today_total = len(local_today) + len(wide_today)
+
+    # Popup data is resolved at generation time so the Lots page makes no
+    # browser request for auction-house details or upcoming sales.
+    dates_file = REPO_DIR.parent / "houses" / "dates.json"
+    houses_dates = {}
+    try:
+        dates_data = json.loads(dates_file.read_text(encoding="utf-8"))
+        candidate_dates = dates_data.get("houses", {})
+        if isinstance(candidate_dates, dict):
+            houses_dates = candidate_dates
+    except Exception as exc:
+        log.warning("Could not load house sale dates from %s: %s", dates_file, exc)
+    dates_by_normalized_name = {
+        _normalize(name): sales
+        for name, sales in houses_dates.items()
+        if isinstance(name, str)
+    }
+
+    today = datetime.now().date()
+
+    def popup_sales(canonical_name):
+        sales = houses_dates.get(canonical_name)
+        if not isinstance(sales, list):
+            sales = dates_by_normalized_name.get(_normalize(canonical_name), [])
+        valid_sales = []
+        for sale in sales if isinstance(sales, list) else []:
+            if not isinstance(sale, dict) or not isinstance(sale.get("date"), str):
+                continue
+            try:
+                sale_day = datetime.strptime(sale["date"], "%Y-%m-%d").date()
+            except ValueError:
+                continue
+            if sale_day < today:
+                continue
+            valid_sales.append({
+                "date": sale["date"],
+                "displayDate": f"{sale_day.strftime('%a')} {sale_day.day} {sale_day.strftime('%b')} {sale_day.year}",
+                "time": sale.get("time") if isinstance(sale.get("time"), str) else "",
+                "title": sale.get("title") if isinstance(sale.get("title"), str) else "",
+            })
+        return sorted(valid_sales, key=lambda sale: (sale["date"], sale["time"]))[:3]
+
+    house_popup_data = {}
+    for lot in local_lots + wide_lots:
+        h = house_meta(lot.get("house", ""), postcodes)
+        if not h["known"] or not h["key"] or h["key"] in house_popup_data:
+            continue
+        canonical_name = h["canonical_name"]
+        house_popup_data[h["key"]] = {
+            "name": canonical_name,
+            "address": h["address"] or "",
+            "easyliveUrl": h["easylive_url"] or "",
+            "sales": popup_sales(canonical_name),
+        }
+    house_popup_js = "const HOUSE_POPUP_DATA = " + json.dumps(
+        house_popup_data, ensure_ascii=False
+    ).replace("</", "<\\/") + ";"
 
     # Build PC_MAP from postcodes data (only houses with lat/lng)
     raw_pc, _ = postcodes
@@ -831,6 +904,25 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .house:hover {{ color: var(--accent); border-bottom-color: var(--accent); }}
     .house.highlighted {{ color: var(--highlight); border-bottom-color: var(--highlight); }}
     .house.unknown {{ opacity: 0.7; }}
+    @media (hover: hover) and (pointer: fine) {{
+      .house[data-house-key]:hover {{ color: var(--accent); border-bottom-color: var(--accent); }}
+      .house-popup {{
+        position: fixed; z-index: 1600; display: none; width: min(280px, calc(100vw - 32px));
+        background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+        box-shadow: var(--shadow-hover); padding: 12px 14px; pointer-events: none;
+        font-size: 0.76rem; line-height: 1.4;
+      }}
+      .house-popup.visible {{ display: block; }}
+      .house-popup-name {{ font-family: 'Playfair Display', serif; font-size: .93rem; font-weight: 700; line-height: 1.25; }}
+      .house-popup-address {{ color: var(--muted); margin-top: 5px; overflow-wrap: anywhere; }}
+      .house-popup-sales {{ border-top: 1px solid var(--line); margin-top: 9px; padding-top: 8px; }}
+      .house-popup-sales-title {{ color: var(--muted); font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 5px; }}
+      .house-popup-sale {{ margin-top: 6px; overflow-wrap: anywhere; }}
+      .house-popup-sale-date {{ color: var(--ink); font-weight: 600; }}
+      .house-popup-sale-title {{ color: var(--muted); margin-top: 1px; }}
+      .house-popup-empty {{ color: var(--muted); }}
+      .house-popup-hint {{ color: var(--accent); font-size: .7rem; margin-top: 9px; }}
+    }}
     .pc {{
       display: inline-block; margin-left: 4px;
       background: var(--accent-soft); color: var(--accent);
@@ -1013,6 +1105,80 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
   <script>
 {pc_map_js}
+
+{house_popup_js}
+
+    // ── HOUSE POPUP (desktop hover only) ──
+    (function initHousePopup() {{
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      const popup = document.createElement('div');
+      popup.className = 'house-popup';
+      document.body.appendChild(popup);
+      let showTimer = null;
+
+      function appendText(parent, className, value) {{
+        const el = document.createElement('div');
+        el.className = className;
+        el.textContent = value;
+        parent.appendChild(el);
+        return el;
+      }}
+
+      function positionPopup(houseEl) {{
+        const rect = houseEl.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.left), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${{left}}px`;
+        popup.style.top = `${{Math.max(edge, top)}}px`;
+      }}
+
+      function showPopup(houseEl) {{
+        const data = HOUSE_POPUP_DATA[houseEl.dataset.houseKey];
+        if (!data) return;
+        popup.replaceChildren();
+        appendText(popup, 'house-popup-name', data.name);
+        if (data.address) appendText(popup, 'house-popup-address', data.address);
+        const sales = Array.isArray(data.sales) ? data.sales : [];
+        const salesEl = document.createElement('div');
+        salesEl.className = 'house-popup-sales';
+        if (sales.length) {{
+          appendText(salesEl, 'house-popup-sales-title', 'Upcoming auctions');
+          sales.forEach(sale => {{
+            const saleEl = document.createElement('div');
+            saleEl.className = 'house-popup-sale';
+            appendText(saleEl, 'house-popup-sale-date', sale.displayDate + (sale.time ? ' · ' + sale.time : ''));
+            if (sale.title) appendText(saleEl, 'house-popup-sale-title', sale.title);
+            salesEl.appendChild(saleEl);
+          }});
+        }} else {{
+          appendText(salesEl, 'house-popup-empty', 'No upcoming auctions currently listed.');
+        }}
+        popup.appendChild(salesEl);
+        if (data.easyliveUrl) appendText(popup, 'house-popup-hint', 'Click the house name to view on EasyLive.');
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        positionPopup(houseEl);
+        popup.style.visibility = '';
+      }}
+
+      function hidePopup() {{
+        clearTimeout(showTimer);
+        popup.classList.remove('visible');
+      }}
+
+      document.querySelectorAll('.house[data-house-key]').forEach(houseEl => {{
+        houseEl.addEventListener('mouseenter', () => {{
+          showTimer = window.setTimeout(() => showPopup(houseEl), 200);
+        }});
+        houseEl.addEventListener('mouseleave', hidePopup);
+      }});
+      window.addEventListener('scroll', hidePopup, true);
+      window.addEventListener('resize', hidePopup);
+    }})();
 
     // ── SEARCH ──
 
