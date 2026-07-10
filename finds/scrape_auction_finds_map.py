@@ -649,7 +649,11 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     header .tagline {{ font-size: .78rem; color: #6b7280; margin: 2px 0 0; max-width: 480px; line-height: 1.3; flex-basis: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
     /* headtop holds brand + search + toggle in a single compact row */
     .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 400px) max-content; align-items: center; column-gap: 12px; min-height: 40px; }}
-    .hrow2 {{ min-height: 26px; display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }}
+    .hrow2 {{ min-height: 26px; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; }}
+    .header-page-tools {{ min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }}
+    .header-utility-nav {{ display: flex; align-items: center; gap: 10px; white-space: nowrap; }}
+    .header-utility-nav a {{ font-size: .72rem; color: var(--muted); text-decoration: none; }}
+    @media (hover: hover) and (pointer: fine) {{ .header-utility-nav a:hover {{ color: var(--accent); }} }}
     .term-tag {{
       font-size: 0.74rem; color: var(--accent); font-weight: 600;
       background: var(--accent-soft); border: 1px solid var(--accent);
@@ -1006,7 +1010,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .search-box {{ min-width: 0; }}
       .search-box-spacer {{ height: 33px; }}
       .search-box input {{ font-size: 0.8rem; padding: 7px 32px 7px 10px; }}
-      .hrow2 {{ min-height: 23px; gap: 6px 8px; }}
+      .hrow2 {{ min-height: 23px; column-gap: 8px; }}
+      .header-page-tools {{ gap: 6px 8px; }}
+      .header-utility-nav {{ gap: 6px; }}
+      .header-utility-nav a {{ font-size: .62rem; }}
       .term-tag {{ font-size: .6rem; padding: 3px 9px; }}
       nav.jump {{
         margin-left: 0; flex-basis: 100%;
@@ -1074,11 +1081,17 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     </div>
     <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
     <div class="hrow2">
-      <span class="search-results" id="searchResults"></span>
-      <nav class="jump" aria-label="Jump to section">
-        <a href="#local" data-target="local">Local · {local_local_count}</a>
-        {f'<a href="#today" data-target="today">UK Today · {wide_today_count}</a>' if wide_today_count else ''}
-        <a href="#uk-wide" data-target="uk-wide">UK Later · {wide_later_count}</a>
+      <div class="header-page-tools">
+        <span class="search-results" id="searchResults"></span>
+        <nav class="jump" aria-label="Jump to section">
+          <a href="#local" data-target="local">Local · {local_local_count}</a>
+          {f'<a href="#today" data-target="today">UK Today · {wide_today_count}</a>' if wide_today_count else ''}
+          <a href="#uk-wide" data-target="uk-wide">UK Later · {wide_later_count}</a>
+        </nav>
+      </div>
+      <nav class="header-utility-nav" aria-label="Utility pages">
+        <a href="../about.html">About</a>
+        <a href="../settings/">Edit search</a>
       </nav>
     </div>
   </header>
