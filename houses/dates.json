@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-11T02:04:14.884203",
+  "scraped_at": "2026-07-11T09:32:46.595844",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -546,7 +546,33 @@
         "title": "General & Antique Sale to include Gold, Silver, Porcelain, Designer Bags & Jewel"
       }
     ],
-    "Capes Dunn": [],
+    "Capes Dunn": [
+      {
+        "date": "2026-07-20",
+        "time": "11am",
+        "title": "Interiors - Vintage & Modern Furniture & Homewares"
+      },
+      {
+        "date": "2026-07-21",
+        "time": "11am",
+        "title": "Northern and Modern Art"
+      },
+      {
+        "date": "2026-08-03",
+        "time": "11am",
+        "title": "Interiors - Vintage & Modern Furniture & Homewares"
+      },
+      {
+        "date": "2026-08-04",
+        "time": "11am",
+        "title": "Summer Auction"
+      },
+      {
+        "date": "2026-08-17",
+        "time": "11am",
+        "title": "Interiors - Vintage & Modern Furniture & Homewares"
+      }
+    ],
     "Cardiff City Auctions Limited": [],
     "Carn Brea Auctions Ltd": [
       {
@@ -560,7 +586,13 @@
         "title": "Collectors Auction"
       }
     ],
-    "Castleblair Auctioneers": [],
+    "Castleblair Auctioneers": [
+      {
+        "date": "2026-07-19",
+        "time": "10:30am",
+        "title": "Antique & General Sale."
+      }
+    ],
     "Cato Crane Auctioneers": [],
     "Cavendish Philatelic Auctions Ltd": [
       {
@@ -778,7 +810,7 @@
       {
         "date": "2026-07-31",
         "time": "10am",
-        "title": "Monthly Live General Sale"
+        "title": "Monthly Live General Sale - Huge Collection Of Tools Including Snap-On"
       },
       {
         "date": "2026-08-11",
@@ -1389,7 +1421,13 @@
         "title": "2 Day Auction of Antique, Vintage & Collectables (Saturday 18th & Sunday 19th Ju"
       }
     ],
-    "Homefront Auctions": [],
+    "Homefront Auctions": [
+      {
+        "date": "2026-07-17",
+        "time": "12pm",
+        "title": "General Auction - Multiple Estates - Gold, Jewellery, Memorabilia, Cameras, Warh"
+      }
+    ],
     "Hosker Haynes Auctioneers": [],
     "House & Son Auctioneers & Valuers": [
       {
@@ -1495,7 +1533,13 @@
       }
     ],
     "J. Straker Chadwick & Sons": [],
-    "J. Stuart Watson Auctioneers": [],
+    "J. Stuart Watson Auctioneers": [
+      {
+        "date": "2026-07-30",
+        "time": "9:30am",
+        "title": "Antique & General Auction Online Only"
+      }
+    ],
     "Jacobs and Hunt": [
       {
         "date": "2026-07-17",
@@ -1531,7 +1575,18 @@
         "title": "Interiors & Jewellery"
       }
     ],
-    "JH Auctions LTD": [],
+    "JH Auctions LTD": [
+      {
+        "date": "2026-07-15",
+        "time": "10am",
+        "title": "All Day General Sale - Inc; 9ct Gold, Wine, Antique Furniture, Mobility Goods, W"
+      },
+      {
+        "date": "2026-07-15",
+        "time": "4pm",
+        "title": "All Day General Sale - Inc; 9ct Gold, Wine, Antique Furniture, Mobility Goods, W"
+      }
+    ],
     "John Cowell Auctions": [],
     "John Goodwin": [
       {
@@ -1928,7 +1983,13 @@
       }
     ],
     "Ma San Auction": [],
-    "Main Line Railwayana Auctions Limited": [],
+    "Main Line Railwayana Auctions Limited": [
+      {
+        "date": "2026-07-25",
+        "time": "10am",
+        "title": "July Railwayana Sale - 15% Buyer's Premium, No Extra Fees Added for Online Biddi"
+      }
+    ],
     "Mark Hill Auctions": [],
     "marketplace@dawsons": [],
     "Martello Auctions": [],
@@ -3261,7 +3322,13 @@
         "title": "Our July Antique & Interiors Sale"
       }
     ],
-    "Wye Valley Auctions": [],
+    "Wye Valley Auctions": [
+      {
+        "date": "2026-07-13",
+        "time": "4pm",
+        "title": "General Auction Sale"
+      }
+    ],
     "Yeovil Auctions": [
       {
         "date": "2026-07-12",
