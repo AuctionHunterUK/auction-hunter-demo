@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-12T02:02:54.491614",
+  "scraped_at": "2026-07-12T10:46:25.374605",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -176,18 +176,7 @@
     ],
     "Atkins Auctions Ltd": [],
     "Aubreys": [],
-    "Auction Cash": [
-      {
-        "date": "2026-07-12",
-        "time": "10am",
-        "title": "No Reserve - Reseller & General Auction | Mixed Lots, Household, Clearance & New"
-      },
-      {
-        "date": "2026-07-12",
-        "time": "6pm",
-        "title": "Fine Jewellery, Antiques & Rare Collectables Auction | Gold, Silver, Watches & U"
-      }
-    ],
+    "Auction Cash": [],
     "Auction Keynes": [],
     "Auction Plus": [],
     "Auction247": [],
@@ -1132,7 +1121,7 @@
       {
         "date": "2026-08-22",
         "time": "9am",
-        "title": "***LOTS ADDED DAILY*** Art Work, Tools, Alcohol, Fashion, Cameras, Costume Jewel"
+        "title": "***Lots Added Daily*** Art Work, Tools, Alcohol, Fashion, Cameras, Costume Jewel"
       }
     ],
     "Gorringe's": [
@@ -1866,6 +1855,16 @@
         "date": "2026-07-13",
         "time": "",
         "title": "Modern & Traditional Home- 13th July 2026"
+      },
+      {
+        "date": "2026-07-19",
+        "time": "11am",
+        "title": "Fine Interiors Sale"
+      },
+      {
+        "date": "2026-07-20",
+        "time": "11am",
+        "title": "Fine Interiors Sale"
       }
     ],
     "Lumsden's Auction": [
@@ -2035,7 +2034,13 @@
       }
     ],
     "Metsab Auctions Ltd": [],
-    "Michael J Bowman": [],
+    "Michael J Bowman": [
+      {
+        "date": "2026-07-25",
+        "time": "2pm",
+        "title": "Antiques, Jewellery, Watches & Collectors' Items"
+      }
+    ],
     "Millwards": [],
     "Minster Auctions": [
       {
@@ -2330,7 +2335,7 @@
       {
         "date": "2026-07-18",
         "time": "10am",
-        "title": "Regular Monthly Auction of 1500 Lots Antiques,Collectables Silver,Jewellery,Pain"
+        "title": "Regular Monthly Auction of 1500 Lots Antiques, Collectables Silver, Jewellery, P"
       }
     ],
     "QC Auctions Ltd": [
@@ -2374,7 +2379,7 @@
       {
         "date": "2026-07-16",
         "time": "7pm",
-        "title": "Vintage Tea Sets"
+        "title": "Timed Auction of Vintage Tea Sets"
       }
     ],
     "Rendells LLP": [
