@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-13T02:05:06.524044",
+  "scraped_at": "2026-07-13T13:35:45.747564",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [],
@@ -800,6 +800,11 @@
         "date": "2026-07-23",
         "time": "10am",
         "title": "Antique & Home"
+      },
+      {
+        "date": "2026-08-06",
+        "time": "10am",
+        "title": "Antique & Home"
       }
     ],
     "Dartmoor Auctions": [],
@@ -826,7 +831,33 @@
     ],
     "Devon Online Auctions": [],
     "Doncaster Auction Centre": [],
-    "Dore & Rees Auctions": [],
+    "Dore & Rees Auctions": [
+      {
+        "date": "2026-09-16",
+        "time": "10:30am",
+        "title": "Asian Art"
+      },
+      {
+        "date": "2026-10-09",
+        "time": "9:30am",
+        "title": "Autumn Interiors"
+      },
+      {
+        "date": "2026-11-09",
+        "time": "10:30am",
+        "title": "Fine Asian Art"
+      },
+      {
+        "date": "2026-11-25",
+        "time": "10:30am",
+        "title": "Fine Jewellery & Watches"
+      },
+      {
+        "date": "2026-12-04",
+        "time": "9:30am",
+        "title": "Interiors"
+      }
+    ],
     "Dore & Rees Motoring": [
       {
         "date": "2026-07-17",
@@ -874,6 +905,11 @@
         "date": "2026-07-22",
         "time": "10:30am",
         "title": "The Summer Auction"
+      },
+      {
+        "date": "2026-07-23",
+        "time": "10:30am",
+        "title": "Modern Art"
       }
     ],
     "Eastbourne Auctions": [
@@ -1032,12 +1068,12 @@
       {
         "date": "2026-07-23",
         "time": "5:30pm",
-        "title": "General Auction To Include Collectables, Furniture, Paintings, Jewellery & Much "
+        "title": "General Auction to include Collectables, Furniture, Paintings, Jewellery & Much "
       },
       {
         "date": "2026-07-24",
         "time": "5:30pm",
-        "title": "General Auction To Include Collectables, Furniture, Paintings, Jewellery & Much "
+        "title": "General Auction to include Collectables, Furniture, Paintings, Jewellery & Much "
       }
     ],
     "Fosse Lane Auction": [],
@@ -1275,7 +1311,13 @@
         "title": "House Clearance, Bankrupt and New Stock, Small Collectables, and General Items U"
       }
     ],
-    "Harrisons Auction Centre": [],
+    "Harrisons Auction Centre": [
+      {
+        "date": "2026-07-18",
+        "time": "10am",
+        "title": "General Auction"
+      }
+    ],
     "Harrisons Auction Rooms": [],
     "Harrogate Auction Centre": [],
     "Hartleys Auctions Ltd": [
@@ -1506,6 +1548,11 @@
     "John Goodwin": [
       {
         "date": "2026-07-22",
+        "time": "10am",
+        "title": "A Mostly Unreserved General Interiors, Furniture, Tools, & Collectibles Auction "
+      },
+      {
+        "date": "2026-09-02",
         "time": "10am",
         "title": "A Mostly Unreserved General Interiors, Furniture, Tools, & Collectibles Auction "
       },
@@ -1955,7 +2002,13 @@
       }
     ],
     "McCartneys (Brecon)": [],
-    "Medway Auctions": [],
+    "Medway Auctions": [
+      {
+        "date": "2026-07-26",
+        "time": "7pm",
+        "title": "Timed Auction of Toys, Model Vehicles and Sporting Memorabilia to include Die-Ca"
+      }
+    ],
     "Mellors & Kirk": [
       {
         "date": "2026-08-04",
@@ -2004,6 +2057,26 @@
         "date": "2026-07-15",
         "time": "9am",
         "title": "Auction of Silver, Jewellery, Paintings, Collectables and Furniture"
+      },
+      {
+        "date": "2026-08-05",
+        "time": "9am",
+        "title": "Auction of Silver, Jewellery, Paintings, Collectables and Furniture"
+      },
+      {
+        "date": "2026-08-09",
+        "time": "6pm",
+        "title": "Timed Auction of Model Railway, Diecast Vehicles, Toy Soldiers and other Collect"
+      },
+      {
+        "date": "2026-08-19",
+        "time": "10am",
+        "title": "Summer Antiques and Fine Art Auction"
+      },
+      {
+        "date": "2026-09-17",
+        "time": "10am",
+        "title": "Auction of Model Railway, Diecast Models, Toy Soldiers, and other Collector's Mo"
       }
     ],
     "Mitchells Auction": [
@@ -2107,7 +2180,7 @@
       {
         "date": "2026-07-19",
         "time": "11am",
-        "title": "Our Fortnightly General Sale with Modern, Antiques & Collectables:\r\n**Please Rea"
+        "title": "Our Fortnightly General Sale with Modern, Antiques & Collectables:\n**Please Read"
       }
     ],
     "Oakham Auction Centre": [
@@ -2138,6 +2211,11 @@
         "date": "2026-07-19",
         "time": "6pm",
         "title": "The July Sale - Antiques, Art, Vintage and Collectables"
+      },
+      {
+        "date": "2026-08-23",
+        "time": "6pm",
+        "title": "The August Sale - Antiques, Vintage, Art and Collectables"
       }
     ],
     "P.F. Windibank": [],
@@ -2183,6 +2261,11 @@
         "date": "2026-07-14",
         "time": "12pm",
         "title": "Second Chance to Bid Summer Welsh Fine Art Sale."
+      },
+      {
+        "date": "2026-07-29",
+        "time": "9:30am",
+        "title": "Antiques, Furniture, Tools, Collectors, Gold, Silver, Jewellery, Watches and Coi"
       }
     ],
     "Philangles Stamp Auctions": [],
@@ -2230,7 +2313,7 @@
       {
         "date": "2026-08-27",
         "time": "10am",
-        "title": "Homewares and Interiors Sale"
+        "title": "Homewares and Interiors Sale - * We will be Open as Normal on Bank Holiday Monda"
       }
     ],
     "Pippa Deeley Auctions": [],
@@ -2629,17 +2712,17 @@
       {
         "date": "2026-07-29",
         "time": "11am",
-        "title": "Three-Day Auction"
+        "title": "Three-Day Auction,\r\nTo Include: The Dame Patricia Routledge Collection"
       },
       {
         "date": "2026-07-30",
         "time": "11am",
-        "title": "Three-Day Auction"
+        "title": "Three-Day Auction,\r\nTo Include: The Dame Patricia Routledge Collection"
       },
       {
         "date": "2026-07-31",
         "time": "10am",
-        "title": "Three-Day Auction"
+        "title": "Three-Day Auction,\r\nTo Include: The Dame Patricia Routledge Collection"
       },
       {
         "date": "2026-09-03",
@@ -3021,7 +3104,7 @@
       {
         "date": "2026-08-05",
         "time": "10am",
-        "title": "Philatelic Auction"
+        "title": "Philatelic Auction (Buyers Premium at 22.5% + VAT)"
       },
       {
         "date": "2026-08-19",
@@ -3029,7 +3112,13 @@
         "title": "Coins, Banknotes, Medals and Militaria Auction (Buyers Premium at 22.5% + VAT)"
       }
     ],
-    "Warwick Auctions Ltd": [],
+    "Warwick Auctions Ltd": [
+      {
+        "date": "2026-07-22",
+        "time": "10am",
+        "title": "General, Antiques & Collectibles"
+      }
+    ],
     "Watermans Auction Rooms": [],
     "Watsons Auctions": [],
     "Wellers Auctions Ltd": [
@@ -3173,6 +3262,11 @@
         "date": "2026-07-13",
         "time": "4pm",
         "title": "General Auction Sale"
+      },
+      {
+        "date": "2026-08-02",
+        "time": "5pm",
+        "title": "Auction of Gold, Silver, Jewellery & Watches"
       }
     ],
     "Yeovil Auctions": [
