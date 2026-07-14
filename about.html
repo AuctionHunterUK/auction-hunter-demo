@@ -36,6 +36,14 @@
   .monitoring-box h2{margin-top:0}
   .monitoring-box p{margin-bottom:10px}
   .monitoring-box p:last-child{margin-bottom:0}
+  .membership-intro{margin-bottom:16px}
+  .tiers{display:grid;gap:14px}
+  .tier-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:20px 22px}
+  .tier-panel h3{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;margin:0 0 7px}
+  .tier-panel p{margin-bottom:10px}
+  .tier-panel p:last-child{margin-bottom:0}
+  .tier-label{display:inline-block;background:#e9ece9;color:#3a5c3b;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;margin-bottom:9px}
+  .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand{gap:5px}.brand img{height:22px}.brand h1{font-size:.88rem}.app-nav{padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
 </style>
@@ -118,9 +126,27 @@ body.gate-locked{overflow:hidden}
   <h2>Map</h2>
   <p>An interactive map of UK auction houses, colour-coded according to when their next sale takes place. It also includes a route planner for discovering auction houses along a journey.</p>
 
-  <h2>What’s next</h2>
-  <p>The longer-term idea is a subscription service with a free auction-house map and optional paid features such as personalised search terms, a saved selection of local auction houses and alerts for newly listed items.</p>
-  <p>These features are represented in the demonstration to communicate the product idea; they are not yet being offered as a commercial service.</p>
+  <h2>Planned membership</h2>
+  <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, Auction Hunter could develop through three planned membership levels.</p>
+  <div class="tiers">
+    <section class="tier-panel">
+      <span class="tier-label">Planned</span>
+      <h3>Map — Free</h3>
+      <p>Free access to the UK auction-house map, upcoming sale dates and route-planning tools.</p>
+    </section>
+    <section class="tier-panel">
+      <span class="tier-label">Planned</span>
+      <h3>Catalogue — Member</h3>
+      <p>A paid personalised catalogue using each member’s search terms, local auction houses and preferences. Every lot would continue to link directly to EasyLive for details and bidding.</p>
+    </section>
+    <section class="tier-panel tier-wanted">
+      <span class="tier-label">Planned</span>
+      <h3>Wanted — Dealer add-on</h3>
+      <p>An additional sourcing service for dealers handling customer requests. Dealers could type a natural-language request or paste only the relevant product requirements from a customer email. The service would retain the sourcing requirements rather than the original email or unnecessary customer personal details.</p>
+      <p>An authorised morning process could compare active requests with newly supplied catalogue data and email possible matches containing a photograph, catalogue dimensions, auction house, sale date, reason for the match and a direct EasyLive link.</p>
+      <p>These are possible matches and dealers must verify the original catalogue information before bidding.</p>
+    </section>
+  </div>
 
   <div class="easylive-box">
     <h2>Working responsibly with auction data</h2>
