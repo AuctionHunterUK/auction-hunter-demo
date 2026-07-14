@@ -1,0 +1,138 @@
+name: Apply search configuration request
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: "scrape-combined"
+  cancel-in-progress: false
+
+jobs:
+  reject-unauthorised-request:
+    if: >-
+      contains(github.event.issue.body, '<!-- auction-hunter-search-config-request -->') &&
+      github.event.issue.author_association != 'OWNER' &&
+      github.event.issue.author_association != 'MEMBER' &&
+      github.event.issue.author_association != 'COLLABORATOR'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'This configuration request was not processed because its author is not an authorised repository collaborator.'
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
+
+  apply-authorised-request:
+    if: >-
+      contains(github.event.issue.body, '<!-- auction-hunter-search-config-request -->') &&
+      (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate request and write configuration
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8'))
+          body = event.get('issue', {}).get('body') or ''
+          marker = '<!-- auction-hunter-search-config-request -->'
+          if marker not in body:
+              sys.exit('Request marker is missing.')
+          match = re.search(r'```json\s*(\{.*?\})\s*```', body, re.DOTALL)
+          if not match:
+              sys.exit('A JSON configuration block is required.')
+          try:
+              payload = json.loads(match.group(1))
+          except json.JSONDecodeError:
+              sys.exit('The JSON configuration block is invalid.')
+          terms = payload.get('search_terms') if isinstance(payload, dict) else None
+          if not isinstance(terms, list) or not 1 <= len(terms) <= 20:
+              sys.exit('Provide between 1 and 20 search terms.')
+          allowed = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 &'(),.+-]{0,79}$")
+          cleaned, seen = [], set()
+          for term in terms:
+              if not isinstance(term, str):
+                  sys.exit('Every search term must be a string.')
+              term = ' '.join(term.split())
+              if not allowed.fullmatch(term):
+                  sys.exit('Search terms must be plain phrases of at most 80 characters.')
+              key = term.casefold()
+              if key in seen:
+                  sys.exit('Search terms must be unique, ignoring case.')
+              seen.add(key)
+              cleaned.append(term)
+          Path('finds/config.json').write_text(json.dumps({'search_terms': cleaned}, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Commit configuration change
+        id: commit
+        run: |
+          if git diff --quiet -- finds/config.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add finds/config.json
+          git commit -m "Update search configuration from approved request"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Rebase and push configuration
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Confirm successful request
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const detail = '${{ steps.commit.outputs.changed }}' === 'true'
+              ? 'The next scheduled scrape will use the updated terms.'
+              : 'The requested terms already match the current configuration.';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Search configuration approved and saved. ${detail}`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
+      - name: Report validation failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'This search-configuration request was not processed. Check that it contains a correctly marked JSON block with 1–20 unique plain search phrases.'
+            });

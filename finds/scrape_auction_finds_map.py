@@ -7,7 +7,8 @@ from urllib.parse import urljoin
 # NOTE: designed to later accept configurable search phrases (e.g. loaded from a
 # config file / CLI args / repo settings). Keep ALL search-term logic flowing
 # through this single list — do not hardcode individual terms elsewhere in the pipeline.
-SEARCH_TERMS = ["pine", "butchers block"]
+FALLBACK_SEARCH_TERMS = ["pine", "butchers block"]
+SEARCH_TERM_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 &'(),.+-]{0,79}$")
 
 # Words that mark a lot as NOT antique. Matched as whole words,
 # case-insensitive, against the lot title.
@@ -49,6 +50,7 @@ IMAGES_DIR    = REPO_DIR / "images"
 SEEN_FILE     = REPO_DIR / "seen_lots.json"
 POSTCODES_FILE = Path(os.environ.get("POSTCODES_FILE",
     REPO_DIR / "house_postcodes.json"))
+CONFIG_FILE = Path(os.environ.get("CONFIG_FILE", REPO_DIR / "config.json"))
 
 HEADERS = {
     "User-Agent": (
@@ -64,6 +66,45 @@ MAX_PAGES     = 30   # per-term safety cap
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger(__name__)
+
+
+def load_search_terms(config_file=CONFIG_FILE):
+    """Load validated search terms, with safe defaults for a bad config."""
+    try:
+        config = json.loads(config_file.read_text(encoding="utf-8"))
+        raw_terms = config.get("search_terms") if isinstance(config, dict) else None
+    except Exception as exc:
+        log.warning("Could not read search config %s: %s; using fallback terms.", config_file, exc)
+        return list(FALLBACK_SEARCH_TERMS)
+
+    if not isinstance(raw_terms, list) or not 1 <= len(raw_terms) <= 20:
+        log.warning("Search config %s must contain 1–20 search_terms; using fallback terms.", config_file)
+        return list(FALLBACK_SEARCH_TERMS)
+
+    terms, seen = [], set()
+    for raw_term in raw_terms:
+        if not isinstance(raw_term, str):
+            log.warning("Search config %s contains a non-string term; using fallback terms.", config_file)
+            return list(FALLBACK_SEARCH_TERMS)
+        term = " ".join(raw_term.split())
+        if not term:
+            log.warning("Search config %s contains a blank term; using fallback terms.", config_file)
+            return list(FALLBACK_SEARCH_TERMS)
+        if not SEARCH_TERM_RE.fullmatch(term):
+            log.warning("Search config %s contains an unsupported term; using fallback terms.", config_file)
+            return list(FALLBACK_SEARCH_TERMS)
+        key = term.casefold()
+        if key not in seen:
+            terms.append(term)
+            seen.add(key)
+
+    if not terms:
+        log.warning("Search config %s has no usable terms; using fallback terms.", config_file)
+        return list(FALLBACK_SEARCH_TERMS)
+    return terms
+
+
+SEARCH_TERMS = load_search_terms()
 
 
 def is_local(house_name):
