@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-14T02:03:12.194080",
+  "scraped_at": "2026-07-14T10:49:38.794100",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [],
@@ -94,6 +94,11 @@
         "title": "19th & 20th Century Collectable Items, Silver, Jewellery and Works of Art & Furn"
       },
       {
+        "date": "2026-07-23",
+        "time": "10:30am",
+        "title": "19th & 20th Century Collectable Items, Silver, Jewellery and Works of Art & Furn"
+      },
+      {
         "date": "2026-07-30",
         "time": "10:30am",
         "title": "19th & 20th Century Collectable Items, Silver, Jewellery and Works of Art & Furn"
@@ -105,11 +110,6 @@
       },
       {
         "date": "2026-08-13",
-        "time": "10:30am",
-        "title": "19th & 20th Century Collectable Items, Silver, Jewellery and Works of Art & Furn"
-      },
-      {
-        "date": "2026-08-20",
         "time": "10:30am",
         "title": "19th & 20th Century Collectable Items, Silver, Jewellery and Works of Art & Furn"
       }
@@ -191,7 +191,7 @@
       {
         "date": "2026-07-27",
         "time": "7:30pm",
-        "title": "TIMED Dylan Oaks Jewellery Auction"
+        "title": "Timed Dylan Oaks Jewellery Auction"
       },
       {
         "date": "2026-07-29",
@@ -1984,13 +1984,7 @@
         "title": "Collectors, Interiors & Antiques"
       }
     ],
-    "Mayfair Auctions": [
-      {
-        "date": "2026-07-15",
-        "time": "9:55am",
-        "title": "Summer Jewels & Watches"
-      }
-    ],
+    "Mayfair Auctions": [],
     "McAfee Auctions": [],
     "McCartneys": [
       {
@@ -2138,7 +2132,13 @@
         "title": "Vintage & Modern Fishing Tackle and Related Items"
       }
     ],
-    "Mulready Philatelics": [],
+    "Mulready Philatelics": [
+      {
+        "date": "2026-07-31",
+        "time": "10am",
+        "title": "Great Britain and All World Stamp Timed Auction"
+      }
+    ],
     "Nesbits Auctions Ltd": [],
     "Nick Barber Auctions": [],
     "NLB Auctions": [
@@ -2361,7 +2361,18 @@
       }
     ],
     "Queens Road Auctions": [],
-    "R.A.M Auctions": [],
+    "R.A.M Auctions": [
+      {
+        "date": "2026-07-25",
+        "time": "10am",
+        "title": "Antiques, Collectable and General Sale"
+      },
+      {
+        "date": "2026-07-26",
+        "time": "10am",
+        "title": "Antiques, Collectable and General Sale"
+      }
+    ],
     "Red Rose Auctions Ltd": [
       {
         "date": "2026-08-05",
@@ -2398,7 +2409,7 @@
       {
         "date": "2026-07-20",
         "time": "9am",
-        "title": "Antique & Home sale"
+        "title": "Antique & Home Sale"
       }
     ],
     "Richnoddystamps Auctions": [],
@@ -2672,7 +2683,18 @@
       }
     ],
     "Square & Compass Auctioneers": [],
-    "Stacey's Auctioneers and Valuers": [],
+    "Stacey's Auctioneers and Valuers": [
+      {
+        "date": "2026-08-25",
+        "time": "10am",
+        "title": "Jewellery, Silver & Gold"
+      },
+      {
+        "date": "2026-08-26",
+        "time": "10am",
+        "title": "Antiques & Collectables"
+      }
+    ],
     "Stafford Auctions": [
       {
         "date": "2026-08-16",
@@ -2885,7 +2907,7 @@
       {
         "date": "2026-07-16",
         "time": "11:30am",
-        "title": "Carlisle UK - Thursday 16th July \n310 Lots of Antiquarian & Colectable Books, be"
+        "title": "Carlisle UK - Thursday 16th July \r\n310 Lots of Antiquarian & Collectable Books, "
       },
       {
         "date": "2026-07-23",
