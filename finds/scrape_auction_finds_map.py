@@ -6,8 +6,8 @@ from urllib.parse import urljoin
 
 # NOTE: designed to later accept configurable search phrases (e.g. loaded from a
 # config file / CLI args / repo settings). Keep ALL search-term logic flowing
-# through this single list — do not hardcode "pine" anywhere else in the pipeline.
-SEARCH_TERMS = ["pine"]
+# through this single list — do not hardcode individual terms elsewhere in the pipeline.
+SEARCH_TERMS = ["pine", "butchers block"]
 
 # Words that mark a lot as NOT antique. Matched as whole words,
 # case-insensitive, against the lot title.
@@ -60,8 +60,7 @@ HEADERS = {
 }
 
 REQUEST_DELAY = 1.5
-MAX_PAGES     = 30   # safety cap; pine typically returns ~16 pages
-MAX_LOTS      = 200
+MAX_PAGES     = 30   # per-term safety cap
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger(__name__)
@@ -1079,7 +1078,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         <a href="../finds/" class="app-nav-link on">Lots</a>
       </nav>
     </div>
-    <p class="tagline">Fresh pine finds from auction houses across the UK — click any lot to see it and bid</p>
+    <p class="tagline">Fresh furniture finds from auction houses across the UK — click any lot to see it and bid</p>
     <div class="hrow2">
       <div class="header-page-tools">
         <span class="search-results" id="searchResults"></span>
@@ -1608,9 +1607,6 @@ def main():
         for lot in scrape_term(session, term):
             if lot["id"] not in all_lots:
                 all_lots[lot["id"]] = lot
-        if len(all_lots) >= MAX_LOTS:
-            log.info(f"Cap reached ({MAX_LOTS}) — stopping")
-            break
 
     log.info(f"Total unique lots: {len(all_lots)}")
 
