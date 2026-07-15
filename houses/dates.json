@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-15T02:03:07.473978",
+  "scraped_at": "2026-07-15T10:53:15.040874",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [],
@@ -128,7 +128,13 @@
     "Arete Art": [],
     "Argents Auctioneers Ltd": [],
     "Argyll Etkin Limited": [],
-    "Arthur Johnson & Sons": [],
+    "Arthur Johnson & Sons": [
+      {
+        "date": "2026-07-18",
+        "time": "9:30am",
+        "title": "The Saturday Auctions 18th July 2026"
+      }
+    ],
     "Ashley Waller Ltd": [
       {
         "date": "2026-07-15",
@@ -826,12 +832,12 @@
       {
         "date": "2026-07-16",
         "time": "9:30am",
-        "title": "Coins, Badges, Banknotes, Tokens. Including hammered and many silver coin exampl"
+        "title": "Coins, Badges, Banknotes, Tokens. Including Hammered and Many Silver Coin Exampl"
       },
       {
         "date": "2026-07-16",
         "time": "3pm",
-        "title": "Medals & Military collectables."
+        "title": "Medals & Military Collectables."
       },
       {
         "date": "2026-07-17",
@@ -1076,6 +1082,21 @@
         "date": "2026-07-25",
         "time": "10am",
         "title": "25th Of July, Classic Cars, Trucks, Motorbikes & Collectibles"
+      },
+      {
+        "date": "2026-08-08",
+        "time": "10am",
+        "title": "8th Of August, Classic & Vintage Tractor, Plant Machinery, Implements, Spares & "
+      },
+      {
+        "date": "2026-08-11",
+        "time": "4pm",
+        "title": "11th Of August, Jewellery, Collectibles, China etc. Online Only"
+      },
+      {
+        "date": "2026-08-29",
+        "time": "10am",
+        "title": "29th Of August, Classic Cars, Trucks, Motorbikes & Collectibles"
       }
     ],
     "FMC Auctions": [
@@ -1233,7 +1254,7 @@
       {
         "date": "2026-07-17",
         "time": "9:30am",
-        "title": "Sale of Ornamental Trees, Fruit Trees, Olive Trees, Shrubs, Plants, and Garden O"
+        "title": "Sale of Ornamental Trees, Fruit Trees, Olive Trees, Shrubs, Plants, Garden Ornam"
       },
       {
         "date": "2026-07-18",
@@ -1421,7 +1442,13 @@
     "House & Son Auctioneers & Valuers": [],
     "HRD Auction Rooms Ltd": [],
     "HT Auctions": [],
-    "Huddersfield Auctions": [],
+    "Huddersfield Auctions": [
+      {
+        "date": "2026-07-19",
+        "time": "12pm",
+        "title": "Antiques, Collectables and General inc Silver, Dalek Figures, Model Boats, Jewel"
+      }
+    ],
     "Hutchinson Scott Auctioneers": [],
     "Hyperion Auctions": [
       {
@@ -1549,12 +1576,12 @@
     "JH Auctions LTD": [
       {
         "date": "2026-07-15",
-        "time": "10am",
+        "time": "4pm",
         "title": "All Day General Sale - Inc; 9ct Gold, Wine, Antique Furniture, Mobility Goods, W"
       },
       {
         "date": "2026-07-15",
-        "time": "4pm",
+        "time": "10am",
         "title": "All Day General Sale - Inc; 9ct Gold, Wine, Antique Furniture, Mobility Goods, W"
       }
     ],
@@ -1690,7 +1717,7 @@
       {
         "date": "2026-07-16",
         "time": "8pm",
-        "title": "Unframed Oil Paintings by Keith Garner RCA, Doulton Figures. Vintage Bookcases, "
+        "title": "Unframed Oil Paintings by Keith Garner RCA, Doulton Figures, Vintage Bookcases, "
       }
     ],
     "KLM Whyte Auctioneers": [
@@ -1995,6 +2022,11 @@
         "date": "2026-07-26",
         "time": "7pm",
         "title": "Timed Auction of Toys, Model Vehicles and Sporting Memorabilia to include Die-Ca"
+      },
+      {
+        "date": "2026-08-01",
+        "time": "10:30am",
+        "title": "Live in Person and Online Vintage Antiques and Collectables Auction including Go"
       }
     ],
     "Mellors & Kirk": [
@@ -2809,7 +2841,18 @@
       }
     ],
     "Swan Fine Art": [],
-    "T&T Auctions": [],
+    "T&T Auctions": [
+      {
+        "date": "2026-07-29",
+        "time": "10am",
+        "title": "A Strong Specialist Collection of Great Britain Coins With Particular Emphasis o"
+      },
+      {
+        "date": "2026-07-30",
+        "time": "9:30am",
+        "title": "July 30th Auction - Specialised Stamp, Cigarette Card and Coin Auction"
+      }
+    ],
     "Tayler and Fletcher": [],
     "Taylors Auctions (Montrose) Ltd": [
       {
@@ -3041,12 +3084,12 @@
     "Unique Auctions House": [
       {
         "date": "2026-07-15",
-        "time": "9am",
+        "time": "2pm",
         "title": "Antique & General Auction"
       },
       {
         "date": "2026-07-15",
-        "time": "2pm",
+        "time": "9am",
         "title": "Antique & General Auction"
       },
       {
