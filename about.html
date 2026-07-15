@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auction Hunter — About</title>
+<title>AuctionSavvy — About</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="About Auction Hunter — a private demonstration combining a UK auction lot feed and auction house map.">
+<meta name="description" content="About AuctionSavvy — a private demonstration combining a UK auction lot feed and auction house map.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -14,9 +14,9 @@
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#374151;line-height:1.65;min-height:100vh}
   /* ── SHARED HEADER CONTRACT (keep in sync with settings/index.html) ── */
   header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 24px;position:sticky;top:0;z-index:1000;backdrop-filter:blur(8px);flex-shrink:0}
-  .headtop{display:grid;grid-template-columns:max-content minmax(0,400px) max-content;align-items:center;column-gap:12px;min-height:40px}.brand{display:flex;align-items:center;gap:10px;text-decoration:none}.brand img{height:40px;width:auto}.brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap}.search-box{position:relative}.search-box-spacer{height:35px;visibility:hidden;pointer-events:none}.tagline{font-size:.78rem;color:#6b7280;margin:2px 0 0;max-width:480px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}.header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}.header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}.header-utility-nav a.on{color:var(--accent);font-weight:600}@media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--accent)}}
-  .app-nav{display:inline-flex;padding:3px;gap:0;background:var(--accent-soft);border:1px solid var(--accent);border-radius:22px}.app-nav-link{font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;color:var(--accent);text-decoration:none;white-space:nowrap}.app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
+  .headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:40px}.brand{display:flex;align-items:center;text-decoration:none}.brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap}.search-box{position:relative}.search-box-spacer{height:35px;visibility:hidden;pointer-events:none}.tagline{flex:0 1 480px;min-width:0;font-size:.78rem;color:#6b7280;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:nowrap}.header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}.header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}.header-utility-nav a.on{color:var(--accent);font-weight:600}@media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--accent)}}
+  .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:var(--accent-soft);border:1px solid var(--accent);border-radius:22px}.app-nav-link{font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;color:var(--accent);text-decoration:none;white-space:nowrap}.app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
   .about-main{padding:64px 20px;display:flex;justify-content:center}
   .wrap{max-width:640px;width:100%;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:44px 48px}
   h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
@@ -45,15 +45,14 @@
   .tier-label{display:inline-block;background:#e9ece9;color:#3a5c3b;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;margin-bottom:9px}
   .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand{gap:5px}.brand img{height:22px}.brand h1{font-size:.88rem}.app-nav{padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
 </style>
 </head>
 <body>
 <!-- ── PRIVATE DEMO LOGIN GATE ───────────────────────────────────────── -->
 <div id="demo-gate">
   <div id="demo-gate-card">
-    <img src="logo.png" alt="Auction Hunter" style="height:48px;width:auto;margin-bottom:14px">
-    <h2>Auction Hunter</h2>
+    <h2>AuctionSavvy</h2>
     <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
     <form id="demo-gate-form">
       <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
@@ -94,9 +93,8 @@ body.gate-locked{overflow:hidden}
 
 <header>
   <div class="headtop">
-    <a class="brand" href="finds/" aria-label="Auction Hunter Lots">
-      <img src="logo.png" alt="Auction Hunter">
-      <h1>Auction Hunter</h1>
+    <a class="brand" href="finds/" aria-label="AuctionSavvy Lots">
+      <h1>AuctionSavvy</h1>
     </a>
     <div class="search-box search-box-spacer" aria-hidden="true"></div>
     <nav class="app-nav" aria-label="App pages">
@@ -104,21 +102,20 @@ body.gate-locked{overflow:hidden}
       <a href="finds/" class="app-nav-link">Lots</a>
     </nav>
   </div>
-  <p class="tagline">How Auction Hunter brings live auction lots and UK auction houses together</p>
   <div class="hrow2">
-    <div class="header-page-tools"></div>
+    <div class="header-page-tools"><p class="tagline">How AuctionSavvy brings live auction lots and UK auction houses together</p></div>
     <nav class="header-utility-nav" aria-label="Utility pages">
       <a href="about.html" class="on" aria-current="page">About</a>
-      <a href="settings/">Edit search</a>
+      <a href="settings/">Edit</a>
     </nav>
   </div>
 </header>
 
 <main class="about-main"><div class="wrap">
-  <h1>About Auction Hunter</h1>
+  <h1>About AuctionSavvy</h1>
   <div class="sub"><em>A private demonstration — two tools, one idea</em></div>
 
-  <p>Auction Hunter is a proof of concept for UK antique dealers and collectors: find what is for sale, see where it is, and decide whether it is worth the trip. The demonstration brings two complementary tools together.</p>
+  <p>AuctionSavvy is a proof of concept for UK antique dealers and collectors: find what is for sale, see where it is, and decide whether it is worth the trip. The demonstration brings two complementary tools together.</p>
 
   <h2>Lots</h2>
   <p>A regularly updated catalogue of pine furniture and butchers’ blocks appearing in UK auctions, organised into Local, Today and Later. Every item links directly to its original EasyLive Auction listing for full details and bidding.</p>
@@ -127,7 +124,7 @@ body.gate-locked{overflow:hidden}
   <p>An interactive map of UK auction houses, colour-coded according to when their next sale takes place. It also includes a route planner for discovering auction houses along a journey.</p>
 
   <h2>Planned membership</h2>
-  <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, Auction Hunter could develop through three planned membership levels.</p>
+  <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through three planned membership levels.</p>
   <div class="tiers">
     <section class="tier-panel">
       <span class="tier-label">Planned</span>
@@ -151,7 +148,7 @@ body.gate-locked{overflow:hidden}
   <div class="easylive-box">
     <h2>Working responsibly with auction data</h2>
     <p>All lot and auction information displayed in this demonstration is sourced from EasyLive Auction. Rights in the listings, descriptions and imagery remain with EasyLive, the participating auctioneers and their respective rights holders.</p>
-    <p>Auction Hunter is currently a password-protected, invitation-only demonstration created to explore a potential partnership with EasyLive. It is not being offered as a commercial service, and every lot links directly back to EasyLive for viewing and bidding.</p>
+    <p>AuctionSavvy is currently a password-protected, invitation-only demonstration created to explore a potential partnership with EasyLive. It is not being offered as a commercial service, and every lot links directly back to EasyLive for viewing and bidding.</p>
     <p>We recognise that EasyLive’s <a href="https://www.easyliveauction.com/legal/site-usage-terms/" target="_blank" rel="noopener noreferrer">published site-usage terms</a> require written permission for automated data collection. Any development beyond this demonstration would therefore be undertaken through an agreed data-access arrangement or partnership. We will promptly remove any information or imagery at the request of EasyLive or the relevant rights holder.</p>
   </div>
 
@@ -164,7 +161,7 @@ body.gate-locked{overflow:hidden}
   <h2>Contact</h2>
   <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
 
-  <div class="footer">Auction Hunter. Private demonstration — invitation only.</div>
+  <div class="footer">AuctionSavvy. Private demonstration — invitation only.</div>
 </div></main>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auction Hunter — UK Auction House Map</title>
+<title>AuctionSavvy — UK Auction House Map</title>
 <meta name="description" content="Find UK auction houses on a live map. Browse upcoming sales by date, see what's on today and coming up, and click through to bid on EasyLive.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,19 +17,18 @@ body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;backgro
 
 /* ── SHARED HEADER CONTRACT (keep in sync with finds/scrape_auction_finds_map.py) ── */
 header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex-shrink:0;z-index:1000}
-.headtop{display:grid;grid-template-columns:max-content minmax(0,400px) max-content;align-items:center;column-gap:12px;min-height:40px}
-.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
-.brand img{height:40px;width:auto}
+.headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:40px}
+.brand{display:flex;align-items:center;cursor:pointer}
 .brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap;margin:0}
 .search-box{position:relative}
 .search-box-spacer{height:35px;visibility:hidden;pointer-events:none}
-.tagline{font-size:.78rem;color:#6b7280;margin:2px 0 0;max-width:480px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tagline{flex:0 1 480px;min-width:0;font-size:.78rem;color:#6b7280;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}
-.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
+.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:nowrap}
 .header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}
 @media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--pine)}}
-.app-nav{display:inline-flex;padding:3px;gap:0;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
+.app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
 .app-nav-link{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;border:0;background:transparent;color:var(--pine);letter-spacing:-.01em;text-decoration:none;white-space:nowrap;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
 .app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
 .app-nav-link.on{background:var(--pine);color:#fff;box-shadow:0 1px 4px rgba(58,92,59,.35)}
@@ -37,10 +36,8 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 @media(max-width:800px){
   header{padding:8px 12px}
   .headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}
-  .brand img{height:22px!important}
-  .brand{gap:5px!important}
   .brand h1{font-size:0.88rem!important}
-  .app-nav{padding:2px}
+  .app-nav{grid-column:auto;justify-self:auto;padding:2px}
   .app-nav-link{font-size:.64rem;padding:4px 9px}
   .tagline{display:none}
   .search-box-spacer{height:33px}
@@ -54,7 +51,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 
 .htag{font-size:.6rem;background:rgba(45,74,62,.1);color:#2d4a3e;border:1px solid rgba(45,74,62,.2);padding:2px 7px;border-radius:10px;letter-spacing:.06em;text-transform:uppercase;display:none}
 @media(min-width:480px){.htag{display:inline}}
-#update-status{font-size:.78rem;color:#22c55e;font-weight:600;display:flex;align-items:center;gap:4px}
+#update-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:#22c55e;font-weight:600;display:flex;align-items:center;gap:4px}
 #updated-badge{font-size:.7rem;color:#6b7280;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:4px;padding:2px 6px;white-space:nowrap;display:none}
 .hright{font-size:.78rem;color:#6b7280;display:none}
 @media(min-width:600px){.hright{display:inline}}
@@ -447,8 +444,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
      finds scraper template). -->
 <div id="demo-gate">
   <div id="demo-gate-card">
-    <img src="logo.png" alt="Auction Hunter" style="height:48px;width:auto;margin-bottom:14px">
-    <h2>Auction Hunter</h2>
+    <h2>AuctionSavvy</h2>
     <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
     <form id="demo-gate-form">
       <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
@@ -489,9 +485,8 @@ body.gate-locked{overflow:hidden}
 
 <header>
   <div class="headtop">
-    <div class="brand" onclick="goHome()" title="Back to start — reset to today's auctions">
-      <img src="logo.png" alt="Auction Hunter">
-      <h1>Auction Hunter</h1>
+    <div class="brand" onclick="goHome()" title="AuctionSavvy — back to start and reset to today's auctions" aria-label="AuctionSavvy home">
+      <h1>AuctionSavvy</h1>
     </div>
     <div class="search-box search-box-spacer" aria-hidden="true"></div>
     <nav class="app-nav" aria-label="App pages">
@@ -499,16 +494,16 @@ body.gate-locked{overflow:hidden}
       <a href="../finds/" class="app-nav-link">Lots</a>
     </nav>
   </div>
-  <p class="tagline">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
   <div class="hrow2">
     <div class="header-page-tools">
+      <p class="tagline">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
       <span id="update-status">✅ Loading dates…</span>
       <span id="updated-badge">1 May 2026</span>
       <span class="hright" id="hright">Loading…</span>
     </div>
     <nav class="header-utility-nav" aria-label="Utility pages">
       <a href="../about.html">About</a>
-      <a href="../settings/">Edit search</a>
+      <a href="../settings/">Edit</a>
     </nav>
   </div>
 </header>
@@ -1063,7 +1058,7 @@ function resetAll(){
   if (window.innerWidth < 768) flashLegend('all');
 }
 
-// Click the "Auction Hunter" title to reset everything to the default view:
+// Click the "AuctionSavvy" title to reset everything to the default view:
 // "Now" filter, map re-centred on the UK, sheet closed, any open popup dismissed.
 function goHome(){
   document.getElementById('sbsearch').value='';

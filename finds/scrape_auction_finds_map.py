@@ -488,8 +488,7 @@ DEMO_GATE_HTML = """<!-- ── PRIVATE DEMO LOGIN GATE ────────
      finds scraper template). -->
 <div id="demo-gate">
   <div id="demo-gate-card">
-    <img src="logo.png" alt="Auction Hunter" style="height:48px;width:auto;margin-bottom:14px">
-    <h2>Auction Hunter</h2>
+    <h2>AuctionSavvy</h2>
     <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
     <form id="demo-gate-form">
       <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
@@ -638,14 +637,14 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auction Hunter — Auction Finds</title>
+  <title>AuctionSavvy — Auction Finds</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {{
-      /* Shared design tokens — extracted from Auction Hunter (/houses) */
+      /* Shared design tokens — extracted from AuctionSavvy (/houses) */
       --bg: #f9fafb;
       --panel: #ffffff;
       --ink: #1a1a18;
@@ -684,13 +683,11 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       backdrop-filter: blur(8px);
       flex-shrink: 0;
     }}
-    /* Tagline shown on desktop, matching Houses — hidden only on mobile
-       (see the mobile media query below) to keep the phone header compact. */
-    header .tagline {{ font-size: .78rem; color: #6b7280; margin: 2px 0 0; max-width: 480px; line-height: 1.3; flex-basis: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-    /* headtop holds brand + search + toggle in a single compact row */
-    .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 400px) max-content; align-items: center; column-gap: 12px; min-height: 40px; }}
+    /* Two balanced desktop rows: brand/search/toggle above, tagline/tools/links below. */
+    header .tagline {{ flex: 0 1 480px; min-width: 0; font-size: .78rem; color: #6b7280; margin: 0; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 520px) minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; min-height: 40px; }}
     .hrow2 {{ min-height: 26px; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; }}
-    .header-page-tools {{ min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }}
+    .header-page-tools {{ min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: nowrap; }}
     .header-utility-nav {{ display: flex; align-items: center; gap: 10px; white-space: nowrap; }}
     .header-utility-nav a {{ font-size: .72rem; color: var(--muted); text-decoration: none; }}
     @media (hover: hover) and (pointer: fine) {{ .header-utility-nav a:hover {{ color: var(--accent); }} }}
@@ -702,11 +699,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .term-tag .term-soon {{ color: var(--muted); font-weight: 400; }}
     @media (max-width: 700px) {{ .term-tag .term-soon {{ display: none; }} }}
     header nav.jump {{ flex-basis: auto; margin: 0; padding: 0; }}
-    .brand {{ display: flex; align-items: center; gap: 10px; }}
-    .brand img {{ height: 40px; width: auto; }}
+    .brand {{ display: flex; align-items: center; }}
     .demo-tag {{ font-size: .62rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }}
     .brand h1 {{ font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; color: #111827; white-space: nowrap; }}
-    .brand .logo {{ font-size: 1.5rem; }}
     .meta {{ font-size: 0.78rem; color: var(--muted); margin-left: auto; }}
     .meta strong {{ color: var(--ink); }}
     .search-box {{
@@ -742,6 +737,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       display: inline-flex; padding: 3px; gap: 0;
       background: var(--accent-soft); border: 1px solid var(--accent);
       border-radius: 22px;
+      grid-column: 4; justify-self: end;
     }}
     .app-nav-link {{
       font-size: 0.82rem; font-weight: 700; padding: 7px 18px;
@@ -756,7 +752,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       box-shadow: 0 1px 4px rgba(58,92,59,.35);
     }}
     .app-nav-link.on:hover {{ background: var(--accent); }}
-    nav.jump {{ display: flex; gap: 6px; flex-wrap: wrap; }}
+    nav.jump {{ display: flex; gap: 6px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; }}
     nav.jump a {{
       font-size: 0.7rem;
       padding: 6px 14px;
@@ -1004,7 +1000,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       border-radius: 50%;
       box-shadow: 0 0 12px rgba(217,83,30,.6);
     }}
-    /* Timing colour bands (mirror Auction Hunter): now / this week / later / no date */
+    /* Timing colour bands (mirror AuctionSavvy): now / this week / later / no date */
     .pin-now    {{ background: #2c6e2c !important; box-shadow: 0 0 12px rgba(44,110,44,.65) !important; }}
     .pin-week   {{ background: #e0b000 !important; box-shadow: 0 0 12px rgba(224,176,0,.6) !important; }}
     .pin-later  {{ background: #b5651d !important; box-shadow: 0 0 12px rgba(181,101,29,.6) !important; }}
@@ -1041,17 +1037,15 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }}
       header .tagline {{ display: none; }}
       .headtop {{ grid-template-columns: max-content minmax(0, 1fr) max-content; column-gap: 10px; min-height: 33px; }}
-      .brand img {{ height: 22px !important; }}
-      .brand {{ gap: 5px; }}
       .brand h1 {{ font-size: 0.88rem; }}
       .demo-tag {{ font-size: .52rem; padding: 2px 7px; }}
-      .app-nav {{ padding: 2px; }}
+      .app-nav {{ grid-column: auto; justify-self: auto; padding: 2px; }}
       .app-nav-link {{ font-size: .64rem; padding: 4px 9px; }}
       .search-box {{ min-width: 0; }}
       .search-box-spacer {{ height: 33px; }}
       .search-box input {{ font-size: 0.8rem; padding: 7px 32px 7px 10px; }}
       .hrow2 {{ min-height: 23px; column-gap: 8px; }}
-      .header-page-tools {{ gap: 6px 8px; }}
+      .header-page-tools {{ gap: 6px 8px; flex-wrap: wrap; }}
       .header-utility-nav {{ gap: 6px; }}
       .header-utility-nav a {{ font-size: .62rem; }}
       .term-tag {{ font-size: .6rem; padding: 3px 9px; }}
@@ -1063,7 +1057,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         gap: 5px;                              /* tighter so all 4 fit */
       }}
       nav.jump::-webkit-scrollbar {{ display: none; }}
-      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 9px; }}
+      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 7px; }}
 
       #map-panel {{ display: none; }}
       #cards-area {{ padding: 0 12px 24px; }}
@@ -1109,7 +1103,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 {gate_html}
   <header>
     <div class="headtop">
-      <div class="brand"><img src="logo.png" alt="Auction Hunter" style="height:40px;width:auto"><h1>Auction Hunter</h1></div>
+      <div class="brand"><h1>AuctionSavvy</h1></div>
       <div class="search-box" id="searchBox">
         <input type="text" id="searchInput" placeholder="Search items..." oninput="searchItems()">
         <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
@@ -1119,9 +1113,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         <a href="../finds/" class="app-nav-link on">Lots</a>
       </nav>
     </div>
-    <p class="tagline">Fresh furniture finds from auction houses across the UK — click any lot to see it and bid</p>
     <div class="hrow2">
       <div class="header-page-tools">
+        <p class="tagline">Fresh furniture finds from auction houses across the UK — click any lot to see it and bid</p>
         <span class="search-results" id="searchResults"></span>
         <nav class="jump" aria-label="Jump to section">
           <a href="#local" data-target="local">Local · {local_local_count}</a>
@@ -1131,7 +1125,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
         <a href="../about.html">About</a>
-        <a href="../settings/">Edit search</a>
+        <a href="../settings/">Edit</a>
       </nav>
     </div>
   </header>
@@ -1153,7 +1147,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
   <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
 
   <footer>
-    Auction Hunter · lots refreshed daily from EasyLive · <a href="../about.html">About</a> · <span class="footer-timestamp">updated {now}</span>
+    AuctionSavvy · lots refreshed daily from EasyLive · <a href="../about.html">About</a> · <span class="footer-timestamp">updated {now}</span>
   </footer>
 
   <script>
