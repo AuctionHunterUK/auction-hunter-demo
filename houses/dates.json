@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-15T10:53:15.040874",
+  "scraped_at": "2026-07-15T11:27:09.796919",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [],
@@ -1810,13 +1810,7 @@
         "title": "Antiques, Furniture, Jewellery and Collectables"
       }
     ],
-    "Liskeard Auction Rooms (HCP-SW)": [
-      {
-        "date": "2026-07-18",
-        "time": "11:59pm",
-        "title": "Timed Auction of Antique Silver, Collectibles and Victoriana"
-      }
-    ],
+    "Liskeard Auction Rooms (HCP-SW)": [],
     "Littleton Auctions": [
       {
         "date": "2026-08-01",
@@ -2895,12 +2889,12 @@
       {
         "date": "2026-07-22",
         "time": "10am",
-        "title": "Antiques & Collectables to include Furniture, Paintings, Ceramics, Jewellery & S"
+        "title": "Antiques & Collectables to include Furniture, Paintings, Ceramics, Music & Music"
       },
       {
         "date": "2026-07-23",
         "time": "10am",
-        "title": "Antiques & Collectables to include Furniture, Paintings, Ceramics, Jewellery & S"
+        "title": "Antiques & Collectables to include Furniture, Paintings, Ceramics, Music & Music"
       },
       {
         "date": "2026-07-23",
