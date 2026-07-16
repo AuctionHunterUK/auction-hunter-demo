@@ -292,6 +292,23 @@ def save_seen(lot_ids):
     SEEN_FILE.write_text(json.dumps(sorted(lot_ids)), encoding="utf-8")
 
 
+def cap_seen_history(previous_ids, current_ids, limit=5000):
+    """Retain every current ID and fill remaining history capacity safely.
+
+    A scrape with more current IDs than the configured limit cannot be capped
+    without dropping current IDs, so those IDs take priority over the limit.
+    """
+    current_ids = set(current_ids)
+    if len(current_ids) >= limit:
+        if len(current_ids) > limit:
+            log.warning("Current scrape has %d IDs, exceeding the %d-ID history cap; retaining all current IDs.", len(current_ids), limit)
+        return current_ids
+
+    available_history_slots = limit - len(current_ids)
+    previous_only_ids = set(previous_ids) - current_ids
+    return current_ids | set(sorted(previous_only_ids)[:available_history_slots])
+
+
 # --- House postcode lookup / fuzzy matching -------------------------------
 _COMPANY_SUFFIXES = [
     " ltd", " limited", " llp", " plc",
@@ -1675,11 +1692,9 @@ def main():
     )
     log.info("HTML written")
 
-    # Update seen_lots.json with this run's lot IDs (union, capped at 5000)
-    updated_seen = (seen | set(all_lots.keys()))
-    # Keep the file from growing unboundedly: prefer recent IDs
-    if len(updated_seen) > 5000:
-        updated_seen = set(list(all_lots.keys())) | set(list(seen))[: 5000 - len(all_lots)]
+    # Update seen_lots.json with every current ID and only the historical IDs
+    # that fit within the usual 5,000-ID cap.
+    updated_seen = cap_seen_history(seen, all_lots.keys())
     save_seen(updated_seen)
     log.info(f"Updated seen_lots.json ({len(updated_seen)} ids)")
 
