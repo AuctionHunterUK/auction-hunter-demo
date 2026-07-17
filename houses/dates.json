@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-17T02:02:42.675856",
+  "scraped_at": "2026-07-17T10:49:43.315081",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -640,7 +640,7 @@
       {
         "date": "2026-07-24",
         "time": "10am",
-        "title": "LIVE AUTOGRAPH ENTERTAINMENT, SPORT, SPACE, MUSIC AND HISTORICAL"
+        "title": "Live Autograph Entertainment, Sport, Space, Music and Historical"
       },
       {
         "date": "2026-07-24",
@@ -758,7 +758,18 @@
         "title": "All World Sale - Tuesday 21st July 2026"
       }
     ],
-    "Cotswold Auction Company": [],
+    "Cotswold Auction Company": [
+      {
+        "date": "2026-07-28",
+        "time": "10am",
+        "title": "Antiques & Interiors with Toys, Dolls, Models - Two Day Sale (Cirencester)"
+      },
+      {
+        "date": "2026-07-29",
+        "time": "10am",
+        "title": "Antiques & Interiors with Toys, Dolls, Models - Two Day Sale (Cirencester)"
+      }
+    ],
     "Cottees Auctions": [
       {
         "date": "2026-07-25",
@@ -883,7 +894,7 @@
       {
         "date": "2026-07-23",
         "time": "10am",
-        "title": "Another Great Selection From Doncaster Auction Centre. The Catalogue May be a Li"
+        "title": "Another Great Selection From Doncaster Auction Centre, antiques , collectibles ,"
       }
     ],
     "Dore & Rees Auctions": [
@@ -1274,7 +1285,7 @@
       {
         "date": "2026-07-21",
         "time": "10:30am",
-        "title": "We are Pleased to Present a One Day Online Auction, Featuring, Watches, Gold & S"
+        "title": "We are Pleased to Present a One Day Online Auction Featuring Watches, Gold & Sil"
       }
     ],
     "H J Pugh & Co": [
@@ -1632,7 +1643,7 @@
       {
         "date": "2026-07-25",
         "time": "10am",
-        "title": "General Sale of Antiques, Collectables and General Items."
+        "title": "General Sale of Antiques, Collectables and General Items Including Model Cars, P"
       },
       {
         "date": "2026-08-08",
@@ -2238,7 +2249,13 @@
       }
     ],
     "Philangles Stamp Auctions": [],
-    "Philip Serrell Auctioneers & Valuers Ltd": [],
+    "Philip Serrell Auctioneers & Valuers Ltd": [
+      {
+        "date": "2026-07-23",
+        "time": "10am",
+        "title": "Philip Serrell Auctioneers Fine Art Auction 23rd July 2026"
+      }
+    ],
     "Phixius Auctions": [],
     "Piano Auctions Ltd": [],
     "Piers Motley Auctions": [
@@ -2283,6 +2300,11 @@
         "date": "2026-08-27",
         "time": "10am",
         "title": "Homewares and Interiors Sale - * We will be Open as Normal on Bank Holiday Monda"
+      },
+      {
+        "date": "2026-09-10",
+        "time": "10am",
+        "title": "Homewares and Interiors Sale"
       }
     ],
     "Pippa Deeley Auctions": [],
@@ -2498,6 +2520,21 @@
         "date": "2026-07-31",
         "time": "9:30am",
         "title": "Antique, General, Collectable & Pre-Loved Sale"
+      },
+      {
+        "date": "2026-08-14",
+        "time": "9:30am",
+        "title": "Antique, Collectable & Pre-Loved Sale"
+      },
+      {
+        "date": "2026-08-28",
+        "time": "9:30am",
+        "title": "General, Collectable & Pre-Loved Sale"
+      },
+      {
+        "date": "2026-09-11",
+        "time": "9:30am",
+        "title": "Antique, Collectable & Pre-Loved Sale"
       }
     ],
     "Ryedale Auctioneers": [
@@ -2661,7 +2698,7 @@
       },
       {
         "date": "2026-07-28",
-        "time": "11:59pm",
+        "time": "4pm",
         "title": "Watches, Lighters, Timed Auction, Bidding Starts from \u00a35.00!"
       }
     ],
@@ -3144,6 +3181,11 @@
         "date": "2026-07-22",
         "time": "10am",
         "title": "General, Antiques & Collectibles"
+      },
+      {
+        "date": "2026-08-05",
+        "time": "10am",
+        "title": "General, Antiques & Collectibles"
       }
     ],
     "Watermans Auction Rooms": [
@@ -3184,7 +3226,7 @@
       {
         "date": "2026-07-19",
         "time": "12pm",
-        "title": "Sunday: Homeware, Fashion, Toys & Tech"
+        "title": "Sunday: New Clothing, Tech, Homeware & More!"
       }
     ],
     "Wessex Auction Rooms": [
@@ -3200,7 +3242,7 @@
       },
       {
         "date": "2026-07-30",
-        "time": "10am",
+        "time": "12pm",
         "title": "Coins & Medals"
       },
       {
@@ -3332,7 +3374,7 @@
     "Yeovil Auctions": [
       {
         "date": "2026-07-23",
-        "time": "10:30am",
+        "time": "10am",
         "title": "Auction of Antiques & Collectables to include Various House Clearance Single Own"
       }
     ],
