@@ -427,9 +427,12 @@ def _is_today(lot, today_str):
 
 
 def _card_html(lot, is_new, postcodes):
+    title_value = lot.get("title", "")
+    title_attr = html.escape(title_value, quote=True)
+    title_text = html.escape(title_value)
     img_src = f"images/{lot['img_file']}" if lot.get("img_file") else ""
     img_tag = (
-        f'<img src="{img_src}" alt="{lot["title"]}" width="400" height="300" loading="lazy">'
+        f'<img src="{img_src}" alt="{title_attr}" width="400" height="300" loading="lazy">'
         if img_src else '<div class="no-img">No image</div>'
     )
     bid      = f'<span class="bid">Bid {lot["bid"]}</span>'           if lot.get("bid")       else ""
@@ -468,16 +471,18 @@ def _card_html(lot, is_new, postcodes):
         house_html_str = f'<span class="house unknown" data-tip="📍 postcode unknown">{lot["house"]} <span class="pc-unknown">?</span></span>'
 
     lot_num_html = f'<span class="lot-number">Lot {lot["lot_number"]}</span>' if lot.get("lot_number") else ""
-
     return f"""
-    <a class="card" href="{lot['url']}" target="_blank" rel="noopener">
-      <div class="card-img">{img_tag}{new_badge}</div>
-      <div class="card-body">
-        <p class="title">{lot['title']}</p>
-        <p class="house-line">{house_html_str}</p>
-        <div class="meta">{lot_num_html}{bid}{estimate}{saledate_html}</div>
-      </div>
-    </a>"""
+    <div class="card-shell">
+      <a class="card" href="{lot['url']}" target="_blank" rel="noopener">
+        <div class="card-img">{img_tag}{new_badge}</div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">{title_text}</span></p>
+          <p class="house-line">{house_html_str}</p>
+          <div class="meta">{lot_num_html}{bid}{estimate}{saledate_html}</div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: {title_attr}" data-full-title="{title_attr}">Details</button>
+    </div>"""
 
 
 def _section_html(title, lots, anchor, seen, postcodes, css_class=""):
@@ -923,6 +928,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .masonry {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; }}
     @media (max-width: 1000px) {{ .masonry {{ grid-template-columns: repeat(2, 1fr); }} }}
     @media (max-width: 600px)  {{ .masonry {{ grid-template-columns: 1fr; }} }}
+    .card-shell {{ position: relative; min-width: 0; height: 100%; }}
     .card {{
       display: flex; flex-direction: column; width: 100%;
       background: var(--panel);
@@ -952,6 +958,37 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       /* Reserve exactly 3 lines so every card body is the same height,
          keeping grid rows perfectly aligned regardless of title length. */
       height: calc(3 * 1.4em);
+    }}
+    .lot-title-text {{ display: inline; }}
+    .lot-preview-trigger {{
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      cursor: pointer;
+    }}
+    .lot-preview-trigger:focus-visible {{
+      width: auto; height: auto; margin: 0; padding: 3px 7px; clip: auto; overflow: visible;
+      right: 8px; top: 8px; z-index: 3; border: 1px solid var(--accent);
+      border-radius: 999px; background: var(--accent-soft); color: var(--accent);
+      font-size: .66rem; font-weight: 700;
+    }}
+    .lot-preview-popup {{
+      position: fixed; z-index: 1600; display: none;
+      width: min(320px, calc(100vw - 28px)); max-height: min(70vh, 420px); overflow: auto;
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow-hover); padding: 14px 16px; font-size: .76rem; line-height: 1.45;
+    }}
+    .lot-preview-popup.visible {{ display: block; }}
+    .lot-preview-popup-title {{ font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }}
+    .lot-preview-planned {{ border-top: 1px solid var(--line); margin-top: 10px; padding-top: 9px; }}
+    .lot-preview-planned-label {{ color: var(--accent); font-size: .66rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }}
+    .lot-preview-planned-copy {{ color: var(--muted); margin-top: 4px; overflow-wrap: anywhere; }}
+    @media (hover: none), (pointer: coarse) {{
+      .lot-preview-trigger {{
+        position: absolute; right: 8px; top: 8px; z-index: 3; display: inline-block;
+        width: auto; height: auto; padding: 3px 7px; margin: 0;
+        overflow: visible; clip: auto; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px;
+        background: var(--accent-soft); color: var(--accent); font-size: .62rem; font-weight: 700;
+      }}
     }}
     .house-line {{ font-size: 0.74rem; color: var(--muted); line-height: 1.3; }}
     .house {{
@@ -1244,6 +1281,110 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       window.addEventListener('resize', hidePopup);
     }})();
 
+    // ── PLANNED LOT PREVIEW (shared popup; hover/focus/tap) ──
+    (function initLotPreview() {{
+      const popup = document.createElement('div');
+      popup.className = 'lot-preview-popup';
+      popup.id = 'lot-preview-popup';
+      popup.setAttribute('role', 'dialog');
+      popup.setAttribute('aria-label', 'Planned lot preview');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(popup);
+      const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      let showTimer = null;
+      let activeTrigger = null;
+
+      function appendText(parent, className, value, tagName = 'div') {{
+        const el = document.createElement(tagName);
+        el.className = className;
+        el.textContent = value;
+        parent.appendChild(el);
+        return el;
+      }}
+
+      function positionPopup(anchor) {{
+        const rect = anchor.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.left), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${{Math.max(edge, left)}}px`;
+        popup.style.top = `${{Math.max(edge, top)}}px`;
+      }}
+
+      function showPreview(titleEl, trigger) {{
+        const title = (trigger && trigger.dataset.fullTitle) || titleEl.textContent.trim();
+        if (!title) return;
+        if (activeTrigger && activeTrigger !== trigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = trigger || null;
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'true');
+        popup.replaceChildren();
+        const titleHeading = appendText(popup, 'lot-preview-popup-title', title, 'h3');
+        titleHeading.id = 'lot-preview-popup-title';
+        popup.setAttribute('aria-labelledby', titleHeading.id);
+        const planned = document.createElement('div');
+        planned.className = 'lot-preview-planned';
+        appendText(planned, 'lot-preview-planned-label', 'Planned lot preview');
+        appendText(planned, 'lot-preview-planned-copy', 'With an authorised data feed, the full description, dimensions and condition information would appear here.');
+        popup.appendChild(planned);
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        popup.setAttribute('aria-hidden', 'false');
+        positionPopup(titleEl);
+        popup.style.visibility = '';
+      }}
+
+      function hidePreview() {{
+        clearTimeout(showTimer);
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = null;
+        popup.classList.remove('visible');
+        popup.setAttribute('aria-hidden', 'true');
+      }}
+
+      function schedulePreview(titleEl, trigger) {{
+        clearTimeout(showTimer);
+        showTimer = window.setTimeout(() => showPreview(titleEl, trigger), 200);
+      }}
+
+      document.querySelectorAll('.card-shell').forEach(shell => {{
+        const titleEl = shell.querySelector('.title');
+        const trigger = shell.querySelector('.lot-preview-trigger');
+        if (!titleEl || !trigger) return;
+        if (hoverCapable) {{
+          titleEl.addEventListener('mouseenter', () => schedulePreview(titleEl, trigger));
+          titleEl.addEventListener('mouseleave', hidePreview);
+        }}
+        trigger.addEventListener('click', event => {{
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === trigger) hidePreview();
+          else showPreview(titleEl, trigger);
+        }});
+        trigger.addEventListener('keydown', event => {{
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === trigger) hidePreview();
+          else showPreview(titleEl, trigger);
+        }});
+        if (hoverCapable) trigger.addEventListener('focus', () => showPreview(titleEl, trigger));
+        trigger.addEventListener('blur', hidePreview);
+      }});
+
+      document.addEventListener('pointerdown', event => {{
+        if (!popup.classList.contains('visible')) return;
+        if (event.target === activeTrigger || popup.contains(event.target)) return;
+        hidePreview();
+      }});
+      document.addEventListener('keydown', event => {{
+        if (event.key === 'Escape') hidePreview();
+      }});
+      window.addEventListener('scroll', hidePreview, true);
+      window.addEventListener('resize', hidePreview);
+    }})();
+
     // ── SEARCH ──
 
     // ── SECTION NAV (scrollspy) ──
@@ -1366,25 +1507,25 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       if (query) {{ searchBox.classList.add('has-text'); }}
       else {{ searchBox.classList.remove('has-text'); }}
       if (!query) {{
-        document.querySelectorAll('.card').forEach(c => {{
-          c.style.display = '';
+        document.querySelectorAll('.card-shell').forEach(shell => {{
+          shell.style.display = '';
         }});
         resultsEl.textContent = '';
         return;
       }}
       const normalizedQuery = normalizeSearch(query);
       let visibleCount = 0, totalCount = 0;
-      document.querySelectorAll('.card').forEach(card => {{
+      document.querySelectorAll('.card-shell').forEach(shell => {{
         totalCount++;
-        const titleEl = card.querySelector('.title');
+        const titleEl = shell.querySelector('.title');
         if (!titleEl) return;
         const title = titleEl.textContent.toLowerCase();
         const normalizedTitle = normalizeSearch(title);
         const queryWords = normalizedQuery.split(/\s+/);
         const matches = queryWords.every(word => normalizedTitle.includes(word));
         if (matches) {{
-          card.style.display = ''; visibleCount++;
-        }} else {{ card.style.display = 'none'; }}
+          shell.style.display = ''; visibleCount++;
+        }} else {{ shell.style.display = 'none'; }}
       }});
       resultsEl.innerHTML = '<strong>' + visibleCount + '</strong> of ' + totalCount + ' lots';
     }}
