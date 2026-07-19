@@ -707,7 +707,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     /* Two balanced desktop rows: brand/search/toggle above, tagline/tools/links below. */
     header .tagline {{ flex: 0 1 480px; min-width: 0; font-size: .78rem; color: #6b7280; margin: 0; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-    .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 520px) minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; min-height: 40px; }}
+    .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 520px) minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; min-height: 44px; }}
     .hrow2 {{ min-height: 26px; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; }}
     .header-page-tools {{ min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: nowrap; }}
     .header-update-status {{ display: none; min-width: 0; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #22c55e; font-size: .78rem; font-weight: 600; }}
@@ -816,16 +816,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       letter-spacing: 0.06em;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }}
-    footer {{
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--muted);
-      padding: 32px 24px 24px;
-      border-top: 1px solid var(--accent-soft);
-    }}
-    footer a {{ color: var(--accent); text-decoration: none; }}
-    .footer-timestamp {{ font-size: 0.75rem; color: #9ca3af; }}
-
     #main-layout {{
       display: flex;
       flex: 1;
@@ -1122,10 +1112,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       #map-panel {{ display: none; }}
       #cards-area {{ padding: 0 12px 24px; }}
       /* No standalone map on mobile (Ken's call): a cold map with no pin lit
-         answers nothing. Map entrance will be tap-item -> pin (planned).
-         Footer also hidden on mobile to give listings the room. */
+         answers nothing. Map entrance will be tap-item -> pin (planned). */
       #map-fab {{ display: none; }}
-      footer {{ display: none; }}
       body.map-open #map-panel {{
         display: block;
         position: fixed; inset: 0; z-index: 1550;
@@ -1206,10 +1194,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
   <button id="map-fab" onclick="openMobileMap()">🗺 Map</button>
   <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
-
-  <footer>
-    AuctionSavvy · lots refreshed daily from EasyLive · <a href="../about.html">About</a> · <span class="footer-timestamp">updated {now}</span>
-  </footer>
 
   <script>
 {pc_map_js}
