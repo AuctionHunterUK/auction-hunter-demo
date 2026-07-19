@@ -710,6 +710,12 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .headtop {{ display: grid; grid-template-columns: max-content minmax(0, 520px) minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; min-height: 40px; }}
     .hrow2 {{ min-height: 26px; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; }}
     .header-page-tools {{ min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: nowrap; }}
+    .header-update-status {{ display: none; min-width: 0; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #22c55e; font-size: .78rem; font-weight: 600; }}
+    @media (min-width: 801px) {{
+      .header-page-tools {{ display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px) max-content max-content; column-gap: 12px; align-items: center; }}
+      .header-update-status {{ display: block; }}
+      header .tagline {{ flex: none; width: auto; }}
+    }}
     .header-utility-nav {{ display: flex; align-items: center; gap: 10px; white-space: nowrap; }}
     .header-utility-nav a {{ font-size: .72rem; color: var(--muted); text-decoration: none; }}
     @media (hover: hover) and (pointer: fine) {{ .header-utility-nav a:hover {{ color: var(--accent); }} }}
@@ -1170,6 +1176,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div class="hrow2">
       <div class="header-page-tools">
         <p class="tagline">Fresh furniture finds from auction houses across the UK — click any lot to see it and bid</p>
+        <span class="header-update-status">✅ Successfully updated - {now}</span>
         <span class="search-results" id="searchResults"></span>
         <nav class="jump" aria-label="Jump to section">
           <a href="#local" data-target="local">Local · {local_local_count}</a>
