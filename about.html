@@ -18,7 +18,10 @@
   .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:nowrap}.header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}.header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}.header-utility-nav a.on{color:var(--accent);font-weight:600}@media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--accent)}}
   .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:var(--accent-soft);border:1px solid var(--accent);border-radius:22px}.app-nav-link{font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;color:var(--accent);text-decoration:none;white-space:nowrap}.app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
   .about-main{padding:64px 20px;display:flex;justify-content:center}
-  .wrap{max-width:640px;width:100%;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:44px 48px}
+  .wrap{max-width:960px;width:100%;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:48px}
+  .reading-column{max-width:680px;margin-left:auto;margin-right:auto}
+  .section-group{margin-top:38px;padding-top:34px;border-top:1px solid var(--line)}
+  .section-lead{max-width:680px;margin-left:auto;margin-right:auto}
   h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
   .sub{color:#7b8290;font-size:.92rem;margin-bottom:32px}
   h2{font-size:.78rem;color:#3a5c3b;margin:28px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
@@ -43,8 +46,16 @@
   .morning-check{margin:28px 0;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:22px 24px}
   .morning-check h2{margin-top:0}
   .morning-check p:last-child{margin-bottom:0;color:#314d32}
-  .membership-intro{margin-bottom:16px}
-  .tiers{display:grid;gap:14px}
+  .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}
+  .feature-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
+  .feature-panel h2{margin-top:0}
+  .feature-panel p:last-child{margin-bottom:0}
+  .discovery-box{margin-top:32px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .discovery-box h2{margin-top:0}
+  .discovery-box p{max-width:740px}
+  .discovery-box p:last-child{margin-bottom:0}
+  .membership-intro{margin-bottom:18px}
+  .tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
   .tier-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:20px 22px}
   .tier-panel h3{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;margin:0 0 7px}
   .tier-panel p{margin-bottom:10px}
@@ -53,12 +64,16 @@
   .tier-map{background:#f9fbf9;border-color:#dce6dc}
   .tier-briefing{background:#f6f9f6;border-color:#d4e0d4}
   .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
-  .delivery-box{margin-top:28px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+  .delivery-box{margin-top:0;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
   .delivery-box h2{margin-top:0}
   .delivery-box p{margin-bottom:10px}
   .delivery-box p:last-child{margin-bottom:0}
+  .support-grid .companion-box{margin-top:0}
+  .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
+  @media(max-width:900px){.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.discovery-box{margin-top:28px}}
 </style>
 </head>
 <body>
@@ -125,37 +140,50 @@ body.gate-locked{overflow:hidden}
 </header>
 
 <main class="about-main"><div class="wrap">
-  <h1>About AuctionSavvy</h1>
-  <div class="sub"><strong>A private demonstration — a personalised morning briefing</strong></div>
+  <div class="reading-column">
+    <h1>About AuctionSavvy</h1>
+    <div class="sub"><strong>A private demonstration — a personalised morning briefing</strong></div>
 
-  <p><strong>AuctionSavvy is a personalised discovery layer that sends motivated buyers to EasyLive.</strong> It turns a dealer’s or collector’s standing interests into a clear, regularly updated shortlist, while EasyLive remains the official place to discover, view and bid on auction lots.</p>
+    <p><strong>AuctionSavvy is a personalised discovery layer that sends motivated buyers to EasyLive.</strong> It turns a dealer’s or collector’s standing interests into a clear, regularly updated shortlist, while EasyLive remains the official place to discover, view and bid on auction lots.</p>
 
-  <p>Instead of repeatedly reviewing broad search results, users choose the types of items, locations and auction houses that matter to them. AuctionSavvy then presents relevant new lots in a simple, time-sensitive briefing—without attempting to replace EasyLive’s official catalogue or bidding service.</p>
+    <p>Instead of repeatedly reviewing broad search results, users choose the types of items, locations and auction houses that matter to them. AuctionSavvy then presents relevant new lots in a simple, time-sensitive briefing—without attempting to replace EasyLive’s official catalogue or bidding service.</p>
 
-  <section class="morning-check">
-    <h2>Designed for a ten-minute morning check</h2>
-    <p>In around ten minutes, a dealer or collector should be able to see what is new within their chosen interests, what is local, what is selling soon and what may match either a customer request or a personal collecting priority—then follow any promising item directly to EasyLive for its official details and bidding.</p>
-    <p>Everything AuctionSavvy develops would follow the same principle: plain language, sensible defaults, minimal setup and only the controls that make finding and assessing items quicker.</p>
-    <p><strong>EasyLive runs the auctions. AuctionSavvy helps busy dealers and collectors decide what deserves their attention.</strong></p>
+    <section class="morning-check">
+      <h2>Designed for a ten-minute morning check</h2>
+      <p>In around ten minutes, a dealer or collector should be able to see what is new within their chosen interests, what is local, what is selling soon and what may match either a customer request or a personal collecting priority—then follow any promising item directly to EasyLive for its official details and bidding.</p>
+      <p>Everything AuctionSavvy develops would follow the same principle: plain language, sensible defaults, minimal setup and only the controls that make finding and assessing items quicker.</p>
+      <p><strong>EasyLive runs the auctions. AuctionSavvy helps busy dealers and collectors decide what deserves their attention.</strong></p>
+    </section>
+  </div>
+
+  <section class="section-group">
+    <p class="section-lead">This demonstration brings two complementary tools together.</p>
+    <div class="feature-grid">
+      <section class="feature-panel">
+        <h2>Lots</h2>
+        <p>A regularly updated, pre-filtered selection of pine furniture and butchers’ blocks appearing in UK auctions. The demonstration is already narrowed to these chosen interests, then organised into <strong>Local Auctions</strong>, <strong>UK-Wide Today</strong> and <strong>UK-Wide Later</strong> so that promising items can be assessed quickly by both location and urgency.</p>
+        <p><strong>Every item links</strong> directly to its original EasyLive listing for official catalogue information and bidding.</p>
+      </section>
+
+      <section class="feature-panel">
+        <h2>Map</h2>
+        <p><strong>An interactive map</strong> of UK auction houses, colour-coded according to when their next sale takes place. A future route-planning feature could help users discover auction houses along a journey and make collection planning easier.</p>
+      </section>
+    </div>
   </section>
 
-  <p>This demonstration brings two complementary tools together.</p>
+  <section class="discovery-box">
+    <h2>Supporting discovery on EasyLive</h2>
+    <p>AuctionSavvy’s personalised briefing would provide a useful starting point, not replace wider browsing and discovery on EasyLive. Members could keep their interests broad and change them easily, while the rotating Daily Showcase would introduce non-members to different categories and encourage exploration beyond a fixed shortlist.</p>
 
-  <h2>Lots</h2>
-  <p>A regularly updated, pre-filtered selection of pine furniture and butchers’ blocks appearing in UK auctions. The demonstration is already narrowed to these chosen interests, then organised into <strong>Local Auctions</strong>, <strong>UK-Wide Today</strong> and <strong>UK-Wide Later</strong> so that promising items can be assessed quickly by both location and urgency.</p>
+    <p>AuctionSavvy would also promote the service directly to dealers and collectors, including people who may not currently visit EasyLive regularly. Every promising lot would lead to its official EasyLive listing for catalogue information and bidding. AuctionSavvy would not compete for the transaction; it would provide an additional route through which relevant, motivated buyers discover and reach EasyLive.</p>
+  </section>
 
-  <p>Every item links directly to its original EasyLive listing for official catalogue information and bidding.</p>
-
-  <h2>Map</h2>
-  <p>An interactive map of UK auction houses, colour-coded according to when their next sale takes place. A future route-planning feature could help users discover auction houses along a journey and make collection planning easier.</p>
-
-  <h2>Supporting discovery on EasyLive</h2>
-  <p>AuctionSavvy’s personalised briefing would provide a useful starting point, not replace wider browsing and discovery on EasyLive. Members could keep their interests broad and change them easily, while the rotating Daily Showcase would introduce non-members to different categories and encourage exploration beyond a fixed shortlist.</p>
-
-  <p>AuctionSavvy would also promote the service directly to dealers and collectors, including people who may not currently visit EasyLive regularly. Every promising lot would lead to its official EasyLive listing for catalogue information and bidding. AuctionSavvy would not compete for the transaction; it would provide an additional route through which relevant, motivated buyers discover and reach EasyLive.</p>
-
-  <h2>Access and membership</h2>
-  <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through a public preview, free map membership, personalised paid membership and an additional dealer sourcing service.</p>
+  <section class="section-group">
+    <div class="section-lead">
+      <h2>Access and membership</h2>
+      <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through a public preview, free map membership, personalised paid membership and an additional dealer sourcing service.</p>
+    </div>
   <div class="tiers">
     <section class="tier-panel tier-briefing">
       <h3>Morning Briefing — Member</h3>
@@ -174,7 +202,7 @@ body.gate-locked{overflow:hidden}
     </section>
     <section class="tier-panel tier-map">
       <h3>Map — Free member</h3>
-      <p>Free registered access to the UK auction-house map, upcoming sale dates and route-planning tools.</p>
+      <p>Free registered access to the UK auction-house map and upcoming sale dates, with route-planning tools proposed as a future addition.</p>
       <p>After signing in, free members would be taken directly to the Map rather than being required to pass through a promotional landing page.</p>
     </section>
     <section class="tier-panel tier-showcase">
@@ -184,39 +212,46 @@ body.gate-locked{overflow:hidden}
       <p>The changing daily category would provide a genuine demonstration of AuctionSavvy without replacing the personalised and consistent service available to members.</p>
     </section>
   </div>
-
-  <section class="delivery-box">
-    <h2>UK-wide delivery support</h2>
-    <p>Finding a suitable item is only useful if collecting it is practical. AuctionSavvy would aim to introduce dealers and collectors to one or more independent specialist UK-wide delivery providers, helping them consider auctions beyond their usual collection area and widening the potential bidder reach of participating auction houses.</p>
-    <p>Initially, this could provide a simple route to request a delivery quotation. Subject to suitable agreements with delivery providers and the availability of authorised catalogue information, a later integration could use the auction-house location, the buyer’s delivery postcode, the item type and any available dimensions to provide a quick indicative quote alongside a lot.</p>
-    <p>By reducing delivery uncertainty before bidding, this could make more geographically distant purchases practical and bring additional qualified visitors to the official EasyLive listings.</p>
-    <p>This is a proposed capability rather than an existing delivery partnership. Any quotation, booking and service would be confirmed and provided by the independent delivery company.</p>
   </section>
 
-  <div class="companion-box">
-    <h2>Chrome companion and complementary tools</h2>
-    <p>Alongside the main service, AuctionSavvy has an optional Chrome companion designed for people browsing EasyLive directly. In the current demonstration, hovering over an auction-house name reveals its address and postcode—information that can otherwise take several clicks to find.</p>
-    <p>This is a small example of AuctionSavvy’s wider principle: remove avoidable steps and make daily auction research quicker and clearer. Possible future additions could include auction-house shortcuts, private collection notes and enhanced multi-stop collection planning.</p>
-    <p>These would remain lightweight aids around the official EasyLive experience. Any broader integration affecting EasyLive’s website, listings or data would be developed transparently and in consultation with EasyLive.</p>
+  <div class="support-grid">
+    <section class="delivery-box">
+      <h2>UK-wide delivery support</h2>
+      <p><strong>Finding a suitable item</strong> is only useful if collecting it is practical. AuctionSavvy would aim to introduce dealers and collectors to one or more independent specialist UK-wide delivery providers, helping them consider auctions beyond their usual collection area and widening the potential bidder reach of participating auction houses.</p>
+      <p>Initially, this could provide a simple route to request a delivery quotation. Subject to suitable agreements with delivery providers and the availability of authorised catalogue information, a later integration could use the auction-house location, the buyer’s delivery postcode, the item type and any available dimensions to provide a quick indicative quote alongside a lot.</p>
+      <p>By reducing delivery uncertainty before bidding, this could make more geographically distant purchases practical and bring additional qualified visitors to the official EasyLive listings.</p>
+      <p>This is a proposed capability rather than an existing delivery partnership. Any quotation, booking and service would be confirmed and provided by the independent delivery company.</p>
+    </section>
+
+    <section class="companion-box">
+      <h2>Chrome companion and complementary tools</h2>
+      <p>Alongside the main service, AuctionSavvy has an optional Chrome companion designed for people browsing EasyLive directly. In the current demonstration, hovering over an auction-house name reveals its address and postcode—information that can otherwise take several clicks to find.</p>
+      <p>This is a small example of AuctionSavvy’s wider principle: remove avoidable steps and make daily auction research quicker and clearer. Possible future additions could include auction-house shortcuts, private collection notes and enhanced multi-stop collection planning.</p>
+      <p>These would remain lightweight aids around the official EasyLive experience. Any broader integration affecting EasyLive’s website, listings or data would be developed transparently and in consultation with EasyLive.</p>
+    </section>
   </div>
 
-  <div class="easylive-box">
-    <h2>Working responsibly with auction data</h2>
-    <p>All lot and auction information displayed in this demonstration is sourced from EasyLive. Rights in the listings, descriptions and imagery remain with EasyLive, the participating auctioneers and their respective rights holders.</p>
-    <p>AuctionSavvy is currently a password-protected, invitation-only demonstration created to explore a potential partnership with EasyLive. It is not being offered as a commercial service, and every lot links directly back to EasyLive for viewing and bidding.</p>
-    <p>We recognise that EasyLive’s <a href="https://www.easyliveauction.com/legal/site-usage-terms/" target="_blank" rel="noopener noreferrer">published site-usage terms</a> require written permission for automated data collection. Any development beyond this demonstration would therefore be undertaken through an agreed data-access arrangement or partnership.</p>
-    <p>We will promptly remove any information or imagery at the request of EasyLive or the relevant rights holder.</p>
-  </div>
+  <section class="section-group stewardship-group">
+    <div class="easylive-box">
+      <h2>Working responsibly with auction data</h2>
+      <p>All lot and auction information displayed in this demonstration is sourced from EasyLive. Rights in the listings, descriptions and imagery remain with EasyLive, the participating auctioneers and their respective rights holders.</p>
+      <p>AuctionSavvy is currently a password-protected, invitation-only demonstration created to explore a potential partnership with EasyLive. It is not being offered as a commercial service, and every lot links directly back to EasyLive for viewing and bidding.</p>
+      <p>We recognise that EasyLive’s <a href="https://www.easyliveauction.com/legal/site-usage-terms/" target="_blank" rel="noopener noreferrer">published site-usage terms</a> require written permission for automated data collection. Any development beyond this demonstration would therefore be undertaken through an agreed data-access arrangement or partnership.</p>
+      <p>We will promptly remove any information or imagery at the request of EasyLive or the relevant rights holder.</p>
+    </div>
 
-  <div class="monitoring-box">
-    <h2>Proposed data-use monitoring</h2>
-    <p>A future partnership could also include an analytics-based monitoring capability designed to help protect catalogue information.</p>
-    <p>It could examine access patterns and flag unusual automated collection, bulk extraction or catalogue reuse for investigation.</p>
-    <p>This would be a proposed detection and alerting tool—not an automatic accusation or enforcement system—with its rules, thresholds and reporting agreed directly with EasyLive.</p>
-  </div>
+    <div class="monitoring-box">
+      <h2>Proposed data-use monitoring</h2>
+      <p>A future partnership could also include an analytics-based monitoring capability designed to help protect catalogue information.</p>
+      <p>It could examine access patterns and flag unusual automated collection, bulk extraction or catalogue reuse for investigation.</p>
+      <p>This would be a proposed detection and alerting tool—not an automatic accusation or enforcement system—with its rules, thresholds and reporting agreed directly with EasyLive.</p>
+    </div>
+  </section>
 
-  <h2>Contact</h2>
-  <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
+  <div class="reading-column section-group">
+    <h2>Contact</h2>
+    <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
+  </div>
 
   <div class="footer">AuctionSavvy. Private demonstration — invitation only.</div>
 </div></main>
