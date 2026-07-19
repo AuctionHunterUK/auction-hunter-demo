@@ -28,6 +28,10 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 .header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}
 @media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--pine)}}
+@media(min-width:801px){
+  .header-page-tools{display:grid;grid-template-columns:minmax(0,1fr) max-content max-content max-content;column-gap:12px;align-items:center}
+  .tagline{flex:none;min-width:0;width:auto}
+}
 .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
 .app-nav-link{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;border:0;background:transparent;color:var(--pine);letter-spacing:-.01em;text-decoration:none;white-space:nowrap;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
 .app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
