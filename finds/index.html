@@ -311,6 +311,7 @@
     }
     .lot-preview-popup.visible { display: block; }
     .lot-preview-popup-title { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+    .lot-preview-close { display: none; }
     .lot-preview-planned { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 9px; }
     .lot-preview-planned-label { color: var(--accent); font-size: .66rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
     .lot-preview-planned-copy { color: var(--muted); margin-top: 4px; overflow-wrap: anywhere; }
@@ -321,6 +322,14 @@
         overflow: visible; clip: auto; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px;
         background: var(--accent-soft); color: var(--accent); font-size: .62rem; font-weight: 700;
       }
+      .lot-preview-popup-title { padding-right: 34px; }
+      .lot-preview-close {
+        position: absolute; top: 7px; right: 7px; display: flex; align-items: center; justify-content: center;
+        width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%;
+        background: transparent; color: var(--muted); font: 400 1.45rem/1 'DM Sans', sans-serif;
+        cursor: pointer; -webkit-tap-highlight-color: transparent;
+      }
+      .lot-preview-close:active { background: var(--accent-soft); color: var(--accent); }
     }
     .house-line { font-size: 0.74rem; color: var(--muted); line-height: 1.3; }
     .house {
@@ -11485,6 +11494,17 @@ const HOUSE_POPUP_DATA = {"overture auctions": {"name": "Overture Auctions", "ad
         activeTrigger = trigger || null;
         if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'true');
         popup.replaceChildren();
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'lot-preview-close';
+        closeButton.setAttribute('aria-label', 'Close lot details');
+        closeButton.textContent = '×';
+        closeButton.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePreview();
+        });
+        popup.appendChild(closeButton);
         const titleHeading = appendText(popup, 'lot-preview-popup-title', title, 'h3');
         titleHeading.id = 'lot-preview-popup-title';
         popup.setAttribute('aria-labelledby', titleHeading.id);
