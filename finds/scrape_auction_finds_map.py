@@ -780,34 +780,26 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       box-shadow: 0 1px 4px rgba(58,92,59,.35);
     }}
     .app-nav-link.on:hover {{ background: var(--accent); }}
-    nav.jump {{ display: flex; gap: 6px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; }}
+    nav.jump {{ display: flex; gap: 16px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; }}
     nav.jump a {{
       font-size: 0.7rem;
-      padding: 6px 14px;
-      background: var(--chip-bg);   /* AH .chip base */
-      border-radius: 20px;
-      color: var(--chip-ink);
+      position: relative;
+      padding: 4px 0 6px;
+      background: transparent;
+      border-radius: 0;
+      color: var(--muted);
       text-decoration: none;
       font-weight: 500;
       transition: 0.15s;
     }}
-    /* Hover affordance for desktop mouse users only — a SUBTLE grey tint, NOT
-       the accent green. TWO layers of defence against the Samsung sticky-green:
-       (1) the compound query `(hover:hover) and (pointer:fine)` — an S-Pen
-       Samsung reports hover:hover (pen CAN hover) but its PRIMARY pointer is
-       coarse (finger), so the single `hover:hover` guard LEAKS on it while the
-       compound one holds; this stops hover styling applying on touch at all.
-       (2) even if some device still leaks, the tint is a harmless grey, never
-       the accent green — so a stuck tap-hover can never be mistaken for the
-       active state. (The entire ~9-round "Samsung sticky green" saga was a
-       sticky tap-:hover painting the SAME green as .active, not a repaint bug.)
-       .active (JS-controlled) is the ONLY thing that ever goes green. */
+    nav.jump a .jump-count {{ color: var(--muted); font-size: .9em; font-weight: 400; }}
+    /* Desktop mouse hover only darkens flat tab text; it never adds a pill. */
     @media (hover: hover) and (pointer: fine) {{
-      nav.jump a:hover {{ background: #e5e7eb; color: var(--ink); }}
+      nav.jump a:hover {{ color: var(--ink); }}
     }}
-    /* Active = the section currently in view (scrollspy) or just clicked.
-       The ONLY green state; set purely by the .active JS class. */
-    nav.jump a.active {{ background: var(--accent); color: var(--panel); }}
+    /* Active = the section currently in view (scrollspy) or just clicked. */
+    nav.jump a.active {{ color: var(--accent); }}
+    nav.jump a.active::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent); }}
     .new-badge {{
       position: absolute; top: 10px; left: 10px;
       background: var(--new-bg); color: #fff;
@@ -1079,7 +1071,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       /* ── COMPACT MOBILE HEADER ──
          Header un-sticks (scrolls away with content) and shrinks hard so
          the lots get the screen. Also kills sideways scroll: nowrap items
-         are allowed to wrap, pill rows become horizontal swipers. */
+         are allowed to wrap, tab rows become horizontal swipers. */
       html, body {{ overflow-x: hidden; }}
       header {{
         position: static;             /* scrolls away — frees the whole screen */
@@ -1104,10 +1096,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         flex-wrap: nowrap; overflow-x: auto;   /* one swipeable row */
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        gap: 5px;                              /* tighter so all 4 fit */
+        gap: 5px;                              /* tighter so all three fit */
       }}
       nav.jump::-webkit-scrollbar {{ display: none; }}
-      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 7px; }}
+      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }}
 
       #map-panel {{ display: none; }}
       #cards-area {{ padding: 0 12px 24px; }}
@@ -1167,9 +1159,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         <span class="header-update-status">✅ Successfully updated - {now}</span>
         <span class="search-results" id="searchResults"></span>
         <nav class="jump" aria-label="Jump to section">
-          <a href="#local" data-target="local">Local · {local_local_count}</a>
-          {f'<a href="#today" data-target="today">UK Today · {wide_today_count}</a>' if wide_today_count else ''}
-          <a href="#uk-wide" data-target="uk-wide">UK Later · {wide_later_count}</a>
+          <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
+          {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
+          <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
