@@ -40,7 +40,7 @@
   .companion-box h2{margin-top:0}
   .companion-box p{margin-bottom:10px}
   .companion-box p:last-child{margin-bottom:0}
-  .morning-check{margin-top:28px;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:22px 24px}
+  .morning-check{margin:28px 0;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:22px 24px}
   .morning-check h2{margin-top:0}
   .morning-check p:last-child{margin-bottom:0;color:#314d32}
   .membership-intro{margin-bottom:16px}
@@ -53,6 +53,10 @@
   .tier-map{background:#f9fbf9;border-color:#dce6dc}
   .tier-briefing{background:#f6f9f6;border-color:#d4e0d4}
   .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
+  .delivery-box{margin-top:28px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .delivery-box h2{margin-top:0}
+  .delivery-box p{margin-bottom:10px}
+  .delivery-box p:last-child{margin-bottom:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}}
 </style>
@@ -128,6 +132,13 @@ body.gate-locked{overflow:hidden}
 
   <p>Instead of repeatedly reviewing broad search results, users choose the types of items, locations and auction houses that matter to them. AuctionSavvy then presents relevant new lots in a simple, time-sensitive briefing—without attempting to replace EasyLive’s official catalogue or bidding service.</p>
 
+  <section class="morning-check">
+    <h2>Designed for a ten-minute morning check</h2>
+    <p>In around ten minutes, a dealer or collector should be able to see what is new within their chosen interests, what is local, what is selling soon and what may match either a customer request or a personal collecting priority—then follow any promising item directly to EasyLive for its official details and bidding.</p>
+    <p>Every planned feature follows the same principle: plain language, sensible defaults, minimal setup and only the controls that make finding and assessing items quicker.</p>
+    <p><strong>EasyLive runs the auctions. AuctionSavvy helps busy dealers and collectors decide what deserves their attention.</strong></p>
+  </section>
+
   <p>This demonstration brings two complementary tools together.</p>
 
   <h2>Lots</h2>
@@ -138,34 +149,9 @@ body.gate-locked{overflow:hidden}
   <h2>Map</h2>
   <p>An interactive map of UK auction houses, colour-coded according to when their next sale takes place. It also includes a route planner for discovering auction houses along a journey and making collection planning easier.</p>
 
-  <div class="companion-box">
-    <h2>Chrome companion</h2>
-    <p>Alongside the main service, AuctionSavvy has an optional Chrome companion designed for people browsing EasyLive directly. In the current demonstration, hovering over an auction-house name reveals its address and postcode — information that can otherwise take several clicks to find.</p>
-    <p>This is a small example of AuctionSavvy’s wider principle: remove avoidable steps and make a dealer’s daily auction research quicker and clearer. Possible future additions could include auction-house shortcuts, private collection notes and links into collection or delivery planning.</p>
-    <p>These would remain lightweight aids around the official EasyLive experience. Any broader integration would be developed in discussion with EasyLive.</p>
-  </div>
-
-  <section class="morning-check">
-    <h2>Designed for a ten-minute morning check</h2>
-    <p>In around ten minutes, a dealer or collector should be able to see what is new within their chosen interests, what is local, what is selling soon and what may match either a customer request or a personal collecting priority—then follow any promising item directly to EasyLive for its official details and bidding.</p>
-    <p>Every planned feature follows the same principle: plain language, sensible defaults, minimal setup and only the controls that make finding and assessing items quicker.</p>
-    <p><strong>EasyLive runs the auctions. AuctionSavvy helps busy dealers and collectors decide what deserves their attention.</strong></p>
-  </section>
-
   <h2>Planned access and membership</h2>
   <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through a public preview, free map membership, personalised paid membership and an additional dealer sourcing service.</p>
   <div class="tiers">
-    <section class="tier-panel tier-showcase">
-      <h3>Daily Showcase — Public preview</h3>
-      <p>A live, publicly accessible sample of the AuctionSavvy experience. Each day would feature a different automatically selected category—such as ceramics, pine furniture or artwork—using a limited selection of current lots.</p>
-      <p>Visitors could explore that day’s selection and follow items directly to EasyLive, but they could not choose the category, search the complete catalogue, set local preferences, view previous showcases or receive alerts.</p>
-      <p>The changing daily category would provide a genuine demonstration of AuctionSavvy without replacing the personalised and consistent service available to members.</p>
-    </section>
-    <section class="tier-panel tier-map">
-      <h3>Map — Free member</h3>
-      <p>Free registered access to the UK auction-house map, upcoming sale dates and route-planning tools.</p>
-      <p>After signing in, free members would be taken directly to the Map rather than being required to pass through a promotional landing page.</p>
-    </section>
     <section class="tier-panel tier-briefing">
       <h3>Morning Briefing — Member</h3>
       <p>A paid, personalised daily shortlist built from each member’s chosen interests, preferred auction houses and location.</p>
@@ -181,12 +167,33 @@ body.gate-locked{overflow:hidden}
       <p>A match notification could include a photograph, catalogue dimensions, auction house, sale date, an explanation of why the item matched and a direct link to the official EasyLive listing.</p>
       <p>These would be suggested matches rather than guarantees. Dealers would always be expected to verify the original catalogue information before advising a customer or bidding.</p>
     </section>
+    <section class="tier-panel tier-map">
+      <h3>Map — Free member</h3>
+      <p>Free registered access to the UK auction-house map, upcoming sale dates and route-planning tools.</p>
+      <p>After signing in, free members would be taken directly to the Map rather than being required to pass through a promotional landing page.</p>
+    </section>
+    <section class="tier-panel tier-showcase">
+      <h3>Daily Showcase — Public preview</h3>
+      <p>A live, publicly accessible sample of the AuctionSavvy experience. Each day would feature a different automatically selected category—such as ceramics, pine furniture or artwork—using a limited selection of current lots.</p>
+      <p>Visitors could explore that day’s selection and follow items directly to EasyLive, but they could not choose the category, search the complete catalogue, set local preferences, view previous showcases or receive alerts.</p>
+      <p>The changing daily category would provide a genuine demonstration of AuctionSavvy without replacing the personalised and consistent service available to members.</p>
+    </section>
   </div>
 
-  <h2>Complementary tools</h2>
-  <p>AuctionSavvy also explores small, practical tools that could make the sourcing journey easier.</p>
-  <p>A prototype browser companion demonstrates how useful information—such as an auction house’s address and postcode—could be made easier to see while browsing. Future possibilities could include enhanced multi-stop collection planning, links to delivery quotations and, subject to an appropriate partnership, more closely integrated delivery estimates.</p>
-  <p>Any companion feature affecting EasyLive’s website, listings or data would be developed transparently and in consultation with EasyLive.</p>
+  <section class="delivery-box">
+    <h2>Planned UK-wide delivery support</h2>
+    <p>Finding a suitable item is only useful if collecting it is practical. AuctionSavvy would aim to introduce dealers and collectors to one or more independent specialist UK-wide delivery providers, helping them consider auctions beyond their usual collection area and widening the potential bidder reach of participating auction houses.</p>
+    <p>Initially, this could provide a simple route to request a delivery quotation. Subject to suitable agreements with delivery providers and the availability of authorised catalogue information, a later integration could use the auction-house location, the buyer’s delivery postcode, the item type and any available dimensions to provide a quick indicative quote alongside a lot.</p>
+    <p>By reducing delivery uncertainty before bidding, this could make more geographically distant purchases practical and bring additional qualified visitors to the official EasyLive listings.</p>
+    <p>This is a proposed capability rather than an existing delivery partnership. Any quotation, booking and service would be confirmed and provided by the independent delivery company.</p>
+  </section>
+
+  <div class="companion-box">
+    <h2>Chrome companion and complementary tools</h2>
+    <p>Alongside the main service, AuctionSavvy has an optional Chrome companion designed for people browsing EasyLive directly. In the current demonstration, hovering over an auction-house name reveals its address and postcode—information that can otherwise take several clicks to find.</p>
+    <p>This is a small example of AuctionSavvy’s wider principle: remove avoidable steps and make daily auction research quicker and clearer. Possible future additions could include auction-house shortcuts, private collection notes and enhanced multi-stop collection planning.</p>
+    <p>These would remain lightweight aids around the official EasyLive experience. Any broader integration affecting EasyLive’s website, listings or data would be developed transparently and in consultation with EasyLive.</p>
+  </div>
 
   <div class="easylive-box">
     <h2>Working responsibly with auction data</h2>
