@@ -63,13 +63,12 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 /* ── TOOLBAR ── */
 #toolbar{background:#fff;border-bottom:1px solid rgba(0,0,0,.06);padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 #toolbar::-webkit-scrollbar{display:none}
-.chip{font-size:.7rem;padding:6px 14px;border-radius:20px;cursor:pointer;font-weight:500;transition:all .12s;user-select:none;white-space:nowrap;flex-shrink:0;background:#f3f4f6;color:#4b5563;border:none;-webkit-tap-highlight-color:transparent}
-.chip.on{color:#fff}
-.chip-soon.on{background:#2d4a3e}
-.chip-2wk.on{background:#2d4a3e}
-.chip-urgent.on{background:#2d4a3e;box-shadow:0 0 8px rgba(45,74,62,.4)}
-.tbtn{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;padding:6px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.1);background:#fff;color:#4b5563;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.tbtn:active{background:rgba(255,255,255,.18)}
+.chip,.tbtn{position:relative;font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:500;padding:5px 8px 7px;border:0;border-radius:0;background:transparent;color:#6b7280;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:color .15s;user-select:none;-webkit-tap-highlight-color:transparent}
+.chip.on,.tbtn.on{color:#2d4a3e}
+.chip.on::after,.tbtn.on::after{content:"";position:absolute;left:4px;right:4px;bottom:1px;height:2px;background:#2d4a3e}
+@media (hover:hover) and (pointer:fine){.chip:hover,.tbtn:hover{color:#1f3d28;background:transparent}}
+.tbtn{font-weight:600}
+.tbtn:active{background:transparent}
 
 /* ── MAP AREA ── */
 #body{flex:1;position:relative;overflow:hidden}
@@ -515,7 +514,7 @@ body.gate-locked{overflow:hidden}
   <span class="chip chip-urgent" id="chip-urgent" onclick="setChip('urgent')">Now</span>
   <span class="chip chip-soon" id="chip-soon" onclick="setChip('soon')">Soon</span>
   <span class="chip chip-2wk" id="chip-2wk" onclick="setChip('2wk')">Later</span>
-  <button class="tbtn" onclick="resetAll()">All</button>
+  <button type="button" class="tbtn" id="chip-all" onclick="resetAll()">All</button>
 </div>
 <div id="body">
   <div id="map"></div>
@@ -1041,11 +1040,16 @@ function filteredH(){
   });
 }
 
+function syncChipState(){
+  ['urgent','soon','2wk','all'].forEach(mode => {
+    const el = document.getElementById(mode === 'all' ? 'chip-all' : 'chip-' + mode);
+    if (el) el.classList.toggle('on', activeChip === mode);
+  });
+}
+
 function setChip(mode){
   activeChip = activeChip===mode ? 'all' : mode;
-  document.getElementById('chip-soon').classList.toggle('on', activeChip==='soon');
-  document.getElementById('chip-2wk').classList.toggle('on', activeChip==='2wk');
-  document.getElementById('chip-urgent').classList.toggle('on', activeChip==='urgent');
+  syncChipState();
   buildSB(filteredH());
   // On mobile: flash the timing legend briefly, then auto-hide so it doesn't block the map
   if (window.innerWidth < 768) flashLegend(activeChip);
@@ -1054,9 +1058,7 @@ function setChip(mode){
 function resetAll(){
   document.getElementById('sbsearch').value='';
   activeChip='all';
-  document.getElementById('chip-soon').classList.remove('on');
-  document.getElementById('chip-2wk').classList.remove('on');
-  document.getElementById('chip-urgent').classList.remove('on');
+  syncChipState();
   buildSB(filteredH());
   // On mobile: flash the timing legend briefly, then auto-hide so it doesn't block the map
   if (window.innerWidth < 768) flashLegend('all');
@@ -1072,9 +1074,7 @@ function goHome(){
   map.setView([54.4,-3.2], window.innerWidth < 768 ? 5 : 6, {animate:true});
   // Reset to the "Now" default
   activeChip = 'urgent';
-  document.getElementById('chip-soon').classList.remove('on');
-  document.getElementById('chip-2wk').classList.remove('on');
-  document.getElementById('chip-urgent').classList.add('on');
+  syncChipState();
   buildSB(filteredH());
 }
 
@@ -1614,7 +1614,7 @@ function setUpdateStatus(msg, col) {
   allH.forEach(addMarker);
   // Default view: show the "Now" auctions (within 3 days) so the app is useful immediately
   activeChip = 'urgent';
-  document.getElementById('chip-urgent').classList.add('on');
+  syncChipState();
   buildSB(filteredH());
 })();
 
