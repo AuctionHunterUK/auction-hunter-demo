@@ -17,10 +17,16 @@
   .headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:40px}.brand{display:flex;align-items:center;text-decoration:none}.brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap}.search-box{position:relative}.search-box-spacer{height:35px;visibility:hidden;pointer-events:none}.tagline{flex:0 1 480px;min-width:0;font-size:.78rem;color:#6b7280;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:nowrap}.header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}.header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}.header-utility-nav a.on{color:var(--accent);font-weight:600}@media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--accent)}}
   .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:var(--accent-soft);border:1px solid var(--accent);border-radius:22px}.app-nav-link{font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;color:var(--accent);text-decoration:none;white-space:nowrap}.app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
-  .about-main{padding:64px 20px;display:flex;justify-content:center}
-  .wrap{max-width:960px;width:100%;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:48px}
+  .about-main{padding:52px 20px 72px}
+  .about-layout{max-width:1160px;width:100%;margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;align-items:start}
+  .about-toc{position:sticky;top:88px;padding:18px 0 18px 2px}
+  .about-toc-title{font-size:.68rem;color:#879083;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin:0 0 11px}
+  .about-toc nav{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+  .about-toc a{display:block;width:100%;padding:7px 10px;border-left:2px solid transparent;color:#778077;font-size:.78rem;line-height:1.3;text-decoration:none;transition:color .18s ease,border-color .18s ease,background .18s ease}
+  .about-toc a:hover,.about-toc a.is-active{color:var(--accent);border-left-color:var(--accent);background:#f2f6f2}
+  .wrap{min-width:0;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:52px}
   .reading-column{max-width:680px;margin-left:auto;margin-right:auto}
-  .section-group{margin-top:38px;padding-top:34px;border-top:1px solid var(--line)}
+  .section-group{margin-top:42px;padding-top:38px;border-top:1px solid var(--line);scroll-margin-top:104px}
   .section-lead{max-width:680px;margin-left:auto;margin-right:auto}
   h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
   .sub{color:#7b8290;font-size:.92rem;margin-bottom:32px}
@@ -43,14 +49,14 @@
   .companion-box h2{margin-top:0}
   .companion-box p{margin-bottom:10px}
   .companion-box p:last-child{margin-bottom:0}
-  .morning-check{margin:28px 0;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:22px 24px}
+  .morning-check{margin:30px 0 0;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:24px 26px}
   .morning-check h2{margin-top:0}
   .morning-check p:last-child{margin-bottom:0;color:#314d32}
-  .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}
+  .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
   .feature-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
   .feature-panel h2{margin-top:0}
   .feature-panel p:last-child{margin-bottom:0}
-  .discovery-box{margin-top:32px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .discovery-box{margin-top:42px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:24px 26px;scroll-margin-top:104px}
   .discovery-box h2{margin-top:0}
   .discovery-box p{max-width:740px}
   .discovery-box p:last-child{margin-bottom:0}
@@ -64,7 +70,7 @@
   .tier-map{background:#f9fbf9;border-color:#dce6dc}
   .tier-briefing{background:#f6f9f6;border-color:#d4e0d4}
   .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
-  .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+  .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px;scroll-margin-top:104px}
   .delivery-box{margin-top:0;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
   .delivery-box h2{margin-top:0}
   .delivery-box p{margin-bottom:10px}
@@ -72,8 +78,9 @@
   .support-grid .companion-box{margin-top:0}
   .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
-  @media(max-width:900px){.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:32px 12px 48px}.wrap{padding:32px 24px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.discovery-box{margin-top:28px}}
+  @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.delivery-box,.companion-box{padding:20px}.morning-check,.discovery-box,.easylive-box,.monitoring-box{padding:20px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 </head>
 <body>
@@ -139,8 +146,21 @@ body.gate-locked{overflow:hidden}
   </div>
 </header>
 
-<main class="about-main"><div class="wrap">
-  <div class="reading-column">
+<main class="about-main"><div class="about-layout">
+  <aside class="about-toc" aria-label="About page sections">
+    <p class="about-toc-title">On this page</p>
+    <nav>
+      <a class="is-active" href="#introduction">Introduction</a>
+      <a href="#tools">Lots and Map</a>
+      <a href="#discovery">Supporting discovery</a>
+      <a href="#membership">Membership</a>
+      <a href="#support">Additional tools</a>
+      <a href="#stewardship">Responsible data use</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </aside>
+  <div class="wrap">
+  <div class="reading-column" id="introduction">
     <h1>About AuctionSavvy</h1>
     <div class="sub"><strong>A private demonstration — a personalised morning briefing</strong></div>
 
@@ -156,7 +176,7 @@ body.gate-locked{overflow:hidden}
     </section>
   </div>
 
-  <section class="section-group">
+  <section class="section-group" id="tools">
     <p class="section-lead">This demonstration brings two complementary tools together.</p>
     <div class="feature-grid">
       <section class="feature-panel">
@@ -172,14 +192,14 @@ body.gate-locked{overflow:hidden}
     </div>
   </section>
 
-  <section class="discovery-box">
+  <section class="discovery-box" id="discovery">
     <h2>Supporting discovery on EasyLive</h2>
     <p>AuctionSavvy’s personalised briefing would provide a useful starting point, not replace wider browsing and discovery on EasyLive. Members could keep their interests broad and change them easily, while the rotating Daily Showcase would introduce non-members to different categories and encourage exploration beyond a fixed shortlist.</p>
 
     <p>AuctionSavvy would also promote the service directly to dealers and collectors, including people who may not currently visit EasyLive regularly. Every promising lot would lead to its official EasyLive listing for catalogue information and bidding. AuctionSavvy would not compete for the transaction; it would provide an additional route through which relevant, motivated buyers discover and reach EasyLive.</p>
   </section>
 
-  <section class="section-group">
+  <section class="section-group" id="membership">
     <div class="section-lead">
       <h2>Access and membership</h2>
       <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through a public preview, free map membership, personalised paid membership and an additional dealer sourcing service.</p>
@@ -214,7 +234,7 @@ body.gate-locked{overflow:hidden}
   </div>
   </section>
 
-  <div class="support-grid">
+  <div class="support-grid" id="support">
     <section class="delivery-box">
       <h2>UK-wide delivery support</h2>
       <p><strong>Finding a suitable item</strong> is only useful if collecting it is practical. Where an auction house offers its own delivery, postage or preferred-courier arrangement, AuctionSavvy could present that option first, with a link to the auction house’s official information and a reminder that availability may depend on the particular lot or destination.</p>
@@ -231,7 +251,7 @@ body.gate-locked{overflow:hidden}
     </section>
   </div>
 
-  <section class="section-group stewardship-group">
+  <section class="section-group stewardship-group" id="stewardship">
     <div class="easylive-box">
       <h2>Working responsibly with auction data</h2>
       <p>All lot and auction information displayed in this demonstration is sourced from EasyLive. Rights in the listings, descriptions and imagery remain with EasyLive, the participating auctioneers and their respective rights holders.</p>
@@ -248,12 +268,30 @@ body.gate-locked{overflow:hidden}
     </div>
   </section>
 
-  <div class="reading-column section-group">
+  <div class="reading-column section-group" id="contact">
     <h2>Contact</h2>
     <p>Questions or feedback? <a href="mailto:ken@auctionhunter.co.uk">ken@auctionhunter.co.uk</a></p>
   </div>
 
   <div class="footer">AuctionSavvy. Private demonstration — invitation only.</div>
-</div></main>
+</div></div></main>
+<script>
+(function(){
+  var links=Array.prototype.slice.call(document.querySelectorAll('.about-toc a'));
+  var sections=links.map(function(link){return document.querySelector(link.getAttribute('href'));}).filter(Boolean);
+  if(!('IntersectionObserver' in window)||!sections.length)return;
+  var observer=new IntersectionObserver(function(entries){
+    var visible=entries.filter(function(entry){return entry.isIntersecting;}).sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});
+    if(!visible.length)return;
+    var id=visible[0].target.id;
+    links.forEach(function(link){
+      var active=link.getAttribute('href')==='#'+id;
+      link.classList.toggle('is-active',active);
+      if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+  },{rootMargin:'-20% 0px -68% 0px',threshold:0});
+  sections.forEach(function(section){observer.observe(section);});
+})();
+</script>
 </body>
 </html>
