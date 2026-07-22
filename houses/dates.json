@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-22T02:03:39.850010",
+  "scraped_at": "2026-07-22T11:50:32.173393",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -54,12 +54,12 @@
       {
         "date": "2026-07-30",
         "time": "10am",
-        "title": "2-Day Auction of General Antiques 30th July : Garden, Paintings, Oriental, Books"
+        "title": "2-Day Auction of General Antiques 30th July: Garden, Paintings, Oriental, Books,"
       },
       {
         "date": "2026-07-31",
         "time": "10am",
-        "title": "2-Day Auction of General Antiques 30th July : Garden, Paintings, Oriental, Books"
+        "title": "2-Day Auction of General Antiques 30th July: Garden, Paintings, Oriental, Books,"
       }
     ],
     "AJ Auctions Fife Ltd": [
@@ -543,12 +543,23 @@
         "title": "Jewellery, Silver, Watches & Gold Coins"
       }
     ],
-    "Cardiff City Auctions Limited": [],
+    "Cardiff City Auctions Limited": [
+      {
+        "date": "2026-08-02",
+        "time": "1pm",
+        "title": "General Auction to include Antiques and Collectables"
+      }
+    ],
     "Carn Brea Auctions Ltd": [
       {
         "date": "2026-07-24",
         "time": "5pm",
         "title": "Collectors Auction"
+      },
+      {
+        "date": "2026-07-28",
+        "time": "5pm",
+        "title": "General Auction"
       }
     ],
     "Castleblair Auctioneers": [],
@@ -608,7 +619,7 @@
       {
         "date": "2026-07-28",
         "time": "10am",
-        "title": "LIVE AUTOGRAPH ENTERTAINMENT, SPORT, SPACE, MUSIC AND HISTORICAL"
+        "title": "Live Autograph Entertainment, Sport, Space, Music and Historical"
       }
     ],
     "Cheshire Stamp Coin Auctions": [],
@@ -1053,7 +1064,7 @@
     "Etrusca Auctions": [
       {
         "date": "2026-07-23",
-        "time": "10am",
+        "time": "4pm",
         "title": "Estate and Fine Jewellery Sale"
       }
     ],
@@ -1065,6 +1076,11 @@
       }
     ],
     "Fieldings Auctioneers Ltd": [
+      {
+        "date": "2026-07-29",
+        "time": "10am",
+        "title": "Timed Sale - Online Only"
+      },
       {
         "date": "2026-07-30",
         "time": "10am",
@@ -1377,7 +1393,13 @@
     "Hidden Gem Auctions": [],
     "Homefront Auctions": [],
     "Hosker Haynes Auctioneers": [],
-    "House & Son Auctioneers & Valuers": [],
+    "House & Son Auctioneers & Valuers": [
+      {
+        "date": "2026-07-28",
+        "time": "9:30am",
+        "title": "Antiques & Collectables - Live Online Only Sale - Viewing by Appointment Only\r\n*"
+      }
+    ],
     "HRD Auction Rooms Ltd": [],
     "HT Auctions": [],
     "Huddersfield Auctions": [],
@@ -1403,6 +1425,16 @@
     "Ibbett Mosely Auctions": [
       {
         "date": "2026-09-02",
+        "time": "11am",
+        "title": "Auction of Fine Art, Antiques, Furniture, China and Ceramics, Toys, Silver, Book"
+      },
+      {
+        "date": "2026-09-10",
+        "time": "2pm",
+        "title": "Timed Auction of Unsold Items from 02/09/2026 Sale. To\r\ninclude: Antique Furnitu"
+      },
+      {
+        "date": "2026-10-21",
         "time": "11am",
         "title": "Auction of Fine Art, Antiques, Furniture, China and Ceramics, Toys, Silver, Book"
       }
@@ -1481,12 +1513,12 @@
     "JH Auctions LTD": [
       {
         "date": "2026-07-22",
-        "time": "10am",
+        "time": "4pm",
         "title": "All Day General Sale - Inc; Rattan Furniture, Antique Furniture, Wood Working To"
       },
       {
         "date": "2026-07-22",
-        "time": "4pm",
+        "time": "10am",
         "title": "All Day General Sale - Inc; Rattan Furniture, Antique Furniture, Wood Working To"
       }
     ],
@@ -1519,6 +1551,11 @@
         "date": "2026-07-22",
         "time": "9:30am",
         "title": "A Good General Sale."
+      },
+      {
+        "date": "2026-08-05",
+        "time": "9:30am",
+        "title": "Interesting General Sale"
       }
     ],
     "John Nicholson's Fine Art Auctioneers & Valuers": [
@@ -1624,7 +1661,7 @@
       {
         "date": "2026-07-23",
         "time": "7pm",
-        "title": "A second chance sale including Victorian, Edwardian & Mid Century Furniture, Whi"
+        "title": "A Second Chance Sale including Victorian, Edwardian & Mid Century Furniture, Whi"
       }
     ],
     "KLM Whyte Auctioneers": [],
@@ -2147,7 +2184,7 @@
       {
         "date": "2026-07-24",
         "time": "9:45am",
-        "title": "Collectible Whisky & Cased Wines, Ola Gorie Gold & Silver, Antique Pub Memorabil"
+        "title": "Collectors sales including Investment Whisky & Cased Wines, Ola Gorie Gold & Sil"
       }
     ],
     "Perkins George Mawer & Co": [],
@@ -2618,7 +2655,13 @@
       }
     ],
     "Stephen Fitzpatrick & Co": [],
-    "Sterling Vault Auctioneers": [],
+    "Sterling Vault Auctioneers": [
+      {
+        "date": "2026-07-28",
+        "time": "10:30am",
+        "title": "Live Auction of Luxury Watches - Featuring Cartier, Rolex, Omega & more"
+      }
+    ],
     "Stevens Auctioneers": [],
     "Stride & Son Auctions Ltd": [
       {
