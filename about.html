@@ -24,6 +24,18 @@
   .about-toc nav{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
   .about-toc a{display:block;width:100%;padding:7px 10px;border-left:2px solid transparent;color:#778077;font-size:.78rem;line-height:1.3;text-decoration:none;transition:color .18s ease,border-color .18s ease,background .18s ease}
   .about-toc a:hover,.about-toc a.is-active{color:var(--accent);border-left-color:var(--accent);background:#f2f6f2}
+  .journey-graphic{margin:24px 8px 0;padding-top:20px;border-top:1px solid #dde3dd;text-align:center}
+  .journey-graphic figcaption{margin-bottom:11px;color:#879083;font-size:.66rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+  .journey-sources{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .journey-node{min-width:0;background:#fff;border:1px solid #d8e2d8;border-radius:8px;padding:8px 5px;color:#526052;font-size:.62rem;line-height:1.25}
+  .journey-node strong{display:block;margin-bottom:2px;color:#263d28;font-family:'Playfair Display',serif;font-size:.8rem}
+  .journey-lines{display:block;width:100%;height:29px}
+  .journey-lines path{fill:none;stroke:#79907a;stroke-width:1.6;vector-effect:non-scaling-stroke}
+  .journey-opportunity{background:#eef4ee;border:1px solid #cfdccf;border-radius:8px;padding:8px 7px;color:#314d32;font-size:.68rem;font-weight:600;line-height:1.25}
+  .journey-arrow{height:25px;color:#587759;font-size:1.05rem;line-height:25px}
+  .journey-destination{background:#3a5c3b;border-radius:9px;padding:10px 7px;color:#fff;box-shadow:0 4px 12px rgba(58,92,59,.13)}
+  .journey-destination strong{display:block;font-family:'Playfair Display',serif;font-size:.92rem}
+  .journey-destination span{display:block;margin-top:3px;color:rgba(255,255,255,.82);font-size:.61rem;line-height:1.35}
   .wrap{min-width:0;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:52px}
   .reading-column{max-width:680px;margin-left:auto;margin-right:auto}
   .section-group{margin-top:42px;padding-top:38px;border-top:1px solid var(--line);scroll-margin-top:104px}
@@ -166,6 +178,19 @@ body.gate-locked{overflow:hidden}
       <a href="#stewardship">Responsible data use</a>
       <a href="#contact">Contact</a>
     </nav>
+    <figure class="journey-graphic" aria-label="Lots and Map help buyers identify a promising opportunity before continuing to EasyLive for the official catalogue, registration and bidding.">
+      <figcaption>Discovery journey</figcaption>
+      <div class="journey-sources">
+        <div class="journey-node"><strong>Lots</strong>Relevant items</div>
+        <div class="journey-node"><strong>Map</strong>Houses and sales</div>
+      </div>
+      <svg class="journey-lines" viewBox="0 0 160 29" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M38 1 L80 28 L122 1"></path>
+      </svg>
+      <div class="journey-opportunity">Promising opportunity</div>
+      <div class="journey-arrow" aria-hidden="true">↓</div>
+      <div class="journey-destination"><strong>EasyLive</strong><span>Official catalogue<br>Register · Bid</span></div>
+    </figure>
   </aside>
   <div class="wrap">
   <div class="reading-column" id="introduction">
