@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuctionSavvy — About</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="About AuctionSavvy — a private demonstration combining a UK auction lot feed and auction house map.">
+<meta name="description" content="AuctionSavvy — a personalised morning briefing for discovering relevant EasyLive auction lots.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -30,6 +30,13 @@
   .section-lead{max-width:680px;margin-left:auto;margin-right:auto}
   h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
   .sub{color:#7b8290;font-size:.92rem;margin-bottom:32px}
+  .hero-intro{font-size:1rem;color:#374151}
+  .decision-summary{margin:22px 0;background:#f3f7f3;border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:17px 20px;color:#314d32;font-size:.92rem}
+  .easylive-reassurance{margin:22px 0 24px;background:#fbfcfa;border:1px solid #d7e4d7;border-radius:10px;padding:20px 22px}
+  .easylive-reassurance h2{margin-top:0}
+  .easylive-reassurance ul{display:grid;gap:7px}
+  .easylive-reassurance li{position:relative;padding:0 0 0 22px}
+  .easylive-reassurance li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
   h2{font-size:.78rem;color:#3a5c3b;margin:28px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
   p{font-size:.93rem;color:#4b5563;margin-bottom:12px}
   .wrap a{color:#4b6b8a;text-decoration:none}
@@ -79,7 +86,7 @@
   .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.delivery-box,.companion-box{padding:20px}.morning-check,.discovery-box,.easylive-box,.monitoring-box{padding:20px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.delivery-box,.companion-box{padding:20px}.morning-check,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 </head>
@@ -161,10 +168,23 @@ body.gate-locked{overflow:hidden}
   </aside>
   <div class="wrap">
   <div class="reading-column" id="introduction">
-    <h1>About AuctionSavvy</h1>
-    <div class="sub"><strong>A private demonstration — a personalised morning briefing</strong></div>
+    <h1>AuctionSavvy</h1>
+    <div class="sub"><strong>A personalised morning briefing for EasyLive auction lots</strong></div>
 
-    <p><strong>AuctionSavvy is a personalised discovery layer that sends motivated buyers to EasyLive.</strong> It turns a dealer’s or collector’s standing interests into a clear, regularly updated shortlist, while EasyLive remains the official place to discover, view and bid on auction lots.</p>
+    <p class="hero-intro"><strong>AuctionSavvy helps dealers and collectors identify relevant opportunities faster,</strong> then sends them directly to EasyLive for official catalogue details, registration and bidding.</p>
+
+    <div class="decision-summary"><strong>In one sentence:</strong> AuctionSavvy helps motivated buyers find relevant EasyLive lots faster—and sends them to EasyLive to view and bid.</div>
+
+    <section class="easylive-reassurance" aria-labelledby="for-easylive-title">
+      <h2 id="for-easylive-title">For EasyLive</h2>
+      <ul>
+        <li>EasyLive remains the official catalogue, registration and bidding destination.</li>
+        <li>No bidding or transaction takes place on AuctionSavvy.</li>
+        <li>Every lot directs the buyer to EasyLive.</li>
+        <li>AuctionSavvy is designed to generate additional qualified traffic.</li>
+        <li>Any live service would require an agreed data-access arrangement.</li>
+      </ul>
+    </section>
 
     <p>Instead of repeatedly reviewing broad search results, users choose the types of items, locations and auction houses that matter to them. AuctionSavvy then presents relevant new lots in a simple, time-sensitive briefing—without attempting to replace EasyLive’s official catalogue or bidding service.</p>
 
