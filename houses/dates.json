@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-23T02:02:50.204713",
+  "scraped_at": "2026-07-23T11:50:55.864547",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -631,7 +631,7 @@
       {
         "date": "2026-07-30",
         "time": "10am",
-        "title": "LIVE AUTOGRAPH ENTERTAINMENT, SPORT, SPACE, MUSIC AND HISTORICAL"
+        "title": "Live Autograph Entertainment, Sport, Space, Music and Historical"
       }
     ],
     "Cheshire Stamp Coin Auctions": [],
@@ -796,7 +796,13 @@
         "title": "Sale of Jewellery, Watches, Militaria, Silver, China, Furniture, Toys & Collecta"
       }
     ],
-    "Crow's Auction Gallery Ltd": [],
+    "Crow's Auction Gallery Ltd": [
+      {
+        "date": "2026-08-05",
+        "time": "10am",
+        "title": "Antiques & Collectables"
+      }
+    ],
     "Cruso & Wilkin": [],
     "Cullens of Surrey": [
       {
@@ -1080,7 +1086,7 @@
       {
         "date": "2026-07-29",
         "time": "10am",
-        "title": "F TURNER & SONS Pocket & Wristwatches |Costly Modern Furnishings| Collectibles| "
+        "title": "F Turner & Sons Pocket & Wristwatches |Costly Modern Furnishings| Collectibles| "
       },
       {
         "date": "2026-07-30",
@@ -1412,7 +1418,13 @@
         "title": "Antiques & Collectables - Live Online Only Sale - Viewing by Appointment Only\r\n*"
       }
     ],
-    "HRD Auction Rooms Ltd": [],
+    "HRD Auction Rooms Ltd": [
+      {
+        "date": "2026-08-11",
+        "time": "9:30am",
+        "title": "Antique & Modern One Day Auction"
+      }
+    ],
     "HT Auctions": [],
     "Huddersfield Auctions": [],
     "Hutchinson Scott Auctioneers": [],
@@ -1523,8 +1535,8 @@
     "John Goodwin": [
       {
         "date": "2026-07-28",
-        "time": "11:59pm",
-        "title": "A timed and unreserved auction sale"
+        "time": "7:30pm",
+        "title": "A Timed and Unreserved Auction Sale"
       },
       {
         "date": "2026-09-02",
@@ -1561,7 +1573,7 @@
       {
         "date": "2026-07-28",
         "time": "10am",
-        "title": "Antiques, Interiors & Collectables"
+        "title": "Antiques, Interiors & Collectables, including Vinyl Records, Dogs, Lego, Gold, S"
       }
     ],
     "Jones & Jacob Limited": [],
@@ -2183,7 +2195,7 @@
       {
         "date": "2026-08-07",
         "time": "10am",
-        "title": "Mixed Gold and Silver Jewellery We Think Too Good to Scrap but Priced to Sell., "
+        "title": "Mixed Gold and Silver Jewellery  All Items Available for Postage by Royal Mail S"
       }
     ],
     "Piano Auctions Ltd": [],
@@ -2503,7 +2515,13 @@
     "Schmergel & Schmelz Auctions": [],
     "Semley Auctioneers Limited": [],
     "Shaw's Auction House": [],
-    "Sheffield Auction Gallery": [],
+    "Sheffield Auction Gallery": [
+      {
+        "date": "2026-07-30",
+        "time": "10:30am",
+        "title": "Football Programmes & Sporting Memorabilia Auction"
+      }
+    ],
     "Shoulers Auctions": [
       {
         "date": "2026-08-13",
@@ -2550,7 +2568,18 @@
         "title": "General Sale - More Details to Follow"
       }
     ],
-    "Smiths Auction Room Limited": [],
+    "Smiths Auction Room Limited": [
+      {
+        "date": "2026-08-13",
+        "time": "10am",
+        "title": "Antiques & Collectables including Silver, Jewellery, Ceramics, Coins, Postcards,"
+      },
+      {
+        "date": "2026-08-14",
+        "time": "10am",
+        "title": "Antiques & Collectables including Silver, Jewellery, Ceramics, Coins, Postcards,"
+      }
+    ],
     "South Cheshire Auctions": [],
     "South Dorsetshire Auctions": [
       {
@@ -2565,7 +2594,7 @@
       },
       {
         "date": "2026-07-30",
-        "time": "10am",
+        "time": "7:30pm",
         "title": "Online Only Artwork Auction - a Large Selection of Oils, Watercolours and Prints"
       },
       {
@@ -2574,9 +2603,9 @@
         "title": "Antiques & Collectables Auction"
       },
       {
-        "date": "2026-08-13",
-        "time": "11:59pm",
-        "title": "Online Only Specialist Model Railway, Model Engineering and Vintage Toy Auction"
+        "date": "2026-08-09",
+        "time": "11am",
+        "title": "Antiques & Collectables Auction"
       }
     ],
     "Sovereign Rarities": [],
@@ -2635,7 +2664,13 @@
         "title": "Coins, Stamps, Jewellery, Militaria, Paintings, Antiques & Collectables"
       }
     ],
-    "Stephen Fitzpatrick & Co": [],
+    "Stephen Fitzpatrick & Co": [
+      {
+        "date": "2026-07-25",
+        "time": "11am",
+        "title": "Antiques & Household Furnishings Auction"
+      }
+    ],
     "Sterling Vault Auctioneers": [
       {
         "date": "2026-07-28",
@@ -2799,11 +2834,6 @@
     "The Great Western Auctions Ltd": [
       {
         "date": "2026-07-23",
-        "time": "10am",
-        "title": "Antiques & Collectables to include Furniture, Pictures, Ceramics, Music & Musica"
-      },
-      {
-        "date": "2026-07-23",
         "time": "12:30pm",
         "title": "Coins & Banknotes"
       },
@@ -2811,6 +2841,11 @@
         "date": "2026-07-23",
         "time": "3pm",
         "title": "Vinyl Records"
+      },
+      {
+        "date": "2026-07-23",
+        "time": "10am",
+        "title": "Antiques & Collectables to include Furniture, Pictures, Ceramics, Music & Musica"
       },
       {
         "date": "2026-08-05",
