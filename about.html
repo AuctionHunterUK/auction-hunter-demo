@@ -75,6 +75,10 @@
   .feature-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
   .feature-panel h2{margin-top:0}
   .feature-panel p:last-child{margin-bottom:0}
+  .working-demo-box{margin-top:20px;background:#eef5ee;border:1px solid #c8d9c9;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
+  .working-demo-box h2{margin-top:0}
+  .working-demo-box p{max-width:780px}
+  .working-demo-box p:last-child{margin-bottom:0}
   .discovery-box{margin-top:42px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:24px 26px;scroll-margin-top:104px}
   .discovery-box h2{margin-top:0}
   .discovery-box p{max-width:740px}
@@ -95,11 +99,11 @@
   .delivery-box p{margin-bottom:10px}
   .delivery-box p:last-child{margin-bottom:0}
   .support-grid .companion-box{margin-top:0}
-  .feature-panel h2,.tier-panel h3,.delivery-box h2,.companion-box h2{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;text-transform:none;letter-spacing:normal;font-weight:700;margin:0 0 7px}
+  .feature-panel h2,.working-demo-box h2,.tier-panel h3,.delivery-box h2,.companion-box h2{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;text-transform:none;letter-spacing:normal;font-weight:700;margin:0 0 7px}
   .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.delivery-box,.companion-box{padding:20px}.morning-check,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.delivery-box,.companion-box{padding:20px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 </head>
@@ -237,6 +241,13 @@ body.gate-locked{overflow:hidden}
         <p><strong>An interactive map</strong> of UK auction houses, colour-coded according to when their next sale takes place. A future route-planning feature could help users discover auction houses along a journey and make collection planning easier.</p>
       </section>
     </div>
+
+    <section class="working-demo-box">
+      <h2>A working demonstration, not a fixed catalogue</h2>
+      <p>The Lots page is generated from a snapshot of listing information for the demonstration’s chosen interests. The process identifies relevant lots, removes duplicates, matches auction houses and locations, organises items into <strong>Local Auctions</strong>, <strong>UK-Wide Today</strong> and <strong>UK-Wide Later</strong>, and preserves a direct link to each official EasyLive listing.</p>
+      <p>The Map page is generated from auction-house locations and upcoming-sale information. It plots houses geographically, colour-codes them according to sale timing, provides <strong>Now</strong>, <strong>Soon</strong>, <strong>Later</strong> and <strong>All</strong> views, and combines the map with a searchable house list. Selecting a house reveals its address, forthcoming sales and a direct link to its official auction page.</p>
+      <p>The versions presented to EasyLive will be intentionally frozen as stable demonstration snapshots. However, the organising processes are not static: when supplied with fresh information, they can rebuild the briefing and update the map automatically. With an authorised EasyLive feed, the same processes could organise supplied catalogue data reliably, at greater scale and eventually around each member’s individual preferences.</p>
+    </section>
   </section>
 
   <section class="discovery-box" id="discovery">
