@@ -1538,9 +1538,15 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         const frame = img.closest('.card-img');
         if (!frame) return;
         frame.classList.add('image-pending');
-        if (img.complete) {{
-          if (img.naturalWidth > 0) showLoaded(img);
-          else showUnavailable(img);
+        if (img.complete && img.naturalWidth > 0) {{
+          showLoaded(img);
+          return;
+        }}
+        // A native lazy image can report complete before its request has
+        // started. Only treat a zero-width completed image as failed when the
+        // browser has actually selected a source for it.
+        if (img.complete && img.currentSrc) {{
+          showUnavailable(img);
           return;
         }}
         img.addEventListener('load', () => showLoaded(img), {{ once: true }});
