@@ -403,6 +403,92 @@ def house_meta(house, postcodes):
             "known": True}
 
 
+# --- UK-only lot filtering ------------------------------------------------
+# Normalised UK postcode, including special case GIR 0AA. Northern Ireland
+# postcodes begin BT and therefore pass this test. The Crown Dependencies use
+# GY, JE and IM postcodes but are not part of the UK, so they are excluded.
+_UK_POSTCODE_RE = re.compile(
+    r"^(?:GIR0AA|[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2})$",
+    re.IGNORECASE,
+)
+_NON_UK_POSTCODE_PREFIXES = ("GY", "JE", "IM")
+_NON_UK_HOUSE_RE = re.compile(
+    r"\b(?:dublin|limassol|nicosia)\b|\bireland\b|\(pty\)",
+    re.IGNORECASE,
+)
+_NON_UK_TIMEZONE_RE = re.compile(
+    r"\b(?:SAST|EET|EEST|CET|CEST|GST)\b",
+    re.IGNORECASE,
+)
+_RAND_ESTIMATE_RE = re.compile(r"(?:^|[\s(])R\s?[\d,]", re.IGNORECASE)
+
+
+def _normalise_postcode(postcode):
+    return re.sub(r"\s+", "", postcode or "").upper()
+
+
+def classify_uk_lot(lot, postcodes):
+    """Return ``(keep, reason)`` for a lot in the UK-only catalogue.
+
+    A matched house with a verified UK postcode is authoritative, including
+    BT postcodes in Northern Ireland. Known houses without a UK postcode are
+    foreign/manual additions in the house lookup and are excluded. Unknown
+    houses are kept unless the lot contains positive overseas evidence, which
+    avoids dropping legitimate UK houses solely because lookup data is absent.
+    """
+    house = lot.get("house") or ""
+    meta = house_meta(house, postcodes)
+    if meta["known"]:
+        postcode = _normalise_postcode(meta["postcode"])
+        if (
+            _UK_POSTCODE_RE.fullmatch(postcode)
+            and not postcode.startswith(_NON_UK_POSTCODE_PREFIXES)
+        ):
+            return True, "verified UK postcode"
+        location = meta["address"] or meta["location"] or meta["postcode"] or "no UK postcode"
+        return False, f"house lookup: {location}"
+
+    # Protect an explicit Northern Ireland reference before checking the
+    # standalone word "Ireland".
+    house_for_check = re.sub(r"\bnorthern ireland\b", "", house, flags=re.IGNORECASE)
+    if _NON_UK_HOUSE_RE.search(house_for_check):
+        return False, f"overseas house name: {house}"
+
+    estimate = lot.get("estimate") or ""
+    if "€" in estimate:
+        return False, "euro estimate"
+    if _RAND_ESTIMATE_RE.search(estimate):
+        return False, "rand estimate"
+
+    sale_text = " ".join(
+        (lot.get("sale_date") or "", lot.get("sale_dates_raw") or "")
+    )
+    timezone = _NON_UK_TIMEZONE_RE.search(sale_text)
+    if timezone:
+        return False, f"overseas timezone: {timezone.group(0).upper()}"
+
+    return True, "no overseas evidence"
+
+
+def filter_uk_lots(all_lots, postcodes, stage="UK filter"):
+    """Return a copy containing only UK lots and log excluded houses."""
+    kept = {}
+    excluded = {}
+    for lot_id, lot in all_lots.items():
+        keep, reason = classify_uk_lot(lot, postcodes)
+        if keep:
+            kept[lot_id] = lot
+            continue
+        key = (lot.get("house") or "Unknown", reason)
+        excluded[key] = excluded.get(key, 0) + 1
+
+    removed = len(all_lots) - len(kept)
+    log.info("%s: retained %d UK lots; removed %d non-UK lots.", stage, len(kept), removed)
+    for (house, reason), count in sorted(excluded.items()):
+        log.info("  excluded %d × %s (%s)", count, house, reason)
+    return kept
+
+
 # --- HTML rendering -------------------------------------------------------
 def _today_date_str(d=None):
     """Return EasyLive's date format for `d` (default today), e.g.
@@ -1879,9 +1965,16 @@ def main():
             if lot["id"] not in all_lots:
                 all_lots[lot["id"]] = lot
 
-    log.info(f"Total unique lots: {len(all_lots)}")
+    log.info(f"Total unique lots before UK filter: {len(all_lots)}")
+
+    postcodes = load_postcodes()
+    log.info(f"Postcode lookup: {len(postcodes[0])} houses")
+    all_lots = filter_uk_lots(all_lots, postcodes, stage="Initial UK filter")
 
     enrich_with_sale_dates(session, all_lots)
+    # A second pass catches an otherwise-unknown overseas house when its sale
+    # page supplies a foreign timezone that was not visible in search results.
+    all_lots = filter_uk_lots(all_lots, postcodes, stage="Enriched UK filter")
 
     log.info("Downloading images…")
     for lot in all_lots.values():
@@ -1893,13 +1986,11 @@ def main():
     wide_lots  = [l for l in all_lots.values() if not l["local"]]
     log.info(f"Local: {len(local_lots)}  UK-wide: {len(wide_lots)}")
 
-    # Load previously-seen lot IDs and postcode lookup
+    # Load previously-seen lot IDs
     seen = load_seen()
-    postcodes = load_postcodes()
     new_count = sum(1 for lot_id in all_lots if lot_id not in seen)
     overlap   = len(seen.intersection(all_lots))
     log.info(f"Seen-before: {overlap}  New since last run: {new_count}")
-    log.info(f"Postcode lookup: {len(postcodes[0])} houses")
 
     (REPO_DIR / "index.html").write_text(
         build_html(local_lots, wide_lots, seen=seen, postcodes=postcodes),
