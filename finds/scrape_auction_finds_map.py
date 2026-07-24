@@ -977,6 +977,19 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     /* Active = the section currently in view (scrollspy) or just clicked. */
     nav.jump a.active {{ color: var(--accent); }}
     nav.jump a.active::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent); }}
+    nav.jump .wanted-filter-button {{
+      appearance: none; border: 0; border-left: 1px solid var(--line);
+      background: transparent; color: var(--accent); cursor: pointer;
+      font: inherit; font-size: .7rem; font-weight: 700;
+      padding: 4px 0 6px 14px; white-space: nowrap;
+    }}
+    nav.jump .wanted-filter-button .jump-count {{ color: var(--muted); font-size: .9em; font-weight: 400; }}
+    nav.jump .wanted-filter-button.active {{ color: #fff; background: var(--accent); border-color: var(--accent); border-radius: 999px; padding: 4px 10px 6px; }}
+    nav.jump .wanted-filter-button.active .jump-count {{ color: #fff; }}
+    @media (hover: hover) and (pointer: fine) {{
+      nav.jump .wanted-filter-button:hover {{ color: var(--ink); }}
+      nav.jump .wanted-filter-button.active:hover {{ color: #fff; background: #2c4a2d; }}
+    }}
     .new-badge {{
       position: absolute; top: 10px; left: 10px;
       background: var(--new-bg); color: #fff;
@@ -1056,6 +1069,18 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       overflow-y: auto;
       padding: 0 24px 40px;
     }}
+    .wanted-filter-summary {{
+      display: none; max-width: 1400px; margin: 24px auto -12px;
+      align-items: center; justify-content: space-between; gap: 14px;
+      padding: 13px 16px; border: 1px solid #d5e1d5;
+      border-left: 4px solid var(--accent); border-radius: 8px;
+      background: #f3f7f3; color: #314d32; font-size: .78rem;
+    }}
+    .wanted-filter-summary.visible {{ display: flex; }}
+    .wanted-filter-summary strong {{ color: var(--accent); }}
+    .wanted-filter-summary-actions {{ display: flex; align-items: center; gap: 12px; white-space: nowrap; }}
+    .wanted-filter-summary a {{ color: var(--accent); font-weight: 700; text-decoration: none; }}
+    .wanted-filter-summary button {{ border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; }}
     #cards-area section {{
       max-width: 1400px;
       margin: 36px auto 0;
@@ -1180,6 +1205,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       height: calc(3 * 1.4em);
     }}
     .lot-title-text {{ display: inline; }}
+    .wanted-match-badge {{
+      display: inline-flex; max-width: 100%; margin: 0 0 7px;
+      padding: 4px 8px; border-radius: 999px;
+      background: #edf4ed; color: var(--accent);
+      font-size: .63rem; font-weight: 700; line-height: 1.25;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }}
     .lot-preview-trigger {{
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
@@ -1327,10 +1359,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         gap: 5px;                              /* tighter so all three fit */
       }}
       nav.jump::-webkit-scrollbar {{ display: none; }}
-      nav.jump a {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }}
+      nav.jump a, nav.jump .wanted-filter-button {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }}
+      nav.jump .wanted-filter-button {{ border-left: 1px solid var(--line); padding-left: 9px; }}
+      nav.jump .wanted-filter-button.active {{ padding-left: 8px; padding-right: 8px; }}
 
       #map-panel {{ display: none; }}
       #cards-area {{ padding: 0 12px 24px; }}
+      .wanted-filter-summary {{ margin-top: 14px; margin-bottom: -10px; }}
       /* No standalone map on mobile (Ken's call): a cold map with no pin lit
          answers nothing. Map entrance will be tap-item -> pin (planned). */
       #map-fab {{ display: none; }}
@@ -1390,10 +1425,12 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
           {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
           <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
+          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false">Wanted <span class="jump-count" id="wantedRequestCount">0</span></button>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
         <a href="../about.html">About</a>
+        <a href="../wanted/">Wanted</a>
         <a href="../settings/">Edit</a>
       </nav>
     </div>
@@ -1406,6 +1443,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       <div class="map-label">Hover a lot for location and sale details</div>
     </div>
     <div id="cards-area">
+      <div class="wanted-filter-summary" id="wantedFilterSummary" role="status" aria-live="polite">
+        <span id="wantedFilterSummaryText"></span>
+        <span class="wanted-filter-summary-actions"><a href="../wanted/">Manage list</a><button type="button" id="clearWantedFilter">Show all</button></span>
+      </div>
       {local_html}
       {today_html}
       {later_html}
@@ -1721,41 +1762,132 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         .replace(/bookcase(s)?/gi, 'bookcase');
     }}
 
-    function searchItems() {{
+    const WANTED_STORAGE_KEY = 'auctionSavvyWantedItemsV1';
+    const WANTED_DEFAULTS = [
+      {{ id: 'example-large-pine-table', text: 'Very large pine table', active: true }},
+      {{ id: 'example-glazed-pine-dresser', text: 'Glazed pine dresser', active: true }},
+      {{ id: 'example-butchers-block', text: "Butchers' block", active: true }}
+    ];
+    let wantedFilterActive = false;
+
+    function loadWantedRequests() {{
+      try {{
+        const stored = localStorage.getItem(WANTED_STORAGE_KEY);
+        if (stored === null) {{
+          localStorage.setItem(WANTED_STORAGE_KEY, JSON.stringify(WANTED_DEFAULTS));
+          return WANTED_DEFAULTS.slice();
+        }}
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed)
+          ? parsed.filter(item => item && typeof item.text === 'string' && item.active !== false && item.text.trim())
+          : [];
+      }} catch (error) {{
+        return WANTED_DEFAULTS.slice();
+      }}
+    }}
+
+    function wantedWords(text) {{
+      const ignored = new Set(['a', 'an', 'the', 'very', 'really', 'about', 'around', 'approximately', 'approx', 'wanted', 'looking', 'for', 'find', 'me']);
+      const normalized = normalizeSearch(String(text || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' '))
+        .replace(/\\bbutchers?\\b/g, 'butcher');
+      return normalized.split(/\s+/).filter(word => word && !ignored.has(word));
+    }}
+
+    function wantedMatchesTitle(title, request) {{
+      const normalizedTitle = normalizeSearch(String(title || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' '))
+        .replace(/\\bbutchers?\\b/g, 'butcher');
+      const words = wantedWords(request.text);
+      return words.length > 0 && words.every(word => normalizedTitle.includes(word));
+    }}
+
+    function applyLotFilters() {{
       const input = document.getElementById('searchInput');
       const query = input.value.toLowerCase().trim();
       const searchBox = document.getElementById('searchBox');
       const resultsEl = document.getElementById('searchResults');
-      if (query) {{ searchBox.classList.add('has-text'); }}
-      else {{ searchBox.classList.remove('has-text'); }}
-      if (!query) {{
-        document.querySelectorAll('.card-shell').forEach(shell => {{
-          shell.style.display = '';
-        }});
-        resultsEl.textContent = '';
-        return;
-      }}
+      const requests = loadWantedRequests();
       const normalizedQuery = normalizeSearch(query);
-      let visibleCount = 0, totalCount = 0;
+      const queryWords = normalizedQuery.split(/\s+/).filter(Boolean);
+      let visibleCount = 0;
+      let totalCount = 0;
+
+      searchBox.classList.toggle('has-text', Boolean(query));
       document.querySelectorAll('.card-shell').forEach(shell => {{
         totalCount++;
         const titleEl = shell.querySelector('.title');
-        if (!titleEl) return;
-        const title = titleEl.textContent.toLowerCase();
-        const normalizedTitle = normalizeSearch(title);
-        const queryWords = normalizedQuery.split(/\s+/);
-        const matches = queryWords.every(word => normalizedTitle.includes(word));
-        if (matches) {{
-          shell.style.display = ''; visibleCount++;
-        }} else {{ shell.style.display = 'none'; }}
+        const title = titleEl ? titleEl.textContent : '';
+        const normalizedTitle = normalizeSearch(title.toLowerCase());
+        const searchMatch = !query || queryWords.every(word => normalizedTitle.includes(word));
+        const wantedMatches = requests.filter(request => wantedMatchesTitle(title, request));
+        const visible = searchMatch && (!wantedFilterActive || wantedMatches.length > 0);
+        shell.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
+
+        const oldBadge = shell.querySelector('.wanted-match-badge');
+        if (oldBadge) oldBadge.remove();
+        if (wantedFilterActive && wantedMatches.length && titleEl) {{
+          const badge = document.createElement('span');
+          badge.className = 'wanted-match-badge';
+          badge.textContent = 'Matched: ' + wantedMatches[0].text + (wantedMatches.length > 1 ? ' +' + (wantedMatches.length - 1) : '');
+          badge.title = 'Possible title match: ' + wantedMatches.map(request => request.text).join(', ');
+          titleEl.insertAdjacentElement('afterend', badge);
+        }}
       }});
-      resultsEl.innerHTML = '<strong>' + visibleCount + '</strong> of ' + totalCount + ' lots';
+
+      document.querySelectorAll('#cards-area section[id]').forEach(section => {{
+        if (!wantedFilterActive) {{
+          section.style.display = '';
+          return;
+        }}
+        const hasVisibleCard = Array.from(section.querySelectorAll('.card-shell')).some(shell => shell.style.display !== 'none');
+        section.style.display = hasVisibleCard ? '' : 'none';
+      }});
+
+      resultsEl.textContent = query ? visibleCount + ' of ' + totalCount + ' lots' : '';
+      const button = document.getElementById('wantedFilterButton');
+      const requestCount = document.getElementById('wantedRequestCount');
+      const summary = document.getElementById('wantedFilterSummary');
+      const summaryText = document.getElementById('wantedFilterSummaryText');
+      requestCount.textContent = requests.length;
+      button.classList.toggle('active', wantedFilterActive);
+      button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
+      summary.classList.toggle('visible', wantedFilterActive);
+      if (wantedFilterActive) {{
+        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active wanted item' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
+      }}
     }}
+
+    function searchItems() {{
+      applyLotFilters();
+    }}
+
+    function toggleWantedFilter() {{
+      const requests = loadWantedRequests();
+      if (!requests.length) {{
+        window.location.href = '../wanted/';
+        return;
+      }}
+      wantedFilterActive = !wantedFilterActive;
+      applyLotFilters();
+      const cardsArea = document.getElementById('cards-area');
+      if (cardsArea) cardsArea.scrollTo({{ top: 0, behavior: 'smooth' }});
+    }}
+
     function clearSearch() {{
       document.getElementById('searchInput').value = '';
-      searchItems();
+      applyLotFilters();
       document.getElementById('searchInput').focus();
     }}
+
+    document.getElementById('wantedFilterButton').addEventListener('click', toggleWantedFilter);
+    document.getElementById('clearWantedFilter').addEventListener('click', () => {{
+      wantedFilterActive = false;
+      applyLotFilters();
+    }});
+    if (new URLSearchParams(window.location.search).get('wanted') === '1' && loadWantedRequests().length) {{
+      wantedFilterActive = true;
+    }}
+    applyLotFilters();
 
     // ── DESKTOP-ONLY MINI-MAP ──
     window.auctionSavvyLeafletReady.then((leafletLoaded) => {{
