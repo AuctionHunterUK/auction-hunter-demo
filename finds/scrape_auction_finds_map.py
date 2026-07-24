@@ -1169,11 +1169,27 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .card:hover {{ transform: translateY(-3px); box-shadow: var(--shadow-hover); }}
     .card-img {{ position: relative; width: 100%; line-height: 0; background: var(--accent-soft); }}
+    .card-img::before {{
+      content: "Loading image…";
+      position: absolute; inset: 0; z-index: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: .72rem; line-height: 1.35;
+      background: linear-gradient(145deg, #f2f5f2, #e7ece7);
+      opacity: 0; transition: opacity .15s ease;
+      pointer-events: none;
+    }}
+    .card-img.image-pending::before {{ opacity: 1; }}
     /* Uniform SQUARE image crop for a tidy catalogue look. height:auto is
        essential — the <img> tags carry a height="300" HTML attribute that
        otherwise overrides aspect-ratio, making cards render at different
        shapes depending on their column width (3-col local vs 4-col later). */
-    .card-img img {{ width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; display: block; }}
+    .card-img img {{
+      position: relative; z-index: 1;
+      width: 100%; height: auto; aspect-ratio: 1/1;
+      object-fit: cover; display: block;
+      opacity: 1; transition: opacity .15s ease;
+    }}
+    .card-img.image-pending img {{ opacity: 0; }}
     .no-img {{
       aspect-ratio: 1/1; display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 8px;
@@ -1464,6 +1480,74 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 {pc_map_js}
 
 {house_popup_js}
+
+    // ── LOT IMAGE LOADING / FAILURE STATES ──
+    (function initLotImageStates() {{
+      const cardsArea = document.getElementById('cards-area');
+      const cardsAreaStyle = cardsArea ? window.getComputedStyle(cardsArea) : null;
+      const cardsAreaScrolls = Boolean(
+        cardsArea &&
+        cardsAreaStyle &&
+        ['auto', 'scroll'].includes(cardsAreaStyle.overflowY) &&
+        cardsArea.scrollHeight > cardsArea.clientHeight + 2
+      );
+      const imagePreloader = 'IntersectionObserver' in window
+        ? new IntersectionObserver(entries => {{
+            entries.forEach(entry => {{
+              if (!entry.isIntersecting) return;
+              const img = entry.target.querySelector('img');
+              if (img && !img.complete) img.loading = 'eager';
+              imagePreloader.unobserve(entry.target);
+            }});
+          }}, {{
+            root: cardsAreaScrolls ? cardsArea : null,
+            rootMargin: '2400px 0px',
+            threshold: 0
+          }})
+        : null;
+
+      function showLoaded(img) {{
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        frame.classList.remove('image-pending');
+      }}
+
+      function showUnavailable(img) {{
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        const fallback = document.createElement('div');
+        fallback.className = 'no-img';
+
+        const icon = document.createElement('span');
+        icon.className = 'no-img-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = '▧';
+
+        const title = document.createElement('strong');
+        title.textContent = 'Image temporarily unavailable';
+
+        const hint = document.createElement('span');
+        hint.textContent = 'View the official EasyLive listing';
+
+        fallback.append(icon, title, hint);
+        frame.classList.remove('image-pending');
+        frame.replaceChildren(fallback);
+      }}
+
+      document.querySelectorAll('.card-img img').forEach(img => {{
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        frame.classList.add('image-pending');
+        if (img.complete) {{
+          if (img.naturalWidth > 0) showLoaded(img);
+          else showUnavailable(img);
+          return;
+        }}
+        img.addEventListener('load', () => showLoaded(img), {{ once: true }});
+        img.addEventListener('error', () => showUnavailable(img), {{ once: true }});
+        if (imagePreloader && img.loading === 'lazy') imagePreloader.observe(frame);
+      }});
+    }})();
 
     // ── HOUSE POPUP (desktop hover only) ──
     (function initHousePopup() {{
