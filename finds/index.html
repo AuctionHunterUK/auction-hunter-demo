@@ -179,6 +179,45 @@
       white-space: nowrap;
       text-align: center;
     }
+    .lot-map-card {
+      position: absolute;
+      z-index: 750;
+      display: none;
+      width: 238px;
+      pointer-events: none;
+      box-sizing: border-box;
+      background: rgba(255,255,255,.97);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 9px;
+      box-shadow: 0 5px 18px rgba(30,40,32,.18);
+      padding: 10px 12px;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.35;
+    }
+    .lot-map-card.visible { display: block; }
+    .lot-map-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: .88rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .lot-map-card-address {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .68rem;
+      overflow-wrap: anywhere;
+    }
+    .lot-map-card-sale {
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px solid var(--line);
+      color: var(--accent);
+      font-size: .69rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
     #cards-area {
       flex: 1;
       overflow-y: auto;
@@ -390,16 +429,11 @@
     }
     .pin-highlighted {
       width: 16px; height: 16px;
-      background: #d9531e;
+      background: #1f2a21;
       border: 3px solid #fff;
       border-radius: 50%;
-      box-shadow: 0 0 12px rgba(217,83,30,.6);
+      box-shadow: 0 0 12px rgba(31,42,33,.55);
     }
-    /* Timing colour bands (mirror AuctionSavvy): now / this week / later / no date */
-    .pin-now    { background: #2c6e2c !important; box-shadow: 0 0 12px rgba(44,110,44,.65) !important; }
-    .pin-week   { background: #e0b000 !important; box-shadow: 0 0 12px rgba(224,176,0,.6) !important; }
-    .pin-later  { background: #b5651d !important; box-shadow: 0 0 12px rgba(181,101,29,.6) !important; }
-    .pin-none   { background: #8a8a8a !important; box-shadow: 0 0 12px rgba(138,138,138,.55) !important; }
 
     /* ── MOBILE MAP OVERLAY ── */
     #map-fab {
@@ -575,7 +609,7 @@ body.gate-locked{overflow:hidden}
     <div id="map-panel">
       <button id="map-close" onclick="closeMobileMap()">✕ Close map</button>
       <div id="map"></div>
-      <div class="map-label">Hover name for map location</div>
+      <div class="map-label">Hover a lot for location and sale details</div>
     </div>
     <div id="cards-area">
       
@@ -11609,6 +11643,9 @@ const HOUSE_POPUP_DATA = {"psp auctions": {"name": "PSP Auctions", "address": "H
 
     let markers = {};
     let highlightedMarker = null;
+    const mapInfoOverlay = document.createElement('div');
+    mapInfoOverlay.className = 'lot-map-card';
+    map.getContainer().appendChild(mapInfoOverlay);
 
     for (const pc in PC_MAP) {
       const h = PC_MAP[pc];
@@ -11620,28 +11657,55 @@ const HOUSE_POPUP_DATA = {"psp auctions": {"name": "PSP Auctions", "address": "H
           iconAnchor: [4, 4]
         })
       });
-      m.bindTooltip(h.name, { direction: 'top', offset: [0, -8] });
       m.addTo(map);
       markers[pc] = m;
     }
 
-    // Returns the timing band class for a sale-date string like "📅 Wed 1st Jul 2026 10:30am BST"
-    function saleBand(dateText) {
-      if (!dateText) return 'pin-none';
-      const m = dateText.match(/(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]{3,})\s+(\d{4})/);
-      if (!m) return 'pin-none';
-      const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-      const mon = months[m[2].slice(0,3).toLowerCase()];
-      if (mon === undefined) return 'pin-none';
-      const sale = new Date(+m[3], mon, +m[1]);
-      const today = new Date(); today.setHours(0,0,0,0);
-      const days = Math.round((sale - today) / 86400000);
-      if (days <= 3) return 'pin-now';
-      if (days <= 14) return 'pin-week';
-      return 'pin-later';
+    function fillMapInfo(houseEl, postcode, saleText) {
+      const houseKey = houseEl ? houseEl.dataset.houseKey : '';
+      const houseInfo = houseKey ? HOUSE_POPUP_DATA[houseKey] : null;
+      const fallbackName = houseEl && houseEl.firstChild ? houseEl.firstChild.textContent.trim() : '';
+      mapInfoOverlay.replaceChildren();
+
+      const name = document.createElement('div');
+      name.className = 'lot-map-card-name';
+      name.textContent = (houseInfo && houseInfo.name) || fallbackName || 'Auction house';
+      mapInfoOverlay.appendChild(name);
+
+      let addressText = houseInfo && houseInfo.address ? houseInfo.address.trim() : '';
+      const compactAddress = addressText.replace(/\s+/g, '').toUpperCase();
+      const compactPostcode = (postcode || '').replace(/\s+/g, '').toUpperCase();
+      if (postcode && !compactAddress.includes(compactPostcode)) {
+        addressText = addressText ? addressText + ' · ' + postcode : postcode;
+      }
+      const address = document.createElement('div');
+      address.className = 'lot-map-card-address';
+      address.textContent = addressText || 'Address unavailable';
+      mapInfoOverlay.appendChild(address);
+
+      const sale = document.createElement('div');
+      sale.className = 'lot-map-card-sale';
+      sale.textContent = saleText ? 'Sale: ' + saleText : 'Sale date unavailable';
+      mapInfoOverlay.appendChild(sale);
     }
 
-    function highlightMarker(pc, band) {
+    function positionMapInfo() {
+      if (!highlightedMarker || !mapInfoOverlay.classList.contains('visible')) return;
+      const point = map.latLngToContainerPoint(highlightedMarker.getLatLng());
+      const size = map.getSize();
+      const width = Math.min(238, Math.max(180, size.x - 24));
+      mapInfoOverlay.style.width = width + 'px';
+      const height = mapInfoOverlay.offsetHeight;
+      let left = point.x - width / 2;
+      let top = point.y + 20;
+      if (top + height > size.y - 12) top = point.y - height - 20;
+      left = Math.max(12, Math.min(left, size.x - width - 12));
+      top = Math.max(44, Math.min(top, size.y - height - 12));
+      mapInfoOverlay.style.left = Math.round(left) + 'px';
+      mapInfoOverlay.style.top = Math.round(top) + 'px';
+    }
+
+    function highlightMarker(pc, houseEl, postcode, saleText) {
       if (highlightedMarker) {
         highlightedMarker.setIcon(L.divIcon({
           className: '',
@@ -11652,16 +11716,26 @@ const HOUSE_POPUP_DATA = {"psp auctions": {"name": "PSP Auctions", "address": "H
         const prev = document.querySelector('.house.highlighted');
         if (prev) prev.classList.remove('highlighted');
       }
-      if (!pc || !markers[pc]) { highlightedMarker = null; return; }
+      if (!pc || !markers[pc]) {
+        highlightedMarker = null;
+        mapInfoOverlay.classList.remove('visible');
+        mapInfoOverlay.replaceChildren();
+        return;
+      }
       const m = markers[pc];
       m.setIcon(L.divIcon({
         className: '',
-        html: '<div class="pin-highlighted ' + (band || 'pin-none') + '"></div>',
+        html: '<div class="pin-highlighted"></div>',
         iconSize: [16, 16],
         iconAnchor: [8, 8]
       }));
       highlightedMarker = m;
+      fillMapInfo(houseEl, postcode, saleText);
+      mapInfoOverlay.classList.add('visible');
+      positionMapInfo();
     }
+
+    map.on('move zoom resize', positionMapInfo);
 
     // Hover ANYWHERE on a lot card highlights that lot's auction house on the
     // map (not just hovering the house name) — makes the map earn its place
@@ -11670,12 +11744,13 @@ const HOUSE_POPUP_DATA = {"psp auctions": {"name": "PSP Auctions", "address": "H
       const houseEl = card.querySelector('.house');
       const pcRaw = card.querySelector('.pc');
       if (!pcRaw) return;
-      const pc = pcRaw.textContent.trim().replace(/\s+/g, '').toUpperCase();
-      const dateEl = card.querySelector('.saledate');
-      const band = saleBand(dateEl ? dateEl.textContent : '');
+      const postcode = pcRaw.textContent.trim();
+      const pc = postcode.replace(/\s+/g, '').toUpperCase();
+      const dateEl = card.querySelector('.saledate, .timeleft');
+      const saleText = dateEl ? dateEl.textContent.replace(/^[📅⏱]\s*/, '').trim() : '';
       card.addEventListener('mouseenter', () => {
         if (houseEl) houseEl.classList.add('highlighted');
-        highlightMarker(pc, band);
+        highlightMarker(pc, houseEl, postcode, saleText);
       });
       card.addEventListener('mouseleave', () => {
         if (houseEl) houseEl.classList.remove('highlighted');
