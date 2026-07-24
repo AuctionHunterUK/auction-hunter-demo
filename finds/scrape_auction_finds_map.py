@@ -118,13 +118,46 @@ def image_filename(url):
     return hashlib.md5(url.encode()).hexdigest()[:12] + "." + ext
 
 
+def _looks_like_image_bytes(data):
+    """Return True for the image formats accepted by image_filename()."""
+    return bool(
+        data.startswith(b"\xff\xd8\xff")
+        or data.startswith(b"\x89PNG\r\n\x1a\n")
+        or data.startswith((b"GIF87a", b"GIF89a"))
+        or (len(data) >= 12 and data.startswith(b"RIFF") and data[8:12] == b"WEBP")
+    )
+
+
+def is_valid_image_file(path):
+    """Reject missing/corrupt files and HTML error pages saved as images."""
+    try:
+        with path.open("rb") as image_file:
+            return _looks_like_image_bytes(image_file.read(12))
+    except OSError:
+        return False
+
+
 def download_image(url, dest):
     if dest.exists():
-        return True
+        if is_valid_image_file(dest):
+            return True
+        log.warning("Discarding invalid cached image: %s", dest.name)
+        try:
+            dest.unlink()
+        except OSError as exc:
+            log.warning("Could not remove invalid image %s: %s", dest.name, exc)
+            return False
     for attempt in range(3):
         try:
             r = requests.get(url, headers=HEADERS, timeout=20)
             r.raise_for_status()
+            if not _looks_like_image_bytes(r.content):
+                log.warning(
+                    "Image response was not image data: %s (%s)",
+                    url,
+                    r.headers.get("Content-Type", "unknown type"),
+                )
+                return False
             dest.write_bytes(r.content)
             return True
         except Exception as e:
@@ -512,15 +545,31 @@ def _is_today(lot, today_str):
     return today_str in blob
 
 
-def _card_html(lot, is_new, postcodes):
+def _card_html(lot, is_new, postcodes, is_priority=False):
     title_value = lot.get("title", "")
     title_attr = html.escape(title_value, quote=True)
     title_text = html.escape(title_value)
-    img_src = f"images/{lot['img_file']}" if lot.get("img_file") else ""
-    img_tag = (
-        f'<img src="{img_src}" alt="{title_attr}" width="400" height="300" loading="lazy">'
-        if img_src else '<div class="no-img">No image</div>'
+    img_file = lot.get("img_file") or ""
+    img_src = (
+        f"images/{img_file}"
+        if img_file and is_valid_image_file(IMAGES_DIR / img_file)
+        else ""
     )
+    if img_src:
+        loading = "eager" if is_priority else "lazy"
+        fetch_priority = "high" if is_priority else "low"
+        img_tag = (
+            f'<img src="{img_src}" alt="{title_attr}" width="400" height="300" '
+            f'loading="{loading}" decoding="async" fetchpriority="{fetch_priority}">'
+        )
+    else:
+        img_tag = (
+            '<div class="no-img">'
+            '<span class="no-img-icon" aria-hidden="true">▧</span>'
+            '<strong>Image available on request</strong>'
+            '<span>View the official EasyLive listing</span>'
+            '</div>'
+        )
     bid      = f'<span class="bid">Bid {lot["bid"]}</span>'           if lot.get("bid")       else ""
     estimate = f'<span class="estimate">Est {lot["estimate"]}</span>' if lot.get("estimate") else ""
 
@@ -571,10 +620,14 @@ def _card_html(lot, is_new, postcodes):
     </div>"""
 
 
-def _section_html(title, lots, anchor, seen, postcodes, css_class=""):
+def _section_html(title, lots, anchor, seen, postcodes, css_class="", priority_ids=None):
     if not lots:
         return f'<section id="{anchor}" class="{css_class}"><h2>{title}</h2><p class="empty">No results found.</p></section>'
-    cards = "\n".join(_card_html(l, l["id"] not in seen, postcodes) for l in lots)
+    priority_ids = priority_ids or set()
+    cards = "\n".join(
+        _card_html(l, l["id"] not in seen, postcodes, l["id"] in priority_ids)
+        for l in lots
+    )
     new_count = sum(1 for l in lots if l["id"] not in seen)
     new_pill = f' <span class="new-count">{new_count} new</span>' if new_count else ""
     return f"""
@@ -731,10 +784,24 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
             pc_entries.append(f'  "{pc_key}":{{name:{n_esc},lat:{lat},lng:{lng},url:{u_esc}}}')
     pc_map_js = "const PC_MAP = {\n" + ",\n".join(pc_entries) + "\n};"
 
+    # Prioritise only the first visible row. Every other catalogue image stays
+    # lazy and low-priority so a large catalogue does not compete with the UI.
+    display_order = local_lots + wide_today + wide_later
+    priority_ids = {lot["id"] for lot in display_order[:3]}
+
     # Render card sections
-    local_html = _section_html("📍 Local auctions", local_lots, "local", seen, postcodes, "local-section")
-    today_html = _section_html(f"🔥 UK-Wide · selling today ({today_str})", wide_today, "today", seen, postcodes, "today-section") if wide_today else ""
-    later_html = _section_html("🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes, "later-section")
+    local_html = _section_html(
+        "📍 Local auctions", local_lots, "local", seen, postcodes,
+        "local-section", priority_ids,
+    )
+    today_html = _section_html(
+        f"🔥 UK-Wide · selling today ({today_str})", wide_today, "today", seen,
+        postcodes, "today-section", priority_ids,
+    ) if wide_today else ""
+    later_html = _section_html(
+        "🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes,
+        "later-section", priority_ids,
+    )
 
     local_local_count = len(local_lots)
     wide_today_count = len(wide_today)
@@ -748,8 +815,32 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
   <title>AuctionSavvy — Auction Finds</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // The Lots mini-map is desktop-only. Do not download Leaflet or map
+    // resources on phones, where the map is intentionally hidden.
+    window.auctionSavvyLeafletReady = Promise.resolve(false);
+    if (window.matchMedia('(min-width: 801px)').matches) {{
+      const leafletCssReady = new Promise((resolve, reject) => {{
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.appendChild(link);
+      }});
+      const leafletScriptReady = new Promise((resolve, reject) => {{
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      }});
+      window.auctionSavvyLeafletReady = Promise.all([
+        leafletCssReady,
+        leafletScriptReady
+      ]).then(() => true);
+    }}
+  </script>
   <style>
     :root {{
       /* Shared design tokens — extracted from AuctionSavvy (/houses) */
@@ -1059,8 +1150,24 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
        shapes depending on their column width (3-col local vs 4-col later). */
     .card-img img {{ width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; display: block; }}
     .no-img {{
-      aspect-ratio: 1/1; display: flex; align-items: center;
-      justify-content: center; font-size: 0.8rem; color: var(--muted);
+      aspect-ratio: 1/1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      padding: 24px; text-align: center; line-height: 1.35;
+      color: var(--muted);
+      background: linear-gradient(145deg, #f2f5f2, #e7ece7);
+    }}
+    .no-img-icon {{
+      width: 42px; height: 42px; display: inline-flex;
+      align-items: center; justify-content: center;
+      border: 1px solid #bdc8bd; border-radius: 50%;
+      color: var(--accent); font-size: 1.25rem; line-height: 1;
+      background: rgba(255,255,255,.65);
+    }}
+    .no-img strong {{
+      color: var(--ink); font-size: .82rem; font-weight: 600;
+    }}
+    .no-img span:last-child {{
+      max-width: 190px; font-size: .7rem;
     }}
     .card-body {{ padding: 12px 14px 14px; }}
     .card-body .title {{
@@ -1161,14 +1268,6 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .saledate {{ color: var(--muted); flex-shrink: 0; margin-left: auto; }}
 
     /* ── MAP PIN STYLES ── */
-    .pin-default {{
-      width: 8px; height: 8px;
-      background: transparent;
-      border: none;
-      border-radius: 50%;
-      opacity: 0;
-      transition: all 0.2s;
-    }}
     .pin-highlighted {{
       width: 16px; height: 16px;
       background: #1f2a21;
@@ -1658,7 +1757,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       document.getElementById('searchInput').focus();
     }}
 
-    // ── MAP ──
+    // ── DESKTOP-ONLY MINI-MAP ──
+    window.auctionSavvyLeafletReady.then((leafletLoaded) => {{
+      if (!leafletLoaded || !window.matchMedia('(min-width: 801px)').matches) return;
+
     const map = L.map('map', {{ center: [54.2, -2.5], zoom: 6, zoomControl: true }});
     L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
       attribution: '&copy; OSM &copy; CARTO',
@@ -1666,25 +1768,18 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       maxZoom: 19
     }}).addTo(map);
 
-    let markers = {{}};
-    let highlightedMarker = null;
+    let markerVisible = false;
+    const highlightedMarker = L.marker([0, 0], {{
+      icon: L.divIcon({{
+        className: '',
+        html: '<div class="pin-highlighted"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      }})
+    }});
     const mapInfoOverlay = document.createElement('div');
     mapInfoOverlay.className = 'lot-map-card';
     map.getContainer().appendChild(mapInfoOverlay);
-
-    for (const pc in PC_MAP) {{
-      const h = PC_MAP[pc];
-      const m = L.marker([h.lat, h.lng], {{
-        icon: L.divIcon({{
-          className: '',
-          html: '<div class="pin-default"></div>',
-          iconSize: [8, 8],
-          iconAnchor: [4, 4]
-        }})
-      }});
-      m.addTo(map);
-      markers[pc] = m;
-    }}
 
     function fillMapInfo(houseEl, postcode, saleText) {{
       const houseKey = houseEl ? houseEl.dataset.houseKey : '';
@@ -1715,7 +1810,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
 
     function positionMapInfo() {{
-      if (!highlightedMarker || !mapInfoOverlay.classList.contains('visible')) return;
+      if (!markerVisible || !mapInfoOverlay.classList.contains('visible')) return;
       const point = map.latLngToContainerPoint(highlightedMarker.getLatLng());
       const size = map.getSize();
       const width = Math.min(238, Math.max(180, size.x - 24));
@@ -1731,30 +1826,21 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
 
     function highlightMarker(pc, houseEl, postcode, saleText) {{
-      if (highlightedMarker) {{
-        highlightedMarker.setIcon(L.divIcon({{
-          className: '',
-          html: '<div class="pin-default"></div>',
-          iconSize: [8, 8],
-          iconAnchor: [4, 4]
-        }}));
-        const prev = document.querySelector('.house.highlighted');
-        if (prev) prev.classList.remove('highlighted');
-      }}
-      if (!pc || !markers[pc]) {{
-        highlightedMarker = null;
+      if (!pc || !PC_MAP[pc]) {{
+        if (markerVisible) {{
+          map.removeLayer(highlightedMarker);
+          markerVisible = false;
+        }}
         mapInfoOverlay.classList.remove('visible');
         mapInfoOverlay.replaceChildren();
         return;
       }}
-      const m = markers[pc];
-      m.setIcon(L.divIcon({{
-        className: '',
-        html: '<div class="pin-highlighted"></div>',
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
-      }}));
-      highlightedMarker = m;
+      const h = PC_MAP[pc];
+      highlightedMarker.setLatLng([h.lat, h.lng]);
+      if (!markerVisible) {{
+        highlightedMarker.addTo(map);
+        markerVisible = true;
+      }}
       fillMapInfo(houseEl, postcode, saleText);
       mapInfoOverlay.classList.add('visible');
       positionMapInfo();
@@ -1801,6 +1887,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function closeMobileMap() {{
       document.body.classList.remove('map-open');
     }}
+    }}).catch((error) => {{
+      console.warn('Lots mini-map could not be loaded.', error);
+    }});
 
     // ── Scroll progress counter ──
     // Updates each section's "X of Y seen" label as the user scrolls past
@@ -1977,8 +2066,12 @@ def main():
     all_lots = filter_uk_lots(all_lots, postcodes, stage="Enriched UK filter")
 
     log.info("Downloading images…")
+    attempted_images = set()
     for lot in all_lots.values():
         if lot["img_url"] and lot["img_file"]:
+            if lot["img_file"] in attempted_images:
+                continue
+            attempted_images.add(lot["img_file"])
             download_image(lot["img_url"], IMAGES_DIR / lot["img_file"])
             time.sleep(0.3)
 
