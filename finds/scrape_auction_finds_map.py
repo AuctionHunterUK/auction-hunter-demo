@@ -1425,7 +1425,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
           {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
           <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
-          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false">Wanted <span class="jump-count" id="wantedRequestCount">0</span></button>
+          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Filter to possible wanted-item matches">Matches <span class="jump-count" id="wantedMatchCount">0</span></button>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
@@ -1810,6 +1810,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       const queryWords = normalizedQuery.split(/\s+/).filter(Boolean);
       let visibleCount = 0;
       let totalCount = 0;
+      let wantedMatchCount = 0;
 
       searchBox.classList.toggle('has-text', Boolean(query));
       document.querySelectorAll('.card-shell').forEach(shell => {{
@@ -1819,6 +1820,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         const normalizedTitle = normalizeSearch(title.toLowerCase());
         const searchMatch = !query || queryWords.every(word => normalizedTitle.includes(word));
         const wantedMatches = requests.filter(request => wantedMatchesTitle(title, request));
+        if (wantedMatches.length) wantedMatchCount++;
         const visible = searchMatch && (!wantedFilterActive || wantedMatches.length > 0);
         shell.style.display = visible ? '' : 'none';
         if (visible) visibleCount++;
@@ -1845,10 +1847,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
       resultsEl.textContent = query ? visibleCount + ' of ' + totalCount + ' lots' : '';
       const button = document.getElementById('wantedFilterButton');
-      const requestCount = document.getElementById('wantedRequestCount');
+      const matchCount = document.getElementById('wantedMatchCount');
       const summary = document.getElementById('wantedFilterSummary');
       const summaryText = document.getElementById('wantedFilterSummaryText');
-      requestCount.textContent = requests.length;
+      matchCount.textContent = wantedMatchCount;
       button.classList.toggle('active', wantedFilterActive);
       button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
       summary.classList.toggle('visible', wantedFilterActive);
