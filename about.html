@@ -75,6 +75,7 @@
   .feature-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
   .feature-panel h2{margin-top:0}
   .feature-panel p:last-child{margin-bottom:0}
+  .feature-wanted{grid-column:1/-1;background:#f3f7f3;border-left:4px solid var(--accent)}
   .working-demo-box{margin-top:20px;background:#eef5ee;border:1px solid #c8d9c9;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
   .working-demo-box h2{margin-top:0}
   .working-demo-box p{max-width:780px}
@@ -176,7 +177,7 @@ body.gate-locked{overflow:hidden}
     <p class="about-toc-title">On this page</p>
     <nav>
       <a class="is-active" href="#introduction">Introduction</a>
-      <a href="#tools">Lots and Map</a>
+      <a href="#tools">Lots, Map and Wanted</a>
       <a href="#discovery">Supporting discovery</a>
       <a href="#membership">Membership</a>
       <a href="#support">Additional tools</a>
@@ -228,7 +229,7 @@ body.gate-locked{overflow:hidden}
   </div>
 
   <section class="section-group" id="tools">
-    <p class="section-lead">This demonstration brings two complementary tools together.</p>
+    <p class="section-lead">This demonstration brings three complementary tools together.</p>
     <div class="feature-grid">
       <section class="feature-panel">
         <h2>Lots</h2>
@@ -241,12 +242,21 @@ body.gate-locked{overflow:hidden}
         <h2>Map</h2>
         <p><strong>An interactive map</strong> of UK auction houses, colour-coded according to when their next sale takes place. A future route-planning feature could help users discover auction houses along a journey and make collection planning easier.</p>
       </section>
+
+      <section class="feature-panel feature-wanted">
+        <h2>Wanted list — working demonstration</h2>
+        <p>Where chosen interests create the broader Morning Briefing, the Wanted list refines it further to the specific pieces a collector or dealer is actively seeking.</p>
+        <p>Collectors and dealers can maintain a private list of specifically wanted items and check the current catalogue against every active item with one click.</p>
+        <p>The demonstration uses transparent keyword matching and clearly labels possible matches before directing users to EasyLive for verification and bidding.</p>
+        <p>With an authorised data feed, this could later develop into AI-assisted matching that understands natural-language descriptions, dimensions and close alternatives, with optional alerts.</p>
+      </section>
     </div>
 
     <section class="working-demo-box">
       <h2>A working demonstration, not a fixed catalogue</h2>
       <p>The Lots page is generated from a snapshot of listing information for the demonstration’s chosen interests. The process identifies relevant lots, removes duplicates, matches auction houses and locations, organises items into <strong>Local Auctions</strong>, <strong>UK-Wide Today</strong> and <strong>UK-Wide Later</strong>, and preserves a direct link to each official EasyLive listing.</p>
       <p>The Map page is generated from auction-house locations and upcoming-sale information. It plots houses geographically, colour-codes them according to sale timing, provides <strong>Now</strong>, <strong>Soon</strong>, <strong>Later</strong> and <strong>All</strong> views, and combines the map with a searchable house list. Selecting a house reveals its address, forthcoming sales and a direct link to its official auction page.</p>
+      <p>The Wanted page is also functional in this demonstration. It stores a private wanted list in the user’s browser and the <strong>Matches</strong> control compares all active wanted items with the current Lots briefing in one step. The current version uses title keywords; no customer or personal information is uploaded.</p>
       <p>The versions presented to EasyLive will be intentionally frozen as stable demonstration snapshots. However, the organising processes are not static: when supplied with fresh information, they can rebuild the briefing and update the map automatically. With an authorised EasyLive feed, the same processes could organise supplied catalogue data reliably, at greater scale and eventually around each member’s individual preferences.</p>
     </section>
   </section>
@@ -273,7 +283,8 @@ body.gate-locked{overflow:hidden}
     </section>
     <section class="tier-panel tier-wanted">
       <h3>Wanted — Dealer add-on</h3>
-      <p>An additional sourcing service for dealers handling customer requests.</p>
+      <p>The working demonstration already shows the core keyword-based workflow through a private wanted list that can be used by collectors or dealers.</p>
+      <p>With an authorised data feed, this could develop into an additional intelligent sourcing service—particularly useful for dealers handling customer requests.</p>
       <p>A dealer could describe an item naturally—for example, “a Victorian pine chest of drawers approximately 45 inches wide”—or paste only the relevant product requirements from a customer email. The service would retain the sourcing requirements rather than the original email or unnecessary customer details.</p>
       <p>An authorised morning process could compare active requests with newly supplied catalogue information and identify possible matches using details such as item type, material, dimensions, location and sale date.</p>
       <p>A match notification could include a photograph, catalogue dimensions, auction house, sale date, an explanation of why the item matched and a direct link to the official EasyLive listing.</p>
