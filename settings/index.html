@@ -24,11 +24,11 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
 <body>
 <!-- Private demonstration gate, shared with Map and Lots. -->
 <div id="demo-gate"><div id="demo-gate-card"><h2>AuctionSavvy</h2><p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p><form id="demo-gate-form"><input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus><button type="submit">Enter demo</button></form><p class="dg-err" id="demo-gate-err"></p></div></div>
-<header><div class="headtop"><a class="brand" href="../finds/" aria-label="AuctionSavvy Lots"><h1>AuctionSavvy</h1></a><div class="search-box search-box-spacer" aria-hidden="true"></div><nav class="app-nav" aria-label="App pages"><a href="../houses/" class="app-nav-link">Map</a><a href="../finds/" class="app-nav-link">Lots</a></nav></div><div class="hrow2"><div class="header-page-tools"><p class="tagline">Manage featured searches and refined items in one place.</p></div><nav class="header-utility-nav" aria-label="Utility pages"><a href="../about.html">About</a><a href="../settings/" class="on" aria-current="page">Edit</a></nav></div></header>
+<header><div class="headtop"><a class="brand" href="../finds/" aria-label="AuctionSavvy Lots"><h1>AuctionSavvy</h1></a><div class="search-box search-box-spacer" aria-hidden="true"></div><nav class="app-nav" aria-label="App pages"><a href="../houses/" class="app-nav-link">Map</a><a href="../finds/" class="app-nav-link">Lots</a></nav></div><div class="hrow2"><div class="header-page-tools"><p class="tagline">Manage featured searches and your refined search in one place.</p></div><nav class="header-utility-nav" aria-label="Utility pages"><a href="../about.html">About</a><a href="../settings/" class="on" aria-current="page">Edit</a></nav></div></header>
 <main>
   <span class="eyebrow">Owner controls</span>
   <h2>Edit</h2>
-  <p class="intro">Manage the broad featured searches used for the nightly catalogue and the specific refined items you want to check within it.</p>
+  <p class="intro">Manage the broad featured searches used for the nightly catalogue and the specific phrases used by your refined search.</p>
   <div class="settings-grid">
     <section class="setting-card term-editor">
       <h3>Featured searches</h3>
@@ -46,20 +46,20 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
     </section>
     <section class="setting-card refined-editor" id="refined-items">
       <div class="refined-head">
-        <div><h3>Refined items</h3><p>Keep a short list of specific pieces you particularly want to find. These refine the broader featured catalogue further.</p></div>
+        <div><h3>Refined search</h3><p>Keep a short list of specific search phrases for pieces you particularly want to find. These narrow the broader featured catalogue further.</p></div>
         <span class="active-total" id="activeTotal">0 active</span>
       </div>
-      <div class="refined-overview" aria-label="Refined items shortcut">
-        <div class="refined-overview-copy"><strong>One check, every active refined item</strong><p id="refinedOverviewText">Your active refined items are ready to compare with the latest lots.</p></div>
+      <div class="refined-overview" aria-label="Refined search shortcut">
+        <div class="refined-overview-copy"><strong>One check, every active phrase</strong><p id="refinedOverviewText">Your active search phrases are ready to compare with the latest lots.</p></div>
         <a class="view-refined" href="../finds/?wanted=1">View matching lots</a>
       </div>
       <form class="add-refined" id="addRefined">
-        <input id="newRefined" type="text" maxlength="120" placeholder="e.g. Very large pine table" aria-label="New refined item" autocomplete="off">
-        <button type="submit">Add item</button>
+        <input id="newRefined" type="text" maxlength="120" placeholder="e.g. Very large pine table" aria-label="New refined search phrase" autocomplete="off">
+        <button type="submit">Add phrase</button>
       </form>
       <p class="refined-status" id="refinedStatus" role="status" aria-live="polite"></p>
       <div class="refined-list" id="refinedList"></div>
-      <p class="privacy-note"><strong>Private on this device:</strong> this demonstration stores refined items only in this browser. It does not upload personal information or send alerts.</p>
+      <p class="privacy-note"><strong>Private on this device:</strong> this demonstration stores refined search phrases only in this browser. It does not upload personal information or send alerts.</p>
       <p class="future-note"><strong>Future enhancement:</strong> with an authorised data feed, AI-assisted matching could understand natural-language descriptions, dimensions and close alternatives—not only specific keywords.</p>
     </section>
   </div>
@@ -223,8 +223,8 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
     var active = items.filter(function (item) { return item.active; });
     document.getElementById('activeTotal').textContent = active.length + ' active';
     document.getElementById('refinedOverviewText').textContent = active.length
-      ? active.length + ' active refined item' + (active.length === 1 ? ' is' : 's are') + ' ready to compare with the latest lots.'
-      : 'Activate or add a refined item to create your one-step shortlist.';
+      ? active.length + ' active search phrase' + (active.length === 1 ? ' is' : 's are') + ' ready to compare with the latest lots.'
+      : 'Activate or add a search phrase to create your one-step shortlist.';
   }
   function render() {
     list.innerHTML = '';
@@ -232,7 +232,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
     if (!items.length) {
       var empty = document.createElement('div');
       empty.className = 'empty-state';
-      empty.textContent = 'No refined items yet. Add your first item above.';
+      empty.textContent = 'No refined search phrases yet. Add your first phrase above.';
       list.appendChild(empty);
       return;
     }
@@ -244,7 +244,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
       var toggle = document.createElement('input');
       toggle.type = 'checkbox';
       toggle.checked = item.active;
-      toggle.setAttribute('aria-label', 'Use ' + item.text + ' in refined items');
+      toggle.setAttribute('aria-label', 'Use ' + item.text + ' in the refined search');
       var toggleText = document.createElement('span');
       toggleText.textContent = 'Active';
       toggleLabel.append(toggle, toggleText);
@@ -255,7 +255,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
       text.type = 'text';
       text.maxLength = 120;
       text.value = item.text;
-      text.setAttribute('aria-label', 'Refined item');
+      text.setAttribute('aria-label', 'Refined search phrase');
       var count = document.createElement('span');
       count.className = 'match-count';
       var matches = matchCount(item);
@@ -266,17 +266,17 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
       remove.className = 'remove-refined';
       remove.textContent = 'Remove';
       remove.setAttribute('aria-label', 'Remove ' + item.text);
-      toggle.addEventListener('change', function () { item.active = toggle.checked; save(item.active ? 'Refined item activated.' : 'Refined item paused.'); });
+      toggle.addEventListener('change', function () { item.active = toggle.checked; save(item.active ? 'Search phrase activated.' : 'Search phrase paused.'); });
       text.addEventListener('change', function () {
         var value = clean(text.value);
-        if (!value) { text.value = item.text; status.textContent = 'A refined item cannot be blank.'; return; }
+        if (!value) { text.value = item.text; status.textContent = 'A refined search phrase cannot be blank.'; return; }
         if (!uniqueText(value, item.id)) { text.value = item.text; status.textContent = 'That item is already in your list.'; return; }
         item.text = value;
-        save('Refined item updated.');
+        save('Search phrase updated.');
       });
       remove.addEventListener('click', function () {
         items = items.filter(function (current) { return current.id !== item.id; });
-        save('Refined item removed.');
+        save('Search phrase removed.');
       });
       row.append(toggleLabel, copy, remove);
       list.appendChild(row);
@@ -285,12 +285,12 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
   document.getElementById('addRefined').addEventListener('submit', function (event) {
     event.preventDefault();
     var value = clean(input.value);
-    if (!value) { status.textContent = 'Type a refined item first.'; input.focus(); return; }
+    if (!value) { status.textContent = 'Type a refined search phrase first.'; input.focus(); return; }
     if (!uniqueText(value)) { status.textContent = 'That item is already in your list.'; input.focus(); return; }
-    if (items.length >= 20) { status.textContent = 'This demonstration supports up to 20 refined items.'; return; }
+    if (items.length >= 20) { status.textContent = 'This demonstration supports up to 20 refined search phrases.'; return; }
     items.push({ id: makeId(), text: value, active: true });
     input.value = '';
-    save('Refined item added.');
+    save('Search phrase added.');
     input.focus();
   });
   render();

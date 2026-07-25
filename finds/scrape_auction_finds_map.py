@@ -1056,6 +1056,70 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       font: inherit; font-size: .7rem; font-weight: 700;
       padding: 4px 0 6px 14px; white-space: nowrap;
     }}
+    .refined-search {{
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }}
+    .refined-search-popover {{
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 1700;
+      width: 270px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s;
+      white-space: normal;
+    }}
+    .refined-search.open .refined-search-popover,
+    .refined-search:hover .refined-search-popover {{
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }}
+    .refined-search-popover strong {{
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: .92rem;
+      line-height: 1.25;
+    }}
+    .refined-search-popover ul {{
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }}
+    .refined-search-popover li {{
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 600;
+    }}
+    .refined-search-popover p {{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.4;
+    }}
+    .refined-search-popover a {{
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 700;
+      text-decoration: none;
+    }}
     nav.jump .wanted-filter-button .jump-count {{ color: var(--muted); font-size: .9em; font-weight: 400; }}
     nav.jump .wanted-filter-button.active {{ color: #fff; background: var(--accent); border-color: var(--accent); border-radius: 999px; padding: 4px 10px 6px; }}
     nav.jump .wanted-filter-button.active .jump-count {{ color: #fff; }}
@@ -1433,6 +1497,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .app-nav {{ grid-column: auto; justify-self: auto; padding: 2px; }}
       .app-nav-link {{ font-size: .64rem; padding: 4px 9px; }}
       .featured-searches {{ display: none; }}
+      .refined-search-popover {{ display: none; }}
       .search-box {{ min-width: 0; }}
       .search-box-spacer {{ height: 33px; }}
       .search-box input {{ font-size: 0.8rem; padding: 7px 32px 7px 10px; }}
@@ -1527,7 +1592,15 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
           {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
           <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
-          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Show matches from your refined items">Refined items <span class="jump-count" id="wantedMatchCount">0</span></button>
+          <div class="refined-search" id="refinedSearch">
+            <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" aria-expanded="false" aria-describedby="refinedSearchPopover" title="Show matches from your refined search">Refined search <span class="jump-count" id="wantedMatchCount">0</span></button>
+            <div class="refined-search-popover" id="refinedSearchPopover" role="dialog" aria-label="Current refined search">
+              <strong>Current refined search</strong>
+              <ul id="refinedSearchPhrases"></ul>
+              <p>These active phrases narrow the lots already selected by your featured searches.</p>
+              <a href="../settings/#refined-items">Edit refined search</a>
+            </div>
+          </div>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
@@ -1546,7 +1619,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div id="cards-area">
       <div class="wanted-filter-summary" id="wantedFilterSummary" role="status" aria-live="polite">
         <span id="wantedFilterSummaryText"></span>
-        <span class="wanted-filter-summary-actions"><a href="../settings/#refined-items">Edit refined items</a><button type="button" id="clearWantedFilter">Show all</button></span>
+        <span class="wanted-filter-summary-actions"><a href="../settings/#refined-items">Edit refined search</a><button type="button" id="clearWantedFilter">Show all</button></span>
       </div>
       {local_html}
       {today_html}
@@ -1999,6 +2072,49 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }}
     }}
 
+    function renderRefinedSearchPopover(requests) {{
+      const list = document.getElementById('refinedSearchPhrases');
+      if (!list) return;
+      list.replaceChildren();
+      if (!requests.length) {{
+        const empty = document.createElement('li');
+        empty.textContent = 'No active phrases';
+        list.appendChild(empty);
+        return;
+      }}
+      requests.forEach(request => {{
+        const item = document.createElement('li');
+        item.textContent = request.text;
+        list.appendChild(item);
+      }});
+    }}
+
+    function initRefinedSearchPopover() {{
+      const wrap = document.getElementById('refinedSearch');
+      const trigger = document.getElementById('wantedFilterButton');
+      if (!wrap || !trigger || !window.matchMedia('(min-width: 801px)').matches) return;
+
+      function setOpen(open) {{
+        wrap.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }}
+
+      wrap.addEventListener('mouseenter', () => setOpen(true));
+      wrap.addEventListener('mouseleave', () => setOpen(false));
+      wrap.addEventListener('focusin', () => setOpen(true));
+      wrap.addEventListener('focusout', () => {{
+        window.setTimeout(() => setOpen(wrap.contains(document.activeElement)), 0);
+      }});
+      wrap.addEventListener('keydown', event => {{
+        if (event.key !== 'Escape') return;
+        setOpen(false);
+        trigger.focus();
+      }});
+      document.addEventListener('click', event => {{
+        if (!wrap.contains(event.target)) setOpen(false);
+      }});
+    }}
+
     function wantedWords(text) {{
       const ignored = new Set(['a', 'an', 'the', 'very', 'really', 'about', 'around', 'approximately', 'approx', 'wanted', 'looking', 'for', 'find', 'me']);
       const normalized = normalizeSearch(String(text || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' '))
@@ -2063,12 +2179,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       const matchCount = document.getElementById('wantedMatchCount');
       const summary = document.getElementById('wantedFilterSummary');
       const summaryText = document.getElementById('wantedFilterSummaryText');
+      renderRefinedSearchPopover(requests);
       matchCount.textContent = wantedMatchCount;
       button.classList.toggle('active', wantedFilterActive);
       button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
       summary.classList.toggle('visible', wantedFilterActive);
       if (wantedFilterActive) {{
-        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active refined item' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
+        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active search phrase' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
       }}
     }}
 
@@ -2094,6 +2211,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       document.getElementById('searchInput').focus();
     }}
 
+    initRefinedSearchPopover();
     document.getElementById('wantedFilterButton').addEventListener('click', toggleWantedFilter);
     document.getElementById('clearWantedFilter').addEventListener('click', () => {{
       wantedFilterActive = false;
@@ -2102,6 +2220,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     if (new URLSearchParams(window.location.search).get('wanted') === '1' && loadWantedRequests().length) {{
       wantedFilterActive = true;
     }}
+    window.addEventListener('storage', event => {{
+      if (event.key === WANTED_STORAGE_KEY) applyLotFilters();
+    }});
     applyLotFilters();
 
     // ── DESKTOP-ONLY MINI-MAP ──
