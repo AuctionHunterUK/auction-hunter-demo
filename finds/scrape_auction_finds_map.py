@@ -1502,7 +1502,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div class="headtop">
       <div class="brand"><h1>AuctionSavvy</h1></div>
       <div class="search-box" id="searchBox">
-        <input type="text" id="searchInput" placeholder="Refine today’s lots…" aria-label="Refine today’s displayed lots" oninput="searchItems()">
+        <input type="text" id="searchInput" placeholder="Search items below…" aria-label="Search items shown below" oninput="searchItems()">
         <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
       </div>
       <div class="featured-searches" id="featuredSearches">
@@ -1527,12 +1527,11 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
           {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
           <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
-          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Show refined matches from your saved item list">Refined matches <span class="jump-count" id="wantedMatchCount">0</span></button>
+          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Show matches from your refined items">Refined items <span class="jump-count" id="wantedMatchCount">0</span></button>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
         <a href="../about.html">About</a>
-        <a href="../wanted/">Wanted</a>
         <a href="../settings/">Edit</a>
       </nav>
     </div>
@@ -1547,7 +1546,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div id="cards-area">
       <div class="wanted-filter-summary" id="wantedFilterSummary" role="status" aria-live="polite">
         <span id="wantedFilterSummaryText"></span>
-        <span class="wanted-filter-summary-actions"><a href="../wanted/">Manage list</a><button type="button" id="clearWantedFilter">Show all</button></span>
+        <span class="wanted-filter-summary-actions"><a href="../settings/#refined-items">Edit refined items</a><button type="button" id="clearWantedFilter">Show all</button></span>
       </div>
       {local_html}
       {today_html}
@@ -2069,7 +2068,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
       summary.classList.toggle('visible', wantedFilterActive);
       if (wantedFilterActive) {{
-        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active wanted item' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
+        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active refined item' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
       }}
     }}
 
@@ -2080,7 +2079,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function toggleWantedFilter() {{
       const requests = loadWantedRequests();
       if (!requests.length) {{
-        window.location.href = '../wanted/';
+        window.location.href = '../settings/#refined-items';
         return;
       }}
       wantedFilterActive = !wantedFilterActive;
