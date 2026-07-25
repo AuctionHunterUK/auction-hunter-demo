@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-25T02:03:43.083883",
+  "scraped_at": "2026-07-25T06:58:46.275365",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -1590,7 +1590,18 @@
         "title": "Collectors Sale Coins, Toys, Militaria. Also Jewellery, Furniture & Effects."
       }
     ],
-    "JH Auctions LTD": [],
+    "JH Auctions LTD": [
+      {
+        "date": "2026-07-29",
+        "time": "10am",
+        "title": "All Day General Sale - Inc; Catering Equipment, Tiffany Style Lamps, Walking Sti"
+      },
+      {
+        "date": "2026-07-29",
+        "time": "4pm",
+        "title": "All Day General Sale - Inc; Catering Equipment, Tiffany Style Lamps, Walking Sti"
+      }
+    ],
     "John Cowell Auctions": [],
     "John Goodwin": [
       {
