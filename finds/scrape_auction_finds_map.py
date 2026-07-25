@@ -698,7 +698,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         postcodes = ({}, {})
     now       = datetime.now().strftime("%A %d %B, %H:%M")
     gate_html = DEMO_GATE_HTML
-    terms_str = ", ".join(SEARCH_TERMS)
+    featured_terms_html = "".join(f"<li>{html.escape(term)}</li>" for term in SEARCH_TERMS)
+    featured_term_count = len(SEARCH_TERMS)
     total     = len(local_lots) + len(wide_lots)
     new_total = sum(1 for l in local_lots + wide_lots if l["id"] not in seen)
 
@@ -935,6 +936,78 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .search-box.has-text .clear-btn {{ display: flex; }}
     .search-results {{ font-size: 0.78rem; color: var(--muted); }}
+    .featured-searches {{
+      position: relative;
+      display: block;
+      justify-self: start;
+    }}
+    .featured-searches-trigger {{
+      appearance: none;
+      border: 0;
+      border-bottom: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      padding: 5px 1px 4px;
+      font: inherit;
+      font-size: .72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }}
+    .featured-searches-count {{
+      color: var(--muted);
+      font-weight: 500;
+      margin-left: 3px;
+    }}
+    .featured-searches-popover {{
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 1700;
+      width: 250px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s;
+    }}
+    .featured-searches.open .featured-searches-popover,
+    .featured-searches:hover .featured-searches-popover {{
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }}
+    .featured-searches-popover strong {{
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: .92rem;
+      line-height: 1.25;
+    }}
+    .featured-searches-popover ul {{
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }}
+    .featured-searches-popover li {{
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 600;
+    }}
+    .featured-searches-popover p {{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.4;
+    }}
     /* Shared app nav (Houses ↔ Finds) — mirrors AH .tbtn pill style */
     /* Segmented page toggle: one control, split in two, so the two-page
        structure (Houses ↔ Finds) reads instantly and stands apart from links. */
@@ -1359,6 +1432,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       .demo-tag {{ font-size: .52rem; padding: 2px 7px; }}
       .app-nav {{ grid-column: auto; justify-self: auto; padding: 2px; }}
       .app-nav-link {{ font-size: .64rem; padding: 4px 9px; }}
+      .featured-searches {{ display: none; }}
       .search-box {{ min-width: 0; }}
       .search-box-spacer {{ height: 33px; }}
       .search-box input {{ font-size: 0.8rem; padding: 7px 32px 7px 10px; }}
@@ -1428,8 +1502,16 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <div class="headtop">
       <div class="brand"><h1>AuctionSavvy</h1></div>
       <div class="search-box" id="searchBox">
-        <input type="text" id="searchInput" placeholder="Search items..." oninput="searchItems()">
+        <input type="text" id="searchInput" placeholder="Refine today’s lots…" aria-label="Refine today’s displayed lots" oninput="searchItems()">
         <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
+      </div>
+      <div class="featured-searches" id="featuredSearches">
+        <button type="button" class="featured-searches-trigger" id="featuredSearchesTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="featuredSearchesPopover">Featured searches <span class="featured-searches-count">{featured_term_count}</span></button>
+        <div class="featured-searches-popover" id="featuredSearchesPopover" role="dialog" aria-label="Current featured searches">
+          <strong>Current featured searches</strong>
+          <ul>{featured_terms_html}</ul>
+          <p>These terms define the lots included in this morning’s catalogue.</p>
+        </div>
       </div>
       <nav class="app-nav" aria-label="App pages">
         <a href="../houses/" class="app-nav-link">Map</a>
@@ -1445,7 +1527,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
           <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
           {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
           <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
-          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Filter to possible wanted-item matches">Matches <span class="jump-count" id="wantedMatchCount">0</span></button>
+          <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" title="Show refined matches from your saved item list">Refined matches <span class="jump-count" id="wantedMatchCount">0</span></button>
         </nav>
       </div>
       <nav class="header-utility-nav" aria-label="Utility pages">
@@ -1480,6 +1562,44 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 {pc_map_js}
 
 {house_popup_js}
+
+    // ── FEATURED SEARCHES (desktop hover, click and keyboard) ──
+    (function initFeaturedSearches() {{
+      const wrap = document.getElementById('featuredSearches');
+      const trigger = document.getElementById('featuredSearchesTrigger');
+      if (!wrap || !trigger) return;
+
+      let pinnedOpen = false;
+      function setOpen(open) {{
+        wrap.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }}
+
+      wrap.addEventListener('mouseenter', () => setOpen(true));
+      wrap.addEventListener('mouseleave', () => {{
+        if (!pinnedOpen) setOpen(false);
+      }});
+      wrap.addEventListener('focusin', () => setOpen(true));
+      wrap.addEventListener('focusout', () => {{
+        if (!pinnedOpen) setOpen(false);
+      }});
+      trigger.addEventListener('click', event => {{
+        event.stopPropagation();
+        pinnedOpen = !pinnedOpen;
+        setOpen(pinnedOpen);
+      }});
+      trigger.addEventListener('keydown', event => {{
+        if (event.key !== 'Escape') return;
+        pinnedOpen = false;
+        setOpen(false);
+        trigger.focus();
+      }});
+      document.addEventListener('click', event => {{
+        if (wrap.contains(event.target)) return;
+        pinnedOpen = false;
+        setOpen(false);
+      }});
+    }})();
 
     // ── LOT IMAGE LOADING / FAILURE STATES ──
     (function initLotImageStates() {{
