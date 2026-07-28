@@ -566,6 +566,37 @@
       border-radius: 999px; background: var(--accent-soft); color: var(--accent);
       font-size: .66rem; font-weight: 700;
     }
+    .lot-reminder-trigger {
+      position: absolute; top: 8px; right: 8px; z-index: 4;
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; padding: 0;
+      border: 1px solid rgba(58,92,59,.28); border-radius: 50%;
+      background: rgba(255,255,255,.92); color: var(--accent);
+      font: 400 1rem/1 'DM Sans', sans-serif;
+      cursor: pointer; box-shadow: 0 2px 7px rgba(20,30,40,.12);
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lot-reminder-trigger:hover,
+    .lot-reminder-trigger:focus-visible {
+      background: #fff; border-color: var(--accent); transform: translateY(-1px);
+      outline: none;
+    }
+    .lot-reminder-popup {
+      position: fixed; z-index: 1650; display: none;
+      width: min(300px, calc(100vw - 28px));
+      background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+      border-radius: var(--radius); box-shadow: var(--shadow-hover);
+      padding: 13px 15px; color: var(--ink); font-size: .74rem; line-height: 1.45;
+    }
+    .lot-reminder-popup.visible { display: block; }
+    .lot-reminder-popup-title {
+      padding-right: 24px; font-family: 'Playfair Display', serif;
+      font-size: .92rem; font-weight: 700; line-height: 1.3;
+    }
+    .lot-reminder-popup-copy { margin-top: 6px; color: var(--muted); }
+    .lot-reminder-popup-note { margin-top: 8px; color: var(--accent); font-size: .68rem; font-weight: 700; }
+    .lot-reminder-close { display: none; }
     .lot-preview-popup {
       position: fixed; z-index: 1600; display: none;
       width: min(320px, calc(100vw - 28px)); max-height: min(70vh, 420px); overflow: auto;
@@ -580,7 +611,7 @@
     .lot-preview-planned-copy { color: var(--muted); margin-top: 4px; overflow-wrap: anywhere; }
     @media (hover: none), (pointer: coarse) {
       .lot-preview-trigger {
-        position: absolute; right: 8px; top: 8px; z-index: 3; display: inline-block;
+        position: absolute; right: 46px; top: 8px; z-index: 3; display: inline-block;
         width: auto; height: auto; padding: 3px 7px; margin: 0;
         overflow: visible; clip: auto; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px;
         background: var(--accent-soft); color: var(--accent); font-size: .62rem; font-weight: 700;
@@ -593,6 +624,14 @@
         cursor: pointer; -webkit-tap-highlight-color: transparent;
       }
       .lot-preview-close:active { background: var(--accent-soft); color: var(--accent); }
+      .lot-reminder-close {
+        position: absolute; top: 5px; right: 5px; display: flex;
+        align-items: center; justify-content: center;
+        width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%;
+        background: transparent; color: var(--muted); font: 400 1.35rem/1 'DM Sans', sans-serif;
+        cursor: pointer;
+      }
+      .lot-reminder-close:active { background: var(--accent-soft); color: var(--accent); }
     }
     .house-line { font-size: 0.74rem; color: var(--muted); line-height: 1.3; }
     .house {
@@ -843,6 +882,7 @@ body.gate-locked{overflow:hidden}
       <nav class="header-utility-nav" aria-label="Utility pages">
         <a href="../about.html">About</a>
         <a href="../settings/">Edit</a>
+        <a href="../proposal.html">Proposal</a>
       </nav>
     </div>
   </header>
@@ -10525,6 +10565,129 @@ const HOUSE_POPUP_DATA = {"bourne end auction rooms": {"name": "Bourne End Aucti
       });
       window.addEventListener('scroll', hidePreview, true);
       window.addEventListener('resize', hidePreview);
+    })();
+
+    // ── PLANNED AUCTION REMINDER (demonstration only) ──
+    (function initPlannedReminders() {
+      const popup = document.createElement('div');
+      popup.className = 'lot-reminder-popup';
+      popup.id = 'lot-reminder-popup';
+      popup.setAttribute('role', 'dialog');
+      popup.setAttribute('aria-label', 'Planned auction reminder');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(popup);
+
+      const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      let activeTrigger = null;
+      let showTimer = null;
+      let pinnedOpen = false;
+
+      function appendText(className, value, tagName = 'div') {
+        const el = document.createElement(tagName);
+        el.className = className;
+        el.textContent = value;
+        popup.appendChild(el);
+        return el;
+      }
+
+      function positionPopup(anchor) {
+        const rect = anchor.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.right - popupRect.width), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${Math.max(edge, left)}px`;
+        popup.style.top = `${Math.max(edge, top)}px`;
+      }
+
+      function showPopup(trigger, pin = false) {
+        clearTimeout(showTimer);
+        activeTrigger = trigger;
+        pinnedOpen = pin;
+        popup.replaceChildren();
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'lot-reminder-close';
+        closeButton.setAttribute('aria-label', 'Close reminder information');
+        closeButton.textContent = '×';
+        closeButton.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePopup();
+        });
+        popup.appendChild(closeButton);
+
+        appendText('lot-reminder-popup-title', 'Auction reminder — planned', 'h3');
+        appendText(
+          'lot-reminder-popup-copy',
+          'With an agreed EasyLive data arrangement, signed-in members could use this bell to receive an email at 7:30am on the morning of the auction.'
+        );
+        appendText('lot-reminder-popup-note', 'Demonstration only — no reminder has been created.');
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        popup.setAttribute('aria-hidden', 'false');
+        trigger.setAttribute('aria-expanded', 'true');
+        positionPopup(trigger);
+        popup.style.visibility = '';
+      }
+
+      function hidePopup() {
+        clearTimeout(showTimer);
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = null;
+        pinnedOpen = false;
+        popup.classList.remove('visible');
+        popup.setAttribute('aria-hidden', 'true');
+      }
+
+      document.querySelectorAll('.card-shell').forEach(shell => {
+        const title = (shell.querySelector('.lot-title-text')?.textContent || 'this lot').trim();
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'lot-reminder-trigger';
+        button.setAttribute('aria-label', 'Planned reminder for: ' + title);
+        button.setAttribute('aria-controls', popup.id);
+        button.setAttribute('aria-expanded', 'false');
+        button.title = 'Planned auction email reminder';
+        button.textContent = '🔔';
+        shell.appendChild(button);
+
+        if (hoverCapable) {
+          button.addEventListener('mouseenter', () => {
+            showTimer = window.setTimeout(() => showPopup(button), 180);
+          });
+          button.addEventListener('mouseleave', () => {
+            clearTimeout(showTimer);
+            if (!pinnedOpen) hidePopup();
+          });
+          button.addEventListener('focus', () => showPopup(button));
+          button.addEventListener('blur', () => {
+            if (!pinnedOpen) hidePopup();
+          });
+        }
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === button && pinnedOpen) hidePopup();
+          else showPopup(button, true);
+        });
+        button.addEventListener('keydown', event => {
+          if (event.key === 'Escape') hidePopup();
+        });
+      });
+
+      document.addEventListener('pointerdown', event => {
+        if (!popup.classList.contains('visible')) return;
+        if (event.target === activeTrigger || popup.contains(event.target)) return;
+        hidePopup();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') hidePopup();
+      });
+      window.addEventListener('scroll', hidePopup, true);
+      window.addEventListener('resize', hidePopup);
     })();
 
     // ── SEARCH ──
