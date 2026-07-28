@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AuctionSavvy — Easy Live Auction proposal v0.3</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Private AuctionSavvy proposal for collaboration with Easy Live Auction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #f4f7f4;
+      --paper: #ffffff;
+      --ink: #1a211b;
+      --text: #465047;
+      --muted: #747e75;
+      --green: #3a5c3b;
+      --green-dark: #29452a;
+      --green-soft: #eaf1ea;
+      --line: #e1e8e1;
+      --gold: #9a7547;
+      --gold-soft: #fbf7f0;
+      --navy: #233f64;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(225, 232, 225, 0.95);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .site-header__inner {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 8px 0;
+    }
+
+    .header-main,
+    .header-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .header-main {
+      min-height: 40px;
+    }
+
+    .header-sub {
+      min-height: 26px;
+    }
+
+    .brand {
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-note {
+      margin: 0;
+      min-width: 0;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-nav {
+      display: inline-flex;
+      flex: 0 0 auto;
+      padding: 3px;
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      background: var(--green-soft);
+    }
+
+    .app-nav a {
+      padding: 6px 17px;
+      border-radius: 999px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .app-nav a:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .utility-nav {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 10px;
+    }
+
+    .utility-nav a {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-decoration: none;
+    }
+
+    .utility-nav a:hover,
+    .utility-nav a[aria-current="page"] {
+      color: var(--green);
+    }
+
+    .utility-nav a[aria-current="page"] {
+      font-weight: 700;
+    }
+
+    #demo-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    #demo-gate-card {
+      width: min(90%, 340px);
+      padding: 38px 40px;
+      border: 1px solid #ecedf0;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(20, 30, 40, 0.08);
+      text-align: center;
+    }
+
+    #demo-gate-card h2 {
+      margin: 0 0 6px;
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.3rem;
+    }
+
+    #demo-gate-card .gate-subtitle {
+      margin: 0 0 18px;
+      color: #6b7280;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    #demo-gate-password {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+      outline: none;
+    }
+
+    #demo-gate-password:focus {
+      border-color: var(--green);
+    }
+
+    #demo-gate-form button {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font: 600 0.85rem "DM Sans", sans-serif;
+    }
+
+    .gate-error {
+      min-height: 1em;
+      margin: 10px 0 0;
+      color: #b91c1c;
+      font-size: 0.75rem;
+    }
+
+    body.gate-locked {
+      overflow: hidden;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      align-items: start;
+      gap: 30px;
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 38px 0 80px;
+    }
+
+    .contents {
+      position: sticky;
+      top: 98px;
+      padding: 10px 0;
+    }
+
+    .contents__label {
+      margin: 0 0 12px;
+      color: #879083;
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .contents nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .contents a {
+      padding: 6px 9px;
+      border-left: 2px solid transparent;
+      color: #747d75;
+      font-size: 0.74rem;
+      line-height: 1.3;
+      text-decoration: none;
+    }
+
+    .contents a:hover,
+    .contents a[aria-current="true"] {
+      border-left-color: var(--green);
+      background: #edf2ed;
+      color: var(--green);
+    }
+
+    .contents__note {
+      margin-top: 18px;
+      padding: 12px 13px;
+      border: 1px solid #d5e1d5;
+      border-radius: 9px;
+      background: #edf4ed;
+      color: #456046;
+      font-size: 0.72rem;
+      line-height: 1.45;
+    }
+
+    .document {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      box-shadow: 0 12px 38px rgba(35, 48, 36, 0.07);
+    }
+
+    .document-hero {
+      padding: 52px 58px 42px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 86% 14%, rgba(58, 92, 59, 0.08), transparent 29%),
+        linear-gradient(135deg, #ffffff 0%, #f3f7f3 100%);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 24px;
+      padding: 6px 11px;
+      border: 1px solid #d7c7ae;
+      border-radius: 999px;
+      background: var(--gold-soft);
+      color: #7b5b34;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      content: "";
+    }
+
+    .document-hero h1 {
+      max-width: 720px;
+      margin: 0 0 8px;
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2rem, 4.5vw, 3.1rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+
+    .document-hero .subtitle {
+      margin: 0 0 30px;
+      color: var(--green);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.2rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 22px;
+      padding-top: 20px;
+      border-top: 1px solid #dfe6df;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .meta strong {
+      color: #3d493e;
+    }
+
+    .content {
+      padding: 10px 58px 60px;
+    }
+
+    .proposal-section {
+      padding: 38px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 88px;
+    }
+
+    .proposal-section:last-child {
+      border-bottom: 0;
+    }
+
+    .section-number {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--green);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.62rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 28px 0 8px;
+      color: #304f31;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.08rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+      font-size: 0.92rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .lead {
+      color: #344236;
+      font-size: 1rem;
+    }
+
+    .boundary {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      background: #f1f6f1;
+      color: #314b32;
+      font-size: 0.94rem;
+    }
+
+    ul,
+    ol {
+      margin: 12px 0 4px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 9px 0;
+      padding-left: 4px;
+      font-size: 0.9rem;
+    }
+
+    li::marker {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 24px 0 12px;
+    }
+
+    .metric {
+      min-height: 108px;
+      padding: 17px 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fafbfa;
+      text-align: center;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--green-dark);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.7rem;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.73rem;
+      line-height: 1.35;
+    }
+
+    .snapshot-note {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      text-align: center;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .benefit {
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbfa;
+      font-size: 0.84rem;
+    }
+
+    .benefit strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #243a25;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .audience-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fafbfa;
+    }
+
+    .audience-card h3 {
+      margin: 0 0 9px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .audience-card p {
+      color: #586159;
+      font-size: 0.8rem;
+    }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .steps li {
+      position: relative;
+      margin: 0 0 12px;
+      padding: 16px 18px 16px 56px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfcfb;
+    }
+
+    .steps li::before {
+      position: absolute;
+      top: 15px;
+      left: 16px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      content: counter(step);
+      counter-increment: step;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 26px;
+      text-align: center;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    th {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    th,
+    td {
+      padding: 14px 15px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f7f9f7;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td:first-child {
+      min-width: 150px;
+      color: #253826;
+      font-weight: 700;
+    }
+
+    .appendix-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .appendix-item {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbfa;
+    }
+
+    .appendix-item h3 {
+      margin: 0 0 7px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.86rem;
+    }
+
+    .appendix-item p {
+      color: #586159;
+      font-size: 0.8rem;
+    }
+
+    .disclaimer {
+      margin-top: 34px;
+      padding: 18px 20px;
+      border: 1px solid #e2d6c5;
+      border-radius: 10px;
+      background: var(--gold-soft);
+      color: #725a3d;
+      font-size: 0.76rem;
+    }
+
+    .document-footer {
+      padding: 22px 58px;
+      border-top: 1px solid var(--line);
+      background: #fafbfa;
+      color: #8c958d;
+      font-size: 0.72rem;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        display: block;
+        padding-top: 24px;
+      }
+
+      .contents {
+        display: none;
+      }
+
+      .audience-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-header {
+        position: static;
+      }
+
+      .site-header__inner {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .brand {
+        font-size: 1rem;
+      }
+
+      .header-note {
+        display: none;
+      }
+
+      .app-nav a {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+      }
+
+      .utility-nav {
+        gap: 7px;
+      }
+
+      .utility-nav a {
+        font-size: 0.64rem;
+      }
+
+      .page {
+        width: calc(100% - 16px);
+        padding: 12px 0 38px;
+      }
+
+      .document {
+        border-radius: 12px;
+      }
+
+      .document-hero {
+        padding: 34px 22px 28px;
+      }
+
+      .content {
+        padding: 4px 22px 38px;
+      }
+
+      .proposal-section {
+        padding: 30px 0;
+        scroll-margin-top: 15px;
+      }
+
+      .metrics,
+      .benefits,
+      .appendix-list {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        min-height: 0;
+      }
+
+      .document-footer {
+        padding: 18px 22px;
+      }
+    }
+
+    @media print {
+      .site-header,
+      .contents {
+        display: none;
+      }
+
+      body,
+      .page {
+        background: #fff;
+      }
+
+      .page {
+        display: block;
+        width: auto;
+        padding: 0;
+      }
+
+      .document {
+        border: 0;
+        box-shadow: none;
+      }
+
+      .proposal-section,
+      .benefit,
+      .audience-card,
+      .appendix-item,
+      .table-wrap {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="demo-gate">
+    <div id="demo-gate-card">
+      <h2>AuctionSavvy</h2>
+      <p class="gate-subtitle">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+      <form id="demo-gate-form">
+        <input type="password" id="demo-gate-password" placeholder="Password" autocomplete="current-password" autofocus>
+        <button type="submit">Enter demo</button>
+      </form>
+      <p class="gate-error" id="demo-gate-error"></p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const gateHash = "3b39de0bbf51af9461938056432a535491f2659be786b4b6cd68c828407a1b26";
+      const storageKey = "ah_demo_ok";
+      const unlock = () => {
+        document.querySelector("#demo-gate")?.remove();
+        document.body.classList.remove("gate-locked");
+      };
+
+      if (localStorage.getItem(storageKey) === gateHash) {
+        unlock();
+        return;
+      }
+
+      document.body.classList.add("gate-locked");
+
+      const hashValue = async (value) => {
+        const bytes = new TextEncoder().encode(value);
+        const digest = await crypto.subtle.digest("SHA-256", bytes);
+        return [...new Uint8Array(digest)]
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join("");
+      };
+
+      document.querySelector("#demo-gate-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const input = document.querySelector("#demo-gate-password");
+        const submittedHash = await hashValue(input.value);
+
+        if (submittedHash === gateHash) {
+          localStorage.setItem(storageKey, submittedHash);
+          unlock();
+          return;
+        }
+
+        document.querySelector("#demo-gate-error").textContent = "Incorrect password.";
+        input.value = "";
+      });
+    })();
+  </script>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <div class="header-main">
+        <a class="brand" href="finds/" aria-label="AuctionSavvy lots">AuctionSavvy</a>
+        <nav class="app-nav" aria-label="App pages">
+          <a href="houses/">Map</a>
+          <a href="finds/">Lots</a>
+        </nav>
+      </div>
+      <div class="header-sub">
+        <p class="header-note">Private proposal for discussion with Easy Live Auction</p>
+        <nav class="utility-nav" aria-label="Utility pages">
+          <a href="about.html">About</a>
+          <a href="settings/">Edit</a>
+          <a href="proposal.html" aria-current="page">Proposal</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page" id="top">
+    <aside class="contents" aria-label="Proposal contents">
+      <p class="contents__label">In this proposal</p>
+      <nav>
+        <a href="#section-1">Executive summary</a>
+        <a href="#section-2">What is running today</a>
+        <a href="#section-3">The problem it solves</a>
+        <a href="#section-4">What Easy Live Auction gains</a>
+        <a href="#section-5">Who else benefits</a>
+        <a href="#section-6">Responsible data use</a>
+        <a href="#section-7">Founder and development</a>
+        <a href="#section-8">A staged collaboration</a>
+        <a href="#appendix-a">Membership model</a>
+        <a href="#appendix-b">Future directions</a>
+      </nav>
+      <div class="contents__note">
+        <strong>Private working page</strong><br>
+        This visual copy mirrors the finished proposal. The PDF remains the formal document.
+      </div>
+    </aside>
+
+    <article class="document">
+      <header class="document-hero">
+        <div class="status">Private and confidential</div>
+        <h1>AuctionSavvy and Easy Live Auction</h1>
+        <p class="subtitle">A proposal for collaboration</p>
+        <div class="meta">
+          <span><strong>Prepared by:</strong> Ken Gibbins, founder of AuctionSavvy</span>
+          <span><strong>Version:</strong> Draft v0.3</span>
+          <span><strong>Date:</strong> 26 July 2026</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="proposal-section" id="section-1">
+          <span class="section-number">Section 1</span>
+          <h2>Executive summary</h2>
+          <p class="lead">AuctionSavvy is a working demonstration of a personalised discovery layer for auction buyers. It helps dealers and collectors identify relevant lots quickly, see where and when they are being sold, and continue to Easy Live Auction for the official catalogue, registration and bidding.</p>
+          <div class="boundary">
+            <strong>The boundary is deliberate and fixed.</strong> AuctionSavvy is not a catalogue, marketplace or bidding platform. Registration and bidding remain with Easy Live Auction, transactions remain within its auctioneer relationships, and Easy Live Auction retains catalogue control throughout. AuctionSavvy’s sole role is to generate qualified journeys into Easy Live Auction — introducing relevant buyers and helping existing members find suitable lots more efficiently.
+          </div>
+          <p>This is a founder-led proposal, to be developed only under an authorised data arrangement with Easy Live Auction. The suggested starting point is a private walkthrough of the working system, followed — if there is mutual interest — by a data and technical discussion and a controlled pilot with jointly agreed success measures.</p>
+        </section>
+
+        <section class="proposal-section" id="section-2">
+          <span class="section-number">Section 2</span>
+          <h2>What is running today</h2>
+          <div class="metrics" aria-label="Current demonstration snapshot">
+            <div class="metric">
+              <strong>779</strong>
+              <span>matching lots in the current briefing</span>
+            </div>
+            <div class="metric">
+              <strong>105</strong>
+              <span>auction houses represented</span>
+            </div>
+            <div class="metric">
+              <strong>490</strong>
+              <span>houses on the UK map</span>
+            </div>
+            <div class="metric">
+              <strong>Nightly</strong>
+              <span>automated updates since 5 July 2026</span>
+            </div>
+          </div>
+          <p class="snapshot-note">Snapshot reviewed 25 July 2026. These figures show present working scale; they are not claims of user adoption or commercial performance.</p>
+          <p>The demonstration is a working, automatically refreshed system rather than a mock-up. It currently provides:</p>
+          <ul>
+            <li><strong>A morning briefing</strong> — matching lots grouped into Local Auctions, UK-Wide Today and UK-Wide Later, so relevance, urgency and geography can be assessed at a glance.</li>
+            <li><strong>Featured searches</strong> — broad demonstration interests build the briefing; in a member service, each member would set their own.</li>
+            <li><strong>Refined search</strong> — private search phrases compared against the current briefing in one action, using transparent keyword matching.</li>
+            <li><strong>Planned auction-day reminders</strong> — a bell on each lot card demonstrates how a signed-in member could request a single email at 7:30am on the morning of the auction. No reminder is created in the demonstration; a live service would depend on an agreed Easy Live Auction data arrangement.</li>
+            <li><strong>A UK auction-house map</strong> — houses explored by location and forthcoming sale timing, with links to official auction pages.</li>
+            <li><strong>Direct continuation to Easy Live Auction</strong> — every displayed lot links to its official listing for verification, registration and bidding.</li>
+          </ul>
+          <p>The demonstration is private and invitation-only, and uses information gathered from publicly accessible Easy Live Auction pages for proof-of-concept purposes. A live service would operate solely on the authorised basis set out in Section 6.</p>
+        </section>
+
+        <section class="proposal-section" id="section-3">
+          <span class="section-number">Section 3</span>
+          <h2>The problem it solves</h2>
+          <p>Auction catalogues contain a continuous flow of opportunity, but relevance is highly personal. A dealer may want stock within particular categories, dimensions or locations; a collector may follow a narrow subject, maker or period. Both have limited time to repeat broad searches across many houses and sale dates.</p>
+          <p>The problem is not a lack of catalogue information — it is the daily effort of deciding what deserves attention. Relevant lots are dispersed across houses and dates, broad searches return more than anyone can review routinely, and location, urgency and collection practicality matter as much as the object itself. AuctionSavvy addresses that decision stage: it turns a large, changing catalogue into a manageable daily starting point, with Easy Live Auction as the destination.</p>
+        </section>
+
+        <section class="proposal-section" id="section-4">
+          <span class="section-number">Section 4</span>
+          <h2>What Easy Live Auction gains</h2>
+          <div class="benefits">
+            <div class="benefit">
+              <strong>Qualified referrals</strong>
+              Every promising lot leads to its official Easy Live Auction page, not to a competing transaction.
+            </div>
+            <div class="benefit">
+              <strong>Potential for more frequent engagement</strong>
+              A morning-briefing habit and optional auction-day reminders are designed to bring members back at useful moments and surface relevant lots they would otherwise miss.
+            </div>
+            <div class="benefit">
+              <strong>New buyer introductions</strong>
+              AuctionSavvy can be promoted directly to relevant dealer and collector audiences.
+            </div>
+            <div class="benefit">
+              <strong>Wider lot exposure</strong>
+              Suitable lots could reach buyers beyond their usual local area or followed houses.
+            </div>
+            <div class="benefit">
+              <strong>Measurable value</strong>
+              Referral measurement can show which discovery journeys produce genuine engagement, subject to agreement.
+            </div>
+          </div>
+          <p>Easy Live Auction already provides Auction Alerts, a Watch List and advanced catalogue search. AuctionSavvy complements these rather than reproducing them: its distinction is the combined morning workflow, in which matches across a member’s interests and locations arrive in one briefing, prioritised by relevance, urgency and proximity.</p>
+        </section>
+
+        <section class="proposal-section" id="section-5">
+          <span class="section-number">Section 5</span>
+          <h2>Who else benefits</h2>
+          <div class="audience-grid">
+            <div class="audience-card">
+              <h3>Dealers and collectors</h3>
+              <p>Members begin the day with a concise view: new lots within chosen interests, nearby sales happening soon, UK-wide lots that may justify collection or delivery, and possible matches for a customer request — each with a direct link to the official information needed before bidding. AuctionSavvy provides prioritisation, not valuation advice or a substitute for the buyer’s own due diligence.</p>
+            </div>
+            <div class="audience-card">
+              <h3>Auction houses and sellers</h3>
+              <p>Suitable lots could reach relevant bidders who do not already follow that house or routinely browse that sale. Looking further ahead, prospective sellers could be guided towards appropriate houses and an official valuation or consignment inquiry — with suitability, acceptance and valuation remaining entirely matters for the house.</p>
+            </div>
+            <div class="audience-card">
+              <h3>Overseas buyers and UK buying tours</h3>
+              <p>Overseas dealers, designers and buying-tour visitors could identify relevant UK sales before a sourcing trip and include auction visits in their itineraries — introducing informed international buyers to houses they might not otherwise encounter. Eligibility, payment, collection, shipping and export would remain subject to official terms and the relevant providers.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="proposal-section" id="section-6">
+          <span class="section-number">Section 6</span>
+          <h2>Responsible data use</h2>
+          <p>Rights in catalogue descriptions, photographs and related material remain with Easy Live Auction, participating auctioneers and their respective rights holders. A live service would not rely on unapproved automated collection. Development would proceed only under a written arrangement covering:</p>
+          <ul>
+            <li>the authorised data source and permitted purposes;</li>
+            <li>attribution, linking and presentation; and</li>
+            <li>appropriate privacy, correction and removal processes.</li>
+          </ul>
+          <p>Easy Live Auction’s listing would remain the authoritative record. Members would always be directed there to verify descriptions, condition, estimates, fees and terms before acting.</p>
+        </section>
+
+        <section class="proposal-section" id="section-7">
+          <span class="section-number">Section 7</span>
+          <h2>Founder and development approach</h2>
+          <p>AuctionSavvy was conceived and built by Ken Gibbins, drawing on many years in the antique furniture trade and recent first-hand experience of buying through auctions. The morning briefing, urgency groupings, local emphasis and attention to collection practicality reflect real sourcing decisions rather than assumptions.</p>
+          <p>Ken developed the system using AI-assisted tools, demonstrating the working discovery journey from personalised match to the official Easy Live Auction listing. For production, appropriate engineering, data, security and user-experience expertise would be brought in, in consultation with Easy Live Auction, once the intended integration and scale were understood.</p>
+          <p>AuctionSavvy would remain founder-led, with Ken responsible for product direction and the buyer-side proposition. The commercial model — referral-based, membership-based or a combination — would be agreed once scope, investment and responsibilities were defined. One possible membership structure is sketched in Appendix A.</p>
+        </section>
+
+        <section class="proposal-section" id="section-8">
+          <span class="section-number">Section 8</span>
+          <h2>A staged collaboration</h2>
+          <p>A controlled pilot is proposed as the natural first stage of a longer collaboration — testing the proposition responsibly and improving it through evidence, without assuming success or failure in advance:</p>
+          <ol class="steps">
+            <li><strong>Walkthrough and alignment</strong> — review the demonstration and discuss its fit with Easy Live Auction’s priorities.</li>
+            <li><strong>Data and technical discussion</strong> — establish what authorised access is feasible and what production would involve.</li>
+            <li><strong>Collaboration principles</strong> — agree catalogue control, branding, referrals, privacy and auctioneer relationships.</li>
+            <li><strong>Controlled pilot</strong> — work with a limited member group using jointly defined measures and scheduled review points.</li>
+            <li><strong>Progressive release</strong> — expand categories, membership and promotion as evidence and operational readiness support it.</li>
+          </ol>
+          <p>Both parties retain the freedom to adjust or stop at any stage, while recognising that useful personalisation and buyer habits develop over more than a single short test. No public launch, commercial operation or broader data collection is proposed until the necessary permissions and arrangements are in place.</p>
+        </section>
+
+        <section class="proposal-section" id="appendix-a">
+          <span class="section-number">Appendix A</span>
+          <h2>One possible membership model</h2>
+          <p>Included for discussion only — not a commitment on pricing or structure. Which functions are public, how access is managed, pricing, attribution and the commercial relationship with Easy Live Auction would all be agreed before development.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Level</th>
+                  <th scope="col">Proposed role</th>
+                  <th scope="col">Principal value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Daily Showcase<br><small>public preview</small></td>
+                  <td>A limited, rotating selection from a featured category</td>
+                  <td>Demonstrates the service and introduces visitors to current Easy Live Auction lots</td>
+                </tr>
+                <tr>
+                  <td>Map<br><small>free member</small></td>
+                  <td>UK auction-house discovery and forthcoming-sale information</td>
+                  <td>Helps users find houses and see where relevant sales are happening</td>
+                </tr>
+                <tr>
+                  <td>Morning Briefing<br><small>paid member</small></td>
+                  <td>A personalised daily shortlist from chosen interests, locations and houses</td>
+                  <td>Saves routine research time and directs members to relevant official listings</td>
+                </tr>
+                <tr>
+                  <td>Refined sourcing<br><small>dealer add-on</small></td>
+                  <td>Specific monitoring within the broader briefing</td>
+                  <td>Supports focused stock searches and customer requests</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="proposal-section" id="appendix-b">
+          <span class="section-number">Appendix B</span>
+          <h2>Possible future directions</h2>
+          <p>Later possibilities, not existing capabilities, partnerships or commitments.</p>
+          <div class="appendix-list">
+            <div class="appendix-item">
+              <h3>AI-assisted matching and alerts</h3>
+              <p>With authorised data, Refined search could interpret natural-language requests and close alternatives, explain matches and offer optional alerts.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Route and collection planning</h3>
+              <p>The map could highlight houses near a planned journey and compare time and distance.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Delivery information</h3>
+              <p>Auction-house options shown first, with possible introductions to specialist providers. Using a member’s stored postcode, an estimated delivery price range could appear automatically against each lot, helping buyers judge total cost before bidding; formal quotations would remain the provider’s responsibility.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Chrome companion</h3>
+              <p>A small companion concept revealing auction-house locations while browsing Easy Live Auction; any continued use would be discussed transparently.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Seller-to-auction-house introductions</h3>
+              <p>A guided route helping prospective sellers identify relevant houses and continue to an official valuation or consignment inquiry.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Overseas buyers and UK buying tours</h3>
+              <p>Curated discovery and trip-planning for overseas trade buyers ahead of sourcing trips, with realistic expectations on eligibility, payment, shipping and export.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Referral and relevance insight</h3>
+              <p>Subject to privacy and commercial agreement, aggregate reporting on which discovery routes produce genuine engagement on Easy Live Auction.</p>
+            </div>
+          </div>
+          <div class="disclaimer">
+            <strong>Private and confidential.</strong> This document is an evolving discussion draft and does not create a partnership, data licence or commitment by either party.
+          </div>
+        </section>
+      </div>
+
+      <footer class="document-footer">
+        AuctionSavvy proposal v0.3 · Private working page · 26 July 2026
+      </footer>
+    </article>
+  </main>
+
+  <script>
+    const sectionLinks = [...document.querySelectorAll(".contents nav a")];
+    const sections = sectionLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+
+      if (!visible) return;
+
+      sectionLinks.forEach((link) => {
+        const isCurrent = link.getAttribute("href") === `#${visible.target.id}`;
+        if (isCurrent) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    }, { rootMargin: "-15% 0px -70% 0px", threshold: 0 });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
