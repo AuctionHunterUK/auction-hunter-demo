@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-28T06:49:17.456421",
+  "scraped_at": "2026-07-28T07:33:35.708771",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -3030,7 +3030,13 @@
         "title": "Arms, Armour, Militaria & Collectibles"
       }
     ],
-    "Walton & Walton": [],
+    "Walton & Walton": [
+      {
+        "date": "2026-08-04",
+        "time": "9:30am",
+        "title": "General fortnightly auction to include Jewellery, Antiques, Artwork, Vintage Ele"
+      }
+    ],
     "Warren and Wignall Auctioneers": [
       {
         "date": "2026-08-05",
