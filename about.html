@@ -85,15 +85,14 @@
   .discovery-box p{max-width:740px}
   .discovery-box p:last-child{margin-bottom:0}
   .membership-intro{margin-bottom:18px}
-  .tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
   .tier-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:20px 22px}
   .tier-panel h3{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;margin:0 0 7px}
   .tier-panel p{margin-bottom:10px}
   .tier-panel p:last-child{margin-bottom:0}
-  .tier-showcase{background:#fcfaf6;border-color:#e8dfd1}
-  .tier-map{background:#f9fbf9;border-color:#dce6dc}
-  .tier-briefing{background:#f6f9f6;border-color:#d4e0d4}
-  .tier-wanted{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
+  .tier-free{background:#fcfaf6;border-color:#e8dfd1}
+  .tier-collector{background:#f9fbf9;border-color:#dce6dc}
+  .tier-trade{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
   .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px;scroll-margin-top:104px}
   .delivery-box{margin-top:0;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
   .delivery-box h2{margin-top:0}
@@ -269,26 +268,21 @@ body.gate-locked{overflow:hidden}
   <section class="section-group" id="membership">
     <div class="section-lead">
       <h2>Access and membership</h2>
-      <p class="membership-intro">Subject to an agreed EasyLive partnership and authorised data feed, AuctionSavvy could develop through four levels.</p>
+      <p class="membership-intro">For discussion only, and subject to an agreed EasyLive partnership and authorised data feed, one possible structure would use three simple tiers. Final features, access rules and pricing would be agreed later.</p>
     </div>
   <div class="tiers">
-    <section class="tier-panel tier-showcase">
-      <h3>Daily Showcase — Public preview</h3>
-      <p>A live, publicly accessible sample. Each day would feature a different automatically selected category—such as ceramics, pine furniture or artwork—using a limited selection of current lots. Visitors could experience AuctionSavvy without the personalisation, complete search or alerts available to members.</p>
+    <section class="tier-panel tier-free">
+      <h3>Free</h3>
+      <p>Access to the UK auction-house map, upcoming sale dates and a limited Daily Showcase rotating between featured categories. It would demonstrate the discovery journey without personal searches, alerts or a complete personalised briefing.</p>
     </section>
-    <section class="tier-panel tier-map">
-      <h3>Map — Free member</h3>
-      <p>Free registered access to the UK auction-house map and upcoming sale dates, with future route-planning tools to help members discover sales and plan collections along a journey.</p>
+    <section class="tier-panel tier-collector">
+      <h3>Collector</h3>
+      <p>A personalised morning briefing built from the member’s chosen interests, preferred auction houses and location, with simple search controls and auction reminders. It would be designed for collectors and other serious private buyers.</p>
     </section>
-    <section class="tier-panel tier-briefing">
-      <h3>Morning Briefing — Member</h3>
-      <p>A paid, personalised daily shortlist built from each member’s chosen interests, preferred auction houses and location, organised by urgency and proximity with new opportunities clearly highlighted. Simple to adjust and consistent every morning.</p>
-    </section>
-    <section class="tier-panel tier-wanted">
-      <h3>Refined sourcing — Dealer add-on</h3>
-      <p>An intelligent sourcing service building on the Refined search, particularly useful for dealers handling customer requests. A dealer could describe an item naturally—for example, “a Victorian pine chest of drawers approximately 45 inches wide”—and an authorised morning process would compare active requests with newly supplied catalogue information using details such as item type, material, dimensions, location and sale date.</p>
-      <p>Suggested match notifications could include a photograph, catalogue dimensions, auction house, sale date and an explanation of why the item matched. Dealers would always verify the original catalogue information before advising a customer or bidding.</p>
-      <p>A private AI-assisted trial is already testing this workflow using product requirements held in a dedicated email folder. In a future member service, users would normally add, edit and remove wanted items directly inside AuctionSavvy; importing relevant requirements from a message could be an optional shortcut rather than the main method. The morning report would prioritise strong and possible matches, flag uncertain cases for manual review and provide direct EasyLive links. It would not contact customers or place bids, and any message import would process only necessary product requirements—not complete emails or unrelated personal information—with appropriate privacy, security and authorised-data arrangements.</p>
+    <section class="tier-panel tier-trade">
+      <h3>Trade</h3>
+      <p>Everything in Collector, plus professional sourcing tools such as multiple wanted-item requests, AI-assisted matching, morning reports and future dealer-focused functions developed with EasyLive.</p>
+      <p>A private AI-assisted trial is already testing this workflow. A future member service would normally let users add, edit and remove wanted items directly inside AuctionSavvy, with optional import of relevant product requirements from a message. Human review, direct EasyLive links and appropriate privacy, security and authorised-data arrangements would remain central.</p>
     </section>
   </div>
   </section>
