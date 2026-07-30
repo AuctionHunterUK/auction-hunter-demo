@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-30T06:50:11.849147",
+  "scraped_at": "2026-07-30T07:31:40.508417",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -365,7 +365,13 @@
         "title": "Antiques, Interiors and General Sale"
       }
     ],
-    "Bosleys Military Auctions": [],
+    "Bosleys Military Auctions": [
+      {
+        "date": "2026-10-07",
+        "time": "10am",
+        "title": "Guaranteed original Military Antique Badges, Medals, Curios, Accoutrements, Head"
+      }
+    ],
     "Bourne End Auction Rooms Ltd": [
       {
         "date": "2026-08-04",
