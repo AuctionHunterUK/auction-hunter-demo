@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-30T02:03:50.315453",
+  "scraped_at": "2026-07-30T06:50:11.849147",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -18,7 +18,13 @@
         "title": "Antique & Collectors Auction"
       }
     ],
-    "Abbey Auction Rooms Ltd": [],
+    "Abbey Auction Rooms Ltd": [
+      {
+        "date": "2026-08-01",
+        "time": "10am",
+        "title": "Antiques and General Auction Including Sewing Machines, Silver, Books, Furniture"
+      }
+    ],
     "ABC Auction": [],
     "Acanthus Auctions Ltd": [
       {
