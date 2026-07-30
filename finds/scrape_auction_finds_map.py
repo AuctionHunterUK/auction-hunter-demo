@@ -2029,7 +2029,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         appendText('lot-reminder-popup-title', 'Auction reminder — planned', 'h3');
         appendText(
           'lot-reminder-popup-copy',
-          'With an agreed EasyLive data arrangement, signed-in members could use this bell to receive an email at 7:30am on the morning of the auction.'
+          'Don’t miss an auction—or a lot—you have already marked as interesting. With an agreed EasyLive data arrangement, signed-in members could use this bell to receive an email at 7:30am on the morning of the auction.'
         );
         appendText(
           'lot-reminder-popup-copy',
