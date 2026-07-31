@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-31T02:03:39.424672",
+  "scraped_at": "2026-07-31T07:07:05.895164",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [],
@@ -2266,7 +2266,13 @@
         "title": "Antiques & General to include Art, Collectables, Silver, Moorcroft Pottery, Furn"
       }
     ],
-    "Pyle's Auctions (Newport, Barnstaple)": [],
+    "Pyle's Auctions (Newport, Barnstaple)": [
+      {
+        "date": "2026-08-15",
+        "time": "10am",
+        "title": "Regular monthly Auction of 1500 Lots of Antiques,collectables,silver,jewellery,p"
+      }
+    ],
     "QC Auctions Ltd": [
       {
         "date": "2026-08-26",
