@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-01T02:03:50.253829",
+  "scraped_at": "2026-08-01T06:52:19.156268",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -435,7 +435,18 @@
         "title": "Collectables & General (Bank Holiday Viewing Hours)"
       }
     ],
-    "Brian Reeve Stamp Auctions": [],
+    "Brian Reeve Stamp Auctions": [
+      {
+        "date": "2026-10-28",
+        "time": "2pm",
+        "title": "Public Auction of Stamps, Coins & Autographs"
+      },
+      {
+        "date": "2026-10-29",
+        "time": "2pm",
+        "title": "Public Auction of Stamps, Coins & Autographs"
+      }
+    ],
     "Britannica Auctions Ltd": [],
     "Browns ASR Ltd": [],
     "Bulstrodes Auctions": [
