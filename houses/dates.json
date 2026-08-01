@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-01T06:52:19.156268",
+  "scraped_at": "2026-08-01T07:24:13.016066",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -1572,7 +1572,18 @@
         "title": "Collectors Sale Coins, Toys, Militaria. Also Jewellery, Furniture & Effects."
       }
     ],
-    "JH Auctions LTD": [],
+    "JH Auctions LTD": [
+      {
+        "date": "2026-08-05",
+        "time": "10am",
+        "title": "All Day General Sale - Inc; Commercial Grade Catering Equipment, Retro Gaming TV"
+      },
+      {
+        "date": "2026-08-05",
+        "time": "4pm",
+        "title": "All Day General Sale - Inc; Commercial Grade Catering Equipment, Retro Gaming TV"
+      }
+    ],
     "John Cowell Auctions": [],
     "John Goodwin": [
       {
