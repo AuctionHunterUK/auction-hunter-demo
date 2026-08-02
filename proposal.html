@@ -1720,6 +1720,12 @@
     const ecosystemDetail = document.querySelector("#ecosystem-detail");
     const ecosystemTooltip = document.querySelector("#ecosystem-tooltip");
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const defaultEcosystemDetail = {
+      dataset: {
+        title: "Explore the complete journey",
+        detail: "Hover over any element for a quick explanation, or select one to keep its explanation here."
+      }
+    };
 
     const fillExplanation = (container, node) => {
       const heading = document.createElement("strong");
@@ -1728,8 +1734,20 @@
     };
 
     const updateEcosystemDetail = (node) => {
-      ecosystemNodes.forEach((item) => item.classList.toggle("is-selected", item === node));
+      ecosystemNodes.forEach((item) => {
+        const isSelected = item === node;
+        item.classList.toggle("is-selected", isSelected);
+        item.setAttribute("aria-pressed", String(isSelected));
+      });
       fillExplanation(ecosystemDetail, node);
+    };
+
+    const clearEcosystemDetail = () => {
+      ecosystemNodes.forEach((item) => {
+        item.classList.remove("is-selected");
+        item.setAttribute("aria-pressed", "false");
+      });
+      fillExplanation(ecosystemDetail, defaultEcosystemDetail);
     };
 
     const hideEcosystemTooltip = () => {
@@ -1759,6 +1777,7 @@
 
     ecosystemNodes.forEach((node) => {
       node.setAttribute("aria-describedby", "ecosystem-detail");
+      node.setAttribute("aria-pressed", "false");
 
       node.addEventListener("mouseenter", () => {
         if (finePointer.matches) showEcosystemTooltip(node);
@@ -1767,9 +1786,17 @@
       node.addEventListener("focus", () => showEcosystemTooltip(node));
       node.addEventListener("blur", hideEcosystemTooltip);
       node.addEventListener("click", () => {
-        updateEcosystemDetail(node);
+        if (node.classList.contains("is-selected")) clearEcosystemDetail();
+        else updateEcosystemDetail(node);
         if (!finePointer.matches) hideEcosystemTooltip();
       });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".ecosystem-node")) return;
+      if (ecosystemNodes.some((node) => node.classList.contains("is-selected"))) {
+        clearEcosystemDetail();
+      }
     });
 
     window.addEventListener("resize", hideEcosystemTooltip);
