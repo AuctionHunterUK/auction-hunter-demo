@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-02T06:56:26.715787",
+  "scraped_at": "2026-08-02T07:28:57.723123",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -1742,7 +1742,18 @@
         "title": "Music Auction"
       }
     ],
-    "Lockdales Auctioneers": [],
+    "Lockdales Auctioneers": [
+      {
+        "date": "2026-08-25",
+        "time": "10am",
+        "title": "Auction 323 - Banknotes"
+      },
+      {
+        "date": "2026-08-26",
+        "time": "10am",
+        "title": "Auction 323 - Banknotes"
+      }
+    ],
     "Locke's Auctioneers": [],
     "Lodge & Thomas": [],
     "London Auctions": [
