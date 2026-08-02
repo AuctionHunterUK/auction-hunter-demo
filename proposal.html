@@ -625,6 +625,368 @@
       text-align: center;
     }
 
+    .view-intro {
+      max-width: 700px;
+      margin: -12px 0 28px;
+      color: #566257;
+      font-size: 0.88rem;
+    }
+
+    .view-switcher {
+      padding: 24px 58px 26px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfb;
+    }
+
+    .view-switcher__lead {
+      margin: 0 0 13px;
+      color: #69736a;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .view-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 5px;
+      border: 1px solid #cfdacf;
+      border-radius: 14px;
+      background: #edf3ed;
+    }
+
+    .view-tab {
+      min-height: 72px;
+      padding: 12px 18px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: #526153;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+    }
+
+    .view-tab strong,
+    .view-tab span {
+      display: block;
+    }
+
+    .view-tab strong {
+      margin-bottom: 2px;
+      color: #263d28;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.08rem;
+    }
+
+    .view-tab span {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .view-tab:hover {
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .view-tab[aria-selected="true"] {
+      border-color: #cdd9cd;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(35, 48, 36, 0.08);
+    }
+
+    .view-tab:focus-visible,
+    .ecosystem-node:focus-visible,
+    .view-cta:focus-visible {
+      outline: 3px solid rgba(58, 92, 59, 0.28);
+      outline-offset: 2px;
+    }
+
+    .overview-panel {
+      padding: 42px 48px 60px;
+    }
+
+    .overview-heading {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    .overview-heading h2 {
+      margin-bottom: 9px;
+      color: var(--green-dark);
+      font-size: 1.8rem;
+    }
+
+    .overview-heading p {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .ecosystem-phase {
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .ecosystem-phase:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .ecosystem-phase__heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .ecosystem-phase__heading h3,
+    .ecosystem-group h3 {
+      margin: 0;
+    }
+
+    .ecosystem-phase__heading h3 {
+      color: var(--navy);
+      font-size: 1.28rem;
+    }
+
+    .ecosystem-phase__heading span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: right;
+    }
+
+    .ecosystem-tributaries,
+    .ecosystem-capabilities,
+    .ecosystem-destinations {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .ecosystem-capabilities,
+    .ecosystem-destinations {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ecosystem-group {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fafbfa;
+    }
+
+    .ecosystem-group h3 {
+      margin-bottom: 11px;
+      color: #304f31;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .ecosystem-nodes {
+      display: grid;
+      gap: 7px;
+    }
+
+    .ecosystem-node {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #dbe4db;
+      border-radius: 8px;
+      background: #fff;
+      color: #384739;
+      cursor: pointer;
+      font: 600 0.75rem "DM Sans", sans-serif;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .ecosystem-node:hover,
+    .ecosystem-node:focus-visible,
+    .ecosystem-node.is-selected {
+      border-color: #8fa78f;
+      background: #eef4ee;
+      color: #243d26;
+    }
+
+    .ecosystem-group--future {
+      border-style: dashed;
+      background: #fcfaf6;
+    }
+
+    .ecosystem-group--future .ecosystem-node {
+      border-style: dashed;
+      border-color: #dfd1bd;
+      background: #fffdf9;
+    }
+
+    .ecosystem-group--future .ecosystem-node:hover,
+    .ecosystem-group--future .ecosystem-node:focus-visible,
+    .ecosystem-group--future .ecosystem-node.is-selected {
+      border-color: #ad8a5f;
+      background: #fbf4e9;
+      color: #5b4225;
+    }
+
+    .ecosystem-flow {
+      display: grid;
+      justify-items: center;
+      gap: 2px;
+      padding: 4px 0;
+      color: var(--green);
+    }
+
+    .ecosystem-flow::before {
+      width: 1px;
+      height: 23px;
+      background: #bac8ba;
+      content: "";
+    }
+
+    .ecosystem-flow::after {
+      content: "↓";
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .ecosystem-core,
+    .ecosystem-boundary,
+    .ecosystem-final {
+      width: min(620px, 100%);
+      margin: 0 auto;
+    }
+
+    .ecosystem-core .ecosystem-node,
+    .ecosystem-final .ecosystem-node {
+      padding: 17px 20px;
+      border-color: var(--green-dark);
+      background: var(--green);
+      color: #fff;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .ecosystem-core .ecosystem-node:hover,
+    .ecosystem-core .ecosystem-node:focus-visible,
+    .ecosystem-core .ecosystem-node.is-selected,
+    .ecosystem-final .ecosystem-node:hover,
+    .ecosystem-final .ecosystem-node:focus-visible,
+    .ecosystem-final .ecosystem-node.is-selected {
+      border-color: #1f3820;
+      background: var(--green-dark);
+      color: #fff;
+    }
+
+    .ecosystem-boundary .ecosystem-node {
+      padding: 14px 18px;
+      border-color: #d7c7ae;
+      background: var(--gold-soft);
+      color: #694e2d;
+      text-align: center;
+    }
+
+    .ecosystem-outcomes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ecosystem-detail {
+      position: sticky;
+      bottom: 12px;
+      z-index: 5;
+      min-height: 68px;
+      margin: 28px auto 0;
+      padding: 15px 18px;
+      border: 1px solid #cdd9cd;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 6px 24px rgba(35, 48, 36, 0.1);
+      color: #3d4c3e;
+      font-size: 0.82rem;
+    }
+
+    .ecosystem-detail strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #29452a;
+    }
+
+    .ecosystem-tooltip {
+      position: fixed;
+      z-index: 10000;
+      display: none;
+      width: min(310px, calc(100vw - 24px));
+      padding: 12px 14px;
+      border: 1px solid #cdd9cd;
+      border-radius: 9px;
+      background: #fff;
+      box-shadow: 0 9px 30px rgba(20, 36, 22, 0.18);
+      color: #3b483c;
+      font-size: 0.76rem;
+      line-height: 1.45;
+      pointer-events: none;
+    }
+
+    .ecosystem-tooltip strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #29452a;
+    }
+
+    .ecosystem-tooltip.is-visible {
+      display: block;
+    }
+
+    .overview-cta,
+    .view-end-cta {
+      padding: 28px 0 0;
+      text-align: center;
+    }
+
+    .view-end-cta {
+      padding: 0 58px 42px;
+    }
+
+    .view-cta {
+      padding: 12px 20px;
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font: 700 0.8rem "DM Sans", sans-serif;
+    }
+
+    .view-cta:hover {
+      background: var(--green-dark);
+    }
+
+    .view-cta--secondary {
+      background: #fff;
+      color: var(--green);
+    }
+
+    body.view-overview .contents {
+      display: none;
+    }
+
+    body.view-overview .page {
+      display: block;
+    }
+
+    body.view-overview .document {
+      width: 100%;
+    }
+
+    body.view-overview .text-panel,
+    body.view-proposal .overview-panel {
+      display: none;
+    }
+
     @media (max-width: 980px) {
       .page {
         display: block;
@@ -683,6 +1045,48 @@
         padding: 34px 22px 28px;
       }
 
+      .view-intro {
+        margin-bottom: 22px;
+      }
+
+      .view-switcher {
+        padding: 18px 14px 20px;
+      }
+
+      .view-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .view-tab {
+        min-height: 62px;
+        padding: 10px 13px;
+      }
+
+      .overview-panel {
+        padding: 30px 14px 42px;
+      }
+
+      .ecosystem-phase__heading {
+        display: block;
+      }
+
+      .ecosystem-phase__heading span {
+        display: block;
+        margin-top: 3px;
+        text-align: left;
+      }
+
+      .ecosystem-tributaries,
+      .ecosystem-capabilities,
+      .ecosystem-destinations,
+      .ecosystem-outcomes {
+        grid-template-columns: 1fr;
+      }
+
+      .ecosystem-detail {
+        position: static;
+      }
+
       .content {
         padding: 4px 22px 38px;
       }
@@ -705,12 +1109,25 @@
       .document-footer {
         padding: 18px 22px;
       }
+
+      .view-end-cta {
+        padding: 0 22px 34px;
+      }
     }
 
     @media print {
       .site-header,
-      .contents {
+      .contents,
+      .view-switcher,
+      .overview-panel,
+      .view-end-cta,
+      .ecosystem-tooltip {
         display: none;
+      }
+
+      body.view-overview .text-panel,
+      body.view-proposal .text-panel {
+        display: block;
       }
 
       body,
@@ -839,6 +1256,7 @@
         <div class="status">Private and confidential</div>
         <h1>AuctionSavvy and Easy Live Auction</h1>
         <p class="subtitle">A proposal for collaboration</p>
+        <p class="view-intro">Start with the visual overview, then read the detailed proposal for the working evidence, safeguards and partnership thinking behind each part.</p>
         <div class="meta">
           <span><strong>Prepared by:</strong> Ken Gibbins, founder of AuctionSavvy</span>
           <span><strong>Version:</strong> Draft v0.3</span>
@@ -846,7 +1264,174 @@
         </div>
       </header>
 
-      <div class="content">
+      <div class="view-switcher">
+        <p class="view-switcher__lead">Two complementary ways to explore the same proposal</p>
+        <div class="view-tabs" role="tablist" aria-label="Proposal views">
+          <button class="view-tab" id="overview-tab" type="button" role="tab" aria-selected="true" aria-controls="proposal-overview-view" data-view="overview">
+            <strong>Visual overview</strong>
+            <span>See the complete AuctionSavvy journey and how every route leads to Easy Live Auction.</span>
+          </button>
+          <button class="view-tab" id="proposal-tab" type="button" role="tab" aria-selected="false" aria-controls="proposal-text-view" data-view="proposal">
+            <strong>Detailed proposal</strong>
+            <span>Read the evidence, responsibilities, safeguards and suggested collaboration in full.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="overview-panel" id="proposal-overview-view" role="tabpanel" aria-labelledby="overview-tab">
+        <div class="overview-heading">
+          <h2>Every AuctionSavvy journey leads to Easy Live Auction</h2>
+          <p>This deliberately comprehensive first view brings the audiences, information, working tools and future possibilities together. Hover over any element for a quick explanation, or select it to keep the explanation visible.</p>
+        </div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-inputs-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-inputs-title">1. What feeds into AuctionSavvy</h3>
+            <span>People and needs · information and preferences · promotion and reach</span>
+          </div>
+          <div class="ecosystem-tributaries">
+            <div class="ecosystem-group">
+              <h3>People and needs</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Collectors" data-detail="Private buyers following particular makers, periods, subjects or types of object need a manageable way to notice relevant opportunities.">Collectors</button>
+                <button class="ecosystem-node" type="button" data-title="Dealers and trade buyers" data-detail="Dealers need efficient daily stock sourcing, alongside a simple way to monitor precise requests from their own customers.">Dealers and trade buyers</button>
+                <button class="ecosystem-node" type="button" data-title="Art and antiques advisers" data-detail="Professional advisers and auction buying agents may manage several precise acquisition briefs for private clients at once.">Art and antiques advisers</button>
+                <button class="ecosystem-node" type="button" data-title="Interior sourcing specialists" data-detail="Design professionals can use auctions to find furniture, art and decorative objects for private or commercial projects.">Interior sourcing specialists</button>
+                <button class="ecosystem-node" type="button" data-title="Overseas buyers and buying tours" data-detail="International buyers could identify relevant UK sales before a sourcing trip or work remotely through established UK contacts.">Overseas buyers and tours</button>
+                <button class="ecosystem-node" type="button" data-title="Prospective sellers" data-detail="Owners unfamiliar with auctions could be guided towards a potentially suitable auction house and its official enquiry process.">Prospective sellers</button>
+                <button class="ecosystem-node" type="button" data-title="Free visitors" data-detail="Non-members could explore the map and a rotating Daily Showcase before deciding whether personalised discovery would help them.">Free visitors</button>
+              </div>
+            </div>
+
+            <div class="ecosystem-group">
+              <h3>Information and preferences</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Authorised catalogue feed" data-detail="An agreed Easy Live Auction feed would provide the reliable, compliant foundation required for a live member service at scale.">Authorised catalogue feed</button>
+                <button class="ecosystem-node" type="button" data-title="Auction-house locations" data-detail="Addresses and postcodes support mapping, local classification, journey planning and possible delivery guidance.">House addresses and postcodes</button>
+                <button class="ecosystem-node" type="button" data-title="Auction and sale dates" data-detail="Dates provide the urgency behind Today, Later, forthcoming-sale mapping and timely reminder functions.">Auction and sale dates</button>
+                <button class="ecosystem-node" type="button" data-title="Featured searches" data-detail="Broad chosen interests create the personalised first layer of each member's regular Morning Briefing.">Featured searches</button>
+                <button class="ecosystem-node" type="button" data-title="Preferred local houses" data-detail="Members could define the auction houses they consider local, practical or particularly relevant.">Preferred local houses</button>
+                <button class="ecosystem-node" type="button" data-title="Wanted-item briefs" data-detail="Specific item and client-sourcing requirements provide the second layer used by Refined search and AI-assisted matching.">Wanted-item briefs</button>
+                <button class="ecosystem-node" type="button" data-title="Postcode and travel preferences" data-detail="Member-controlled location information could support distance, route and delivery guidance with appropriate privacy safeguards.">Postcode and travel preferences</button>
+              </div>
+            </div>
+
+            <div class="ecosystem-group">
+              <h3>Promotion and reach</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Daily Showcase" data-detail="A rotating public example could introduce non-members to different auction categories without providing a complete personalised briefing.">Daily Showcase</button>
+                <button class="ecosystem-node" type="button" data-title="YouTube walkthroughs" data-detail="Instructional videos could show the full journey from discovering an item to opening its official Easy Live Auction listing.">YouTube walkthroughs</button>
+                <button class="ecosystem-node" type="button" data-title="Instagram demonstrations" data-detail="Short visual demonstrations and genuine auction finds could introduce AuctionSavvy and Easy Live Auction to new audiences.">Instagram demonstrations</button>
+                <button class="ecosystem-node" type="button" data-title="Auction-house visits" data-detail="Authentic, permission-based visits and videos could introduce participating auction houses and the people behind them.">Auction-house visits</button>
+                <button class="ecosystem-node" type="button" data-title="Buying-tour relationships" data-detail="Buying-tour organisers could include relevant auctions alongside dealers, fairs and other stops on UK sourcing itineraries.">Buying-tour relationships</button>
+                <button class="ecosystem-node" type="button" data-title="EasyLive customer benefit" data-detail="Subject to agreement, existing Easy Live Auction customers could receive an introductory offer through a referral link or code without customer-data sharing.">EasyLive customer offer</button>
+                <button class="ecosystem-node" type="button" data-title="Chrome companion" data-detail="The working private browser companion already reveals auction-house addresses and postcodes while browsing Easy Live Auction.">Chrome companion</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-core">
+          <button class="ecosystem-node" type="button" data-title="AuctionSavvy" data-detail="AuctionSavvy combines personal preferences, auction information and discovery tools to decide what deserves attention. It is not a catalogue, marketplace or bidding platform.">AuctionSavvy — personalised discovery and decision layer</button>
+        </div>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-tools-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-tools-title">2. Discovery and decision tools</h3>
+            <span>Working evidence alongside possibilities requiring agreement or development</span>
+          </div>
+          <div class="ecosystem-capabilities">
+            <div class="ecosystem-group">
+              <h3>Working or demonstrated now</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Morning Briefing" data-detail="Matching lots are organised into Local Auctions, UK-Wide Today and UK-Wide Later for a rapid daily review.">Morning Briefing</button>
+                <button class="ecosystem-node" type="button" data-title="Featured search" data-detail="Broad demonstration interests create the first selection of relevant lots; a member service would personalise them.">Featured search</button>
+                <button class="ecosystem-node" type="button" data-title="Refined search" data-detail="Private wanted-item phrases can be checked against the current briefing in one action, adding a more precise second layer.">Refined search</button>
+                <button class="ecosystem-node" type="button" data-title="7am AI-assisted trial" data-detail="A working private trial emails prioritised possible wanted-item matches each morning, with explanations and direct Easy Live Auction links.">7am AI matching trial</button>
+                <button class="ecosystem-node" type="button" data-title="Auction-house map" data-detail="UK auction houses can be explored by location and forthcoming sale timing, introducing houses beyond those a buyer already follows.">Auction-house map</button>
+                <button class="ecosystem-node" type="button" data-title="House information pop-ups" data-detail="Addresses, postcodes and upcoming sales provide practical context without interrupting the route to the official lot listing.">House information pop-ups</button>
+                <button class="ecosystem-node" type="button" data-title="Working Chrome companion" data-detail="The privately used companion demonstrates how small agreed browsing tools could make auction-house context clearer on Easy Live Auction itself.">Working Chrome companion</button>
+                <button class="ecosystem-node" type="button" data-title="Direct EasyLive links" data-detail="Every displayed item continues to its official Easy Live Auction page for catalogue verification, registration and bidding.">Direct EasyLive links</button>
+              </div>
+            </div>
+
+            <div class="ecosystem-group ecosystem-group--future">
+              <h3>With agreement or further development</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Personal member accounts" data-detail="Free, Collector and Trade access could provide increasingly personalised searches, local preferences and professional workflows.">Personal member accounts</button>
+                <button class="ecosystem-node" type="button" data-title="Intelligent matching" data-detail="AI could interpret natural-language requests, dimensions and close alternatives while explaining its reasoning for human review.">Intelligent matching</button>
+                <button class="ecosystem-node" type="button" data-title="Auction reminders" data-detail="Morning and optional pre-auction messages could return a member to an item or sale they had already marked as interesting.">Auction reminders</button>
+                <button class="ecosystem-node" type="button" data-title="Enhanced item information" data-detail="With richer supplied information, concise details and dimensions could appear before the member opens the authoritative listing.">Enhanced item information</button>
+                <button class="ecosystem-node" type="button" data-title="Route planning" data-detail="The map could highlight auction houses on or near a journey and support multi-stop collection planning.">Route planning</button>
+                <button class="ecosystem-node" type="button" data-title="Delivery support" data-detail="Auction-house services could be shown first, followed where appropriate by indicative independent specialist courier information.">Delivery support</button>
+                <button class="ecosystem-node" type="button" data-title="Condition-report requests" data-detail="This would be explored only with Easy Live Auction's advice so auction houses are not subjected to unnecessary or poorly controlled requests.">Condition-report requests</button>
+                <button class="ecosystem-node" type="button" data-title="Seller-to-house guidance" data-detail="Prospective sellers could be guided towards potentially suitable houses and then into the house's official valuation or consignment process.">Seller-to-house guidance</button>
+                <button class="ecosystem-node" type="button" data-title="Expanded Chrome companion" data-detail="Further optional browsing functions could be developed transparently and only with Easy Live Auction's agreement.">Expanded Chrome companion</button>
+                <button class="ecosystem-node" type="button" data-title="Referral measurement" data-detail="Privacy-conscious reporting could show which AuctionSavvy discovery routes lead to meaningful engagement on Easy Live Auction.">Referral measurement</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-outcomes-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-outcomes-title">3. Practical outcomes</h3>
+            <span>What the user is now ready to do</span>
+          </div>
+          <div class="ecosystem-outcomes">
+            <button class="ecosystem-node" type="button" data-title="Relevant lot identified" data-detail="The right object is noticed because it matches a chosen interest, client brief, location or sense of urgency.">Relevant lot identified</button>
+            <button class="ecosystem-node" type="button" data-title="Relevant house or sale identified" data-detail="A useful auction house or forthcoming sale becomes visible beyond the user's normal browsing routine.">Relevant house or sale identified</button>
+            <button class="ecosystem-node" type="button" data-title="Practicality assessed" data-detail="Location, timing, collection and delivery information help the buyer decide whether an opportunity is realistically viable.">Practicality assessed</button>
+            <button class="ecosystem-node" type="button" data-title="Seller enquiry directed" data-detail="A prospective seller reaches an official valuation or consignment route without AuctionSavvy valuing the item or guaranteeing acceptance.">Seller enquiry directed</button>
+            <button class="ecosystem-node" type="button" data-title="Timely return encouraged" data-detail="A reminder brings an already-motivated buyer back to the official listing shortly before the relevant sale.">Timely return encouraged</button>
+            <button class="ecosystem-node" type="button" data-title="Qualified journey created" data-detail="New and existing audiences reach an opportunity that is already relevant to their interests or professional brief.">Qualified journey created</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-boundary">
+          <button class="ecosystem-node" type="button" data-title="A deliberate boundary" data-detail="AuctionSavvy stops at discovery, prioritisation and practical guidance. It does not provide the official catalogue, registration, bidding or transaction.">AuctionSavvy stops at discovery and prioritisation</button>
+        </div>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-destinations-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-destinations-title">4. Official destinations</h3>
+            <span>Control returns to Easy Live Auction and its auctioneers</span>
+          </div>
+          <div class="ecosystem-destinations">
+            <button class="ecosystem-node" type="button" data-title="Official EasyLive lot listing" data-detail="The official listing remains the authoritative source for images, descriptions, estimates, condition information, registration and bidding.">Official EasyLive lot listing</button>
+            <button class="ecosystem-node" type="button" data-title="Official auction-house page" data-detail="The participating auction house retains responsibility for sale information, valuation, consignment and its relationship with the seller.">Official auction-house page</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-final">
+          <button class="ecosystem-node" type="button" data-title="Easy Live Auction" data-detail="Easy Live Auction retains the official catalogue, auctioneer relationships, customer registration, bidding and transactions. AuctionSavvy is designed to deliver relevant, motivated people into that ecosystem.">Easy Live Auction — catalogue · auctioneers · registration · bidding · transactions</button>
+        </div>
+
+        <div class="ecosystem-detail" id="ecosystem-detail" aria-live="polite">
+          <strong>Explore the complete journey</strong>
+          Hover over any element for a quick explanation, or select one to keep its explanation here.
+        </div>
+
+        <div class="ecosystem-tooltip" id="ecosystem-tooltip" role="tooltip" aria-hidden="true"></div>
+
+        <div class="overview-cta">
+          <button class="view-cta" type="button" data-view-target="proposal">Now read the detailed proposal →</button>
+        </div>
+      </div>
+
+      <div class="content text-panel" id="proposal-text-view" role="tabpanel" aria-labelledby="proposal-tab">
         <section class="proposal-section" id="section-1">
           <span class="section-number">Section 1</span>
           <h2>Executive summary</h2>
@@ -1057,6 +1642,10 @@
         </section>
       </div>
 
+      <div class="view-end-cta text-panel">
+        <button class="view-cta view-cta--secondary" type="button" data-view-target="overview">← Return to the visual overview</button>
+      </div>
+
       <footer class="document-footer">
         AuctionSavvy proposal v0.3 · Private working page · 26 July 2026
       </footer>
@@ -1064,6 +1653,128 @@
   </main>
 
   <script>
+    const viewTabs = [...document.querySelectorAll(".view-tab")];
+    const viewTargets = [...document.querySelectorAll("[data-view-target]")];
+    const overviewPanel = document.querySelector("#proposal-overview-view");
+    const textPanels = [...document.querySelectorAll(".text-panel")];
+    const viewSwitcher = document.querySelector(".view-switcher");
+
+    const setProposalView = (view, options = {}) => {
+      const selectedView = view === "proposal" ? "proposal" : "overview";
+      const showOverview = selectedView === "overview";
+
+      document.body.classList.toggle("view-overview", showOverview);
+      document.body.classList.toggle("view-proposal", !showOverview);
+      overviewPanel.hidden = !showOverview;
+      textPanels.forEach((panel) => { panel.hidden = showOverview; });
+
+      viewTabs.forEach((tab) => {
+        const selected = tab.dataset.view === selectedView;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      if (options.updateHash) {
+        history.replaceState(null, "", selectedView === "overview" ? "#overview" : "#proposal");
+      }
+
+      if (options.scroll) {
+        viewSwitcher.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      if (options.focus) {
+        viewTabs.find((tab) => tab.dataset.view === selectedView)?.focus();
+      }
+    };
+
+    const initialHash = window.location.hash;
+    const initialView = initialHash && initialHash !== "#overview" ? "proposal" : "overview";
+    setProposalView(initialView);
+
+    viewTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        setProposalView(tab.dataset.view, { updateHash: true });
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextTab = viewTabs[(index + direction + viewTabs.length) % viewTabs.length];
+        setProposalView(nextTab.dataset.view, { updateHash: true, focus: true });
+      });
+    });
+
+    viewTargets.forEach((target) => {
+      target.addEventListener("click", () => {
+        setProposalView(target.dataset.viewTarget, { updateHash: true, scroll: true });
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      if (window.location.hash === "#overview") setProposalView("overview");
+      else setProposalView("proposal");
+    });
+
+    const ecosystemNodes = [...document.querySelectorAll(".ecosystem-node[data-detail]")];
+    const ecosystemDetail = document.querySelector("#ecosystem-detail");
+    const ecosystemTooltip = document.querySelector("#ecosystem-tooltip");
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    const fillExplanation = (container, node) => {
+      const heading = document.createElement("strong");
+      heading.textContent = node.dataset.title;
+      container.replaceChildren(heading, document.createTextNode(node.dataset.detail));
+    };
+
+    const updateEcosystemDetail = (node) => {
+      ecosystemNodes.forEach((item) => item.classList.toggle("is-selected", item === node));
+      fillExplanation(ecosystemDetail, node);
+    };
+
+    const hideEcosystemTooltip = () => {
+      ecosystemTooltip.classList.remove("is-visible");
+      ecosystemTooltip.setAttribute("aria-hidden", "true");
+    };
+
+    const showEcosystemTooltip = (node) => {
+      fillExplanation(ecosystemTooltip, node);
+      ecosystemTooltip.classList.add("is-visible");
+      ecosystemTooltip.setAttribute("aria-hidden", "false");
+
+      const nodeRect = node.getBoundingClientRect();
+      const tooltipRect = ecosystemTooltip.getBoundingClientRect();
+      const gutter = 12;
+      const preferredLeft = nodeRect.left + (nodeRect.width - tooltipRect.width) / 2;
+      const left = Math.min(
+        window.innerWidth - tooltipRect.width - gutter,
+        Math.max(gutter, preferredLeft)
+      );
+      let top = nodeRect.top - tooltipRect.height - 9;
+      if (top < gutter) top = nodeRect.bottom + 9;
+
+      ecosystemTooltip.style.left = `${left}px`;
+      ecosystemTooltip.style.top = `${top}px`;
+    };
+
+    ecosystemNodes.forEach((node) => {
+      node.setAttribute("aria-describedby", "ecosystem-detail");
+
+      node.addEventListener("mouseenter", () => {
+        if (finePointer.matches) showEcosystemTooltip(node);
+      });
+      node.addEventListener("mouseleave", hideEcosystemTooltip);
+      node.addEventListener("focus", () => showEcosystemTooltip(node));
+      node.addEventListener("blur", hideEcosystemTooltip);
+      node.addEventListener("click", () => {
+        updateEcosystemDetail(node);
+        if (!finePointer.matches) hideEcosystemTooltip();
+      });
+    });
+
+    window.addEventListener("resize", hideEcosystemTooltip);
+    window.addEventListener("scroll", hideEcosystemTooltip, true);
+
     const sectionLinks = [...document.querySelectorAll(".contents nav a")];
     const sections = sectionLinks
       .map((link) => document.querySelector(link.getAttribute("href")))
