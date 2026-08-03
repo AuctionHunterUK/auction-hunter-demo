@@ -94,6 +94,9 @@
   .tier-collector{background:#f9fbf9;border-color:#dce6dc}
   .tier-trade{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
   .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px;scroll-margin-top:104px}
+  .intelligent-search-box{grid-column:1/-1;background:#f8faf8;border:1px solid #d7e4d7;border-left:5px solid #587759;border-radius:10px;padding:24px 26px}
+  .intelligent-search-box p{max-width:780px;margin-bottom:10px}
+  .intelligent-search-box p:last-child{margin-bottom:0}
   .planner-box{grid-column:1/-1;background:#f3f7f3;border:1px solid #cfdccf;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
   .planner-box p{max-width:780px;margin-bottom:10px}
   .planner-box p:last-child{margin-bottom:0}
@@ -108,11 +111,11 @@
   .seller-box p:last-child,.overseas-box p:last-child{margin-bottom:0}
   .condition-box{grid-column:1/-1;background:#f9fbf9;border:1px solid #dce6dc;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
   .condition-box p:last-child{margin-bottom:0}
-  .feature-panel h2,.working-demo-box h2,.tier-panel h3,.planner-box h2,.delivery-box h2,.companion-box h2,.seller-box h2,.overseas-box h2,.condition-box h2{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;text-transform:none;letter-spacing:normal;font-weight:700;margin:0 0 7px}
+  .feature-panel h2,.working-demo-box h2,.tier-panel h3,.intelligent-search-box h2,.planner-box h2,.delivery-box h2,.companion-box h2,.seller-box h2,.overseas-box h2,.condition-box h2{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;text-transform:none;letter-spacing:normal;font-weight:700;margin:0 0 7px}
   .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 </head>
@@ -280,7 +283,7 @@ body.gate-locked{overflow:hidden}
     </section>
     <section class="tier-panel tier-collector">
       <h3>Collector</h3>
-      <p>A personalised morning briefing built from the member’s chosen interests, preferred auction houses and location, with simple search controls and auction reminders. It would be designed for collectors and other serious private buyers.</p>
+      <p>A personalised morning briefing built from the member’s chosen interests, preferred auction houses and location, with Intelligent Featured Search, simple controls and auction reminders. It would be designed for collectors and other serious private buyers.</p>
     </section>
     <section class="tier-panel tier-trade">
       <h3>Trade</h3>
@@ -291,6 +294,12 @@ body.gate-locked{overflow:hidden}
   </section>
 
   <div class="support-grid" id="support">
+    <section class="intelligent-search-box">
+      <h2>Intelligent Featured Search</h2>
+      <p>Members should be able to describe a broad interest without compiling a long list of keywords. Entering <strong>“ceramics”</strong>, for example, could prompt AuctionSavvy to suggest related areas such as pottery, porcelain, chinaware, stoneware, earthenware and studio pottery, while also recognising relevant catalogue wording that does not repeat the original term.</p>
+      <p>The suggested interpretation would remain visible and editable: members could accept useful related terms, remove irrelevant ones and add a short clarification or exclusion. Featured Search would provide the broad intelligent selection; Refined Search would remain the more precise layer for a particular object or active requirement.</p>
+    </section>
+
     <section class="planner-box">
       <h2>AI Journey &amp; Collection Planner</h2>
       <p>A future Trade feature could develop AuctionSavvy from a morning discovery tool into a continuous planning companion. A dealer might say, “I’m travelling to Newcastle on Thursday.” The assistant could ask a few useful questions, then combine saved interests and current commitments with relevant lots, auction dates, collection windows and travel information to suggest an efficient plan.</p>
