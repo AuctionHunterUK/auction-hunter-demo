@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-05T06:52:09.676100",
+  "scraped_at": "2026-08-05T07:33:33.644246",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -641,6 +641,11 @@
         "date": "2026-08-07",
         "time": "8pm",
         "title": "Clearance Timed Sale (All Lots Start at Just \u00a32)"
+      },
+      {
+        "date": "2026-08-10",
+        "time": "10am",
+        "title": "Sale of Jewellery, Antiques, Collectables, Furniture and Electricals"
       }
     ],
     "Churchill Auctions Ltd": [
@@ -874,6 +879,11 @@
         "date": "2026-08-23",
         "time": "6pm",
         "title": "\u00a31 Starting Bid Last Chance Sale - Minimum Buyers Commission \u00a32 plus VAT."
+      },
+      {
+        "date": "2026-08-23",
+        "time": "6pm",
+        "title": "Live Vinyl Record Auction - Cheap Postage - 1 Record \u00a310 - up to 15 Records \u00a315 "
       },
       {
         "date": "2026-09-06",
