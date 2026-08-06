@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-06T02:03:33.675302",
+  "scraped_at": "2026-08-06T06:53:50.615788",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -12,7 +12,13 @@
     "A 1 Collectables Antiques Auctions": [],
     "A.S.H. Auctions (ASH)": [],
     "A7 Waverley Auctions Ltd": [],
-    "Abbey Auction Rooms Ltd": [],
+    "Abbey Auction Rooms Ltd": [
+      {
+        "date": "2026-08-08",
+        "time": "10am",
+        "title": "Antiques and General Auction Including Silver, Books, Electronics, Musical Instr"
+      }
+    ],
     "ABC Auction": [],
     "Acanthus Auctions Ltd": [
       {
@@ -2537,7 +2543,7 @@
       {
         "date": "2026-08-21",
         "time": "10am",
-        "title": "Silver, Silver Jewellery and Watches"
+        "title": "Silver, Silver Jewellery, Pens and Watches"
       },
       {
         "date": "2026-08-28",
@@ -2547,7 +2553,7 @@
       {
         "date": "2026-09-04",
         "time": "10am",
-        "title": "Jewellery"
+        "title": "Gold jewellery, watches and coins"
       }
     ],
     "Sportingold Auctions": [
