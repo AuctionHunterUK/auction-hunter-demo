@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-06T06:53:50.615788",
+  "scraped_at": "2026-08-06T07:36:56.129391",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -496,7 +496,13 @@
         "title": "The Sunday Auction: Vintage Toys & Retro Star Wars Collectibles"
       }
     ],
-    "Cadmore Auctions": [],
+    "Cadmore Auctions": [
+      {
+        "date": "2026-08-09",
+        "time": "12pm",
+        "title": "Sunday Afternoon Automatic Sales (Jewellery, Watches, Designer Items, Militaria,"
+      }
+    ],
     "Cambridgeshire Philatelic Auctions Ltd": [],
     "Canalbank Auction": [],
     "Capes Dunn": [
