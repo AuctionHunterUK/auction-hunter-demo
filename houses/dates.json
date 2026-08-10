@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-10T02:02:27.133622",
+  "scraped_at": "2026-08-10T06:16:06.696393",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -468,7 +468,23 @@
         "title": "The Sunday Auction: Vintage Toys & Retro Star Wars Collectibles"
       }
     ],
-    "Cadmore Auctions": [],
+    "Cadmore Auctions": [
+      {
+        "date": "2026-08-17",
+        "time": "10am",
+        "title": "Three-Day General Auction (Jewellery, Watches, Designer Items, Militaria, Coins,"
+      },
+      {
+        "date": "2026-08-18",
+        "time": "10am",
+        "title": "Three-Day General Auction (Jewellery, Watches, Designer Items, Militaria, Coins,"
+      },
+      {
+        "date": "2026-08-19",
+        "time": "10am",
+        "title": "Three-Day General Auction (Jewellery, Watches, Designer Items, Militaria, Coins,"
+      }
+    ],
     "Cambridgeshire Philatelic Auctions Ltd": [],
     "Canalbank Auction": [
       {
@@ -2738,8 +2754,8 @@
     "Tong's Auction House": [
       {
         "date": "2026-08-13",
-        "time": "12pm",
-        "title": "Now Thursday 13th **Mixed Sale of General, Tool, Garden, DIY, Tech, Job Lots and"
+        "time": "10:30am",
+        "title": "Mixed Sale of General clearance, Tool, Garden, DIY, Tech, Job Lots and More! END"
       }
     ],
     "Tony Lester Auctions Ltd": [],
