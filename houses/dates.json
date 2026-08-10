@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-08-09T05:52:15.029392",
+  "scraped_at": "2026-08-10T02:02:27.133622",
   "houses": {
     "1888 Auctioneers": [],
     "A & C Auctions of Pendle": [
@@ -160,13 +160,7 @@
     "Atkins Auctions Ltd": [],
     "Aubreys": [],
     "Auction Cash": [],
-    "Auction Keynes": [
-      {
-        "date": "2026-08-09",
-        "time": "4pm",
-        "title": "VW Golf Clipper Convertible, Land Rover Series 111, Jewellery, Books, Antiques, "
-      }
-    ],
+    "Auction Keynes": [],
     "Auction Plus": [],
     "Auction247": [],
     "Auctioneum Ltd": [
@@ -474,13 +468,7 @@
         "title": "The Sunday Auction: Vintage Toys & Retro Star Wars Collectibles"
       }
     ],
-    "Cadmore Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "12pm",
-        "title": "Sunday Afternoon Automatic Sales (Jewellery, Watches, Designer Items, Militaria,"
-      }
-    ],
+    "Cadmore Auctions": [],
     "Cambridgeshire Philatelic Auctions Ltd": [],
     "Canalbank Auction": [
       {
@@ -647,11 +635,6 @@
     ],
     "Churchill Auctions Ltd": [
       {
-        "date": "2026-08-09",
-        "time": "6pm",
-        "title": "The Second Chance Sale - Items Ending on Sunday 9th August - No Viewing"
-      },
-      {
         "date": "2026-09-07",
         "time": "9:59am",
         "title": "Two Day Antiques & General Auction: - Contents TBC"
@@ -806,6 +789,11 @@
         "date": "2026-08-12",
         "time": "10am",
         "title": "Antiques and General, House Clearance, Barn Clearance, Furniture, Paintings, Hou"
+      },
+      {
+        "date": "2026-08-14",
+        "time": "10am",
+        "title": "Sale of Jewellery & Watches"
       }
     ],
     "Doncaster Auction Centre": [
@@ -865,18 +853,7 @@
       }
     ],
     "Dorset Vintage & Classic Auctions": [],
-    "Drake's Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "2pm",
-        "title": "Model Trains, Vehicles & Collectables"
-      },
-      {
-        "date": "2026-08-09",
-        "time": "4pm",
-        "title": "Estate Clearance, Garden, Furniture and Collectables"
-      }
-    ],
+    "Drake's Auctions": [],
     "Dreweatts 1759": [],
     "Droitwich Auctions Ltd": [
       {
@@ -1069,13 +1046,7 @@
         "title": "Machinery Auction to include Tools, Garden Items, Implements, Vehicles & Much Mo"
       }
     ],
-    "Fosse Lane Auction": [
-      {
-        "date": "2026-08-09",
-        "time": "2pm",
-        "title": "Weekly Timed Auction | Over 1,000 Lots | Antiques, Jewellery, Furniture, Electro"
-      }
-    ],
+    "Fosse Lane Auction": [],
     "Foxhill Auctions": [],
     "Franklin Browns": [
       {
@@ -1205,7 +1176,7 @@
       {
         "date": "2026-08-11",
         "time": "10:30am",
-        "title": "H&H Auctioneers Invite You to Join us for Our Forthcoming Sale of Jewellery, Wat"
+        "title": "H&H Auctioneers Invite You to Our Upcoming Sale of Chesterfield Sofas and Chairs"
       }
     ],
     "H J Pugh & Co": [
@@ -1261,11 +1232,6 @@
     "Halls Fine Art Auctioneers": [],
     "Hamilton Square Auctioneers": [
       {
-        "date": "2026-08-09",
-        "time": "11am",
-        "title": "Timed Auction of General Sale Items including Royal Doulton Figures and Costume "
-      },
-      {
         "date": "2026-08-29",
         "time": "10am",
         "title": "Monthly Antique and General Sale to include Collectables, Jewellery etc"
@@ -1283,6 +1249,11 @@
       {
         "date": "2026-10-31",
         "time": "11am",
+        "title": "Monthly Antique and General Sale to include Collectables, Jewelry etc"
+      },
+      {
+        "date": "2026-11-28",
+        "time": "10am",
         "title": "Monthly Antique and General Sale to include Collectables, Jewelry etc"
       }
     ],
@@ -1369,13 +1340,7 @@
         "title": "September 2 Day Fine Art & Antiques"
       }
     ],
-    "Heart of Gloucester Auctions Ltd": [
-      {
-        "date": "2026-08-09",
-        "time": "6pm",
-        "title": "Antiques & General Fortnightly Auction"
-      }
-    ],
+    "Heart of Gloucester Auctions Ltd": [],
     "Henry Adams Fine Art Auctioneers": [],
     "Henry Aldridge & Son Ltd Auctioneers & Valuers": [],
     "Hexham Auction Mart Co": [],
@@ -1391,7 +1356,13 @@
         "title": "Auction of Collectibles, Antique & Vintage Items"
       }
     ],
-    "Homefront Auctions": [],
+    "Homefront Auctions": [
+      {
+        "date": "2026-08-14",
+        "time": "11:55am",
+        "title": "General Auction - Multiple Estates - Gold, Silver, Rare Books, Pok\u00e9mon, Glass, F"
+      }
+    ],
     "Hosker Haynes Auctioneers": [],
     "House & Son Auctioneers & Valuers": [
       {
@@ -1802,11 +1773,6 @@
     "Lyme Bay Auctions": [],
     "Lymington Auctions": [
       {
-        "date": "2026-08-09",
-        "time": "6pm",
-        "title": "First Day Covers, Stamps, Concorde Memorabilia & Radios Timed Auction"
-      },
-      {
         "date": "2026-09-03",
         "time": "10am",
         "title": "The Two-Day Antiques, Collectables & Silver Sale"
@@ -1941,11 +1907,6 @@
     "Millwards": [],
     "Minster Auctions": [
       {
-        "date": "2026-08-09",
-        "time": "6pm",
-        "title": "Timed Auction of Model Railway, Diecast Vehicles, Toy Soldiers and Other Collect"
-      },
-      {
         "date": "2026-08-19",
         "time": "10am",
         "title": "Summer Antiques and Fine Art Auction"
@@ -2028,13 +1989,7 @@
     "NLB Auctions": [],
     "Nock Deighton": [],
     "North Coast Auctions": [],
-    "North Cornwall Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "12:30pm",
-        "title": "Antique, Collectables, Silver, Furniture, Military, Books, Toys, Ethnic Jeweller"
-      }
-    ],
+    "North Cornwall Auctions": [],
     "North Devon Auctions Ltd": [
       {
         "date": "2026-08-17",
@@ -2047,6 +2002,11 @@
         "date": "2026-08-23",
         "time": "10am",
         "title": "Stock Clearance Sale, All \u00a35 Start with No Reserves.\r\n**Please Read Long Descrip"
+      },
+      {
+        "date": "2026-09-06",
+        "time": "11am",
+        "title": "All Things Antique, Collectable and Retro:\r\n**Please Read Long Description as by"
       }
     ],
     "Oakham Auction Centre": [
@@ -2056,13 +2016,7 @@
         "title": "Online General Household Auction"
       }
     ],
-    "Okehampton Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "11:59am",
-        "title": "General Antiques Sale, Antique & Modern Furniture, Silver, Plate & Jewellery, Ch"
-      }
-    ],
+    "Okehampton Auctions": [],
     "Omega Auctions Ltd": [],
     "Ottery Auction Rooms": [],
     "Outhwaite & Litherland": [],
@@ -2209,9 +2163,9 @@
     "Prestige Auctions": [],
     "PSP Auctions": [
       {
-        "date": "2026-08-09",
+        "date": "2026-08-16",
         "time": "5pm",
-        "title": "Tools - Vintage - Modern - Farm - Vehicles"
+        "title": "DJ Equipment Antiques, Tools, Industrial & Decorative Interiors Auction featurin"
       }
     ],
     "Pump House Specialist Auctions Ltd": [],
@@ -2496,21 +2450,16 @@
       {
         "date": "2026-08-13",
         "time": "10am",
-        "title": "Antiques & Collectables Sale"
+        "title": "Antiques & Collectables Sale - Day One Lots 1 to 639 - Day Two Lots 640 to 1305"
       },
       {
         "date": "2026-08-14",
         "time": "10am",
-        "title": "Antiques & Collectables Sale"
+        "title": "Antiques & Collectables Sale - Day One Lots 1 to 639 - Day Two Lots 640 to 1305"
       }
     ],
     "South Cheshire Auctions": [],
     "South Dorsetshire Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "11am",
-        "title": "Antiques & Collectables Auction including Militaria and Weaponry, Gold & Silver "
-      },
       {
         "date": "2026-08-13",
         "time": "7:30pm",
@@ -2530,6 +2479,11 @@
         "date": "2026-08-30",
         "time": "7:30pm",
         "title": "Online Only 2nd Chance Auction of Previously Unsold Items"
+      },
+      {
+        "date": "2026-08-31",
+        "time": "7:30pm",
+        "title": "Online Only Coinage Auction featuring Individual Coins, Coin Sets etc in Base Me"
       }
     ],
     "Sovereign Rarities": [],
@@ -2567,13 +2521,7 @@
         "title": "Sportingold September Two-Day Sale of Cigarette Cards & Sporting Memorabilia"
       }
     ],
-    "Square & Compass Auctioneers": [
-      {
-        "date": "2026-08-09",
-        "time": "10am",
-        "title": "Antiques, Mid-Century Furniture, Jewellery & Collectors' Auction"
-      }
-    ],
+    "Square & Compass Auctioneers": [],
     "Stacey's Auctioneers and Valuers": [
       {
         "date": "2026-08-25",
@@ -2635,12 +2583,12 @@
       {
         "date": "2026-08-10",
         "time": "10:30am",
-        "title": "Two-Day Auction of General Items, Antiques and Collectables \u2014 Additional Lots wi"
+        "title": "Two-Day Auction of General Items, Antiques and Collectables"
       },
       {
         "date": "2026-08-11",
         "time": "10:30am",
-        "title": "Two-Day Auction of General Items, Antiques and Collectables \u2014 Additional Lots wi"
+        "title": "Two-Day Auction of General Items, Antiques and Collectables"
       }
     ],
     "Summersgills": [
@@ -2883,13 +2831,7 @@
       }
     ],
     "Tyne Valley Auctions": [],
-    "UK Militaria Auctions": [
-      {
-        "date": "2026-08-09",
-        "time": "7pm",
-        "title": "Timed Easy Live Auction of Victorian, WW1 & WW2 Militaria"
-      }
-    ],
+    "UK Militaria Auctions": [],
     "UK Toy & Model Auctions Ltd": [],
     "Unique Auctions House": [
       {
@@ -3013,16 +2955,6 @@
     ],
     "Wellers Auctions Ltd": [
       {
-        "date": "2026-08-09",
-        "time": "10am",
-        "title": "Unclaimed Goods from a Major UK Courier Network inc Toys, Tech, Fashion, Collect"
-      },
-      {
-        "date": "2026-08-09",
-        "time": "12pm",
-        "title": "Sunday: New Clothing, Tech, Homeware & More!"
-      },
-      {
         "date": "2026-08-10",
         "time": "10am",
         "title": "Unclaimed Goods from a Major UK Courier Network inc. Toys, Tech, Fashion, Collec"
@@ -3036,6 +2968,16 @@
         "date": "2026-08-10",
         "time": "9:30am",
         "title": "Monday: Customer Returns, End of Line Stock from an International Retailer and U"
+      },
+      {
+        "date": "2026-08-12",
+        "time": "10am",
+        "title": "An Exclusively Curated Selection of Fine Wines & Spirits"
+      },
+      {
+        "date": "2026-08-13",
+        "time": "10am",
+        "title": "Unclaimed Goods from a Major UK Courier Network incl. Toys, Tech, Fashion, Colle"
       }
     ],
     "Wessex Auction Rooms": [
