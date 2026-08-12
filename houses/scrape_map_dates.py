@@ -13,6 +13,9 @@ from pathlib import Path
 
 DELAY = 1.5
 BASE = "https://www.easyliveauction.com"
+MIN_EXPECTED_HOUSES_WITH_SALES = 10
+MIN_RETAINED_SALES_RATIO = 0.25
+SALES_RATIO_BASELINE = 40
 MONTHS = {"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,
           "July":7,"August":8,"September":9,"October":10,"November":11,"December":12}
 HEADERS = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
@@ -159,6 +162,44 @@ def scrape_dates(test_limit=None):
         "summary": {"total": total, "with_sales": with_sales}
     }
 
+def load_previous_sales_count(data_file=None):
+    """Return the number of houses with sales in the published dates file."""
+    data_file = data_file or (REPO_DIR / "dates.json")
+    try:
+        data = json.loads(data_file.read_text(encoding="utf-8"))
+        houses = data.get("houses") if isinstance(data, dict) else None
+    except Exception as exc:
+        print(f"WARNING: could not read previous sale-date count from {data_file}: {exc}")
+        return None
+    if not isinstance(houses, dict):
+        print(f"WARNING: previous sale-date file {data_file} has no house lookup")
+        return None
+    return sum(1 for sales in houses.values() if isinstance(sales, list) and sales)
+
+def validate_scrape_volume(
+    data,
+    previous_count=None,
+    minimum=MIN_EXPECTED_HOUSES_WITH_SALES,
+    retained_ratio=MIN_RETAINED_SALES_RATIO,
+    ratio_baseline=SALES_RATIO_BASELINE,
+):
+    """Fail before writing when sale-date results are implausibly sparse."""
+    summary = data.get("summary", {})
+    current_count = summary.get("with_sales", 0)
+    if current_count < minimum:
+        raise RuntimeError(
+            f"Sale-date scrape found upcoming sales for only {current_count} houses; "
+            f"minimum safe count is {minimum}. Refusing to replace dates.json."
+        )
+    if previous_count is not None and previous_count >= ratio_baseline:
+        minimum_from_history = int(previous_count * retained_ratio)
+        if current_count < minimum_from_history:
+            raise RuntimeError(
+                f"Sale-date scrape retained only {current_count}/{previous_count} houses "
+                f"with sales ({current_count / previous_count:.1%}); minimum safe retention "
+                f"is {retained_ratio:.0%}. Refusing to replace dates.json."
+            )
+
 def write_dates(data):
     """Write dates.json to the auction-map repo."""
     if not REPO_DIR.exists():
@@ -203,7 +244,10 @@ if __name__ == "__main__":
     parser.add_argument("--no-push", action="store_true", help="Skip git push (write file only)")
     args = parser.parse_args()
 
+    previous_sales_count = load_previous_sales_count()
     data = scrape_dates(test_limit=args.test)
+    if not args.test:
+        validate_scrape_volume(data, previous_count=previous_sales_count)
     write_dates(data)
 
     if not args.no_push:

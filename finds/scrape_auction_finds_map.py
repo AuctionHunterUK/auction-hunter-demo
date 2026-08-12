@@ -63,6 +63,9 @@ HEADERS = {
 
 REQUEST_DELAY = 1.5
 MAX_PAGES     = 30   # per-term safety cap
+MIN_EXPECTED_LOTS = 20
+MIN_RETAINED_LOT_RATIO = 0.25
+LOT_RATIO_BASELINE = 100
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger(__name__)
@@ -340,6 +343,49 @@ def cap_seen_history(previous_ids, current_ids, limit=5000):
     available_history_slots = limit - len(current_ids)
     previous_only_ids = set(previous_ids) - current_ids
     return current_ids | set(sorted(previous_only_ids)[:available_history_slots])
+
+
+def load_previous_lot_count(data_file=None):
+    """Return the last published lot count, or ``None`` if unavailable."""
+    data_file = data_file or (REPO_DIR / "data.json")
+    try:
+        data = json.loads(data_file.read_text(encoding="utf-8"))
+    except Exception as exc:
+        log.warning("Could not read previous catalogue count from %s: %s", data_file, exc)
+        return None
+    if not isinstance(data, list):
+        log.warning("Previous catalogue %s is not a JSON list; ignoring its count.", data_file)
+        return None
+    return len(data)
+
+
+def validate_scrape_volume(
+    current_count,
+    previous_count=None,
+    minimum=MIN_EXPECTED_LOTS,
+    retained_ratio=MIN_RETAINED_LOT_RATIO,
+    ratio_baseline=LOT_RATIO_BASELINE,
+    stage="Final scrape",
+):
+    """Fail closed when a scrape is empty or implausibly smaller than normal.
+
+    The exception is raised before generated data, HTML, seen history, or the
+    image cache are changed, preserving the last usable published catalogue.
+    """
+    if current_count < minimum:
+        raise RuntimeError(
+            f"{stage} produced only {current_count} lots; minimum safe count is {minimum}. "
+            "Refusing to replace the existing catalogue."
+        )
+
+    if previous_count is not None and previous_count >= ratio_baseline:
+        minimum_from_history = int(previous_count * retained_ratio)
+        if current_count < minimum_from_history:
+            raise RuntimeError(
+                f"{stage} retained only {current_count}/{previous_count} lots "
+                f"({current_count / previous_count:.1%}); minimum safe retention is "
+                f"{retained_ratio:.0%}. Refusing to replace the existing catalogue."
+            )
 
 
 # --- House postcode lookup / fuzzy matching -------------------------------
@@ -2682,6 +2728,8 @@ def main():
     IMAGES_DIR.mkdir(parents=True, exist_ok=True)
     session  = requests.Session()
     all_lots = {}
+    previous_lot_count = load_previous_lot_count()
+    log.info("Previously published catalogue: %s lots", previous_lot_count if previous_lot_count is not None else "unknown")
 
     for term in SEARCH_TERMS:
         log.info(f"Searching: '{term}'")
@@ -2694,11 +2742,21 @@ def main():
     postcodes = load_postcodes()
     log.info(f"Postcode lookup: {len(postcodes[0])} houses")
     all_lots = filter_uk_lots(all_lots, postcodes, stage="Initial UK filter")
+    validate_scrape_volume(
+        len(all_lots),
+        previous_count=previous_lot_count,
+        stage="Initial UK-filtered scrape",
+    )
 
     enrich_with_sale_dates(session, all_lots)
     # A second pass catches an otherwise-unknown overseas house when its sale
     # page supplies a foreign timezone that was not visible in search results.
     all_lots = filter_uk_lots(all_lots, postcodes, stage="Enriched UK filter")
+    validate_scrape_volume(
+        len(all_lots),
+        previous_count=previous_lot_count,
+        stage="Final UK-filtered scrape",
+    )
 
     log.info("Downloading images…")
     attempted_images = set()
