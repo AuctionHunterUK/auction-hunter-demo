@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AuctionSavvy — Easy Live Auction proposal v0.3</title>
+  <title>AuctionSavvy — Easy Live Auction proposal v0.4</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Private AuctionSavvy proposal for collaboration with Easy Live Auction.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -890,7 +890,7 @@
 
     .ecosystem-outcomes {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -999,6 +999,10 @@
 
       .audience-grid {
         grid-template-columns: 1fr;
+      }
+
+      .ecosystem-outcomes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -1234,20 +1238,19 @@
     <aside class="contents" aria-label="Proposal contents">
       <p class="contents__label">In this proposal</p>
       <nav>
-        <a href="#section-1">Executive summary</a>
-        <a href="#section-2">What is running today</a>
-        <a href="#section-3">The problem it solves</a>
-        <a href="#section-4">What Easy Live Auction gains</a>
-        <a href="#section-5">Who else benefits</a>
-        <a href="#section-6">Responsible data use</a>
-        <a href="#section-7">Founder and development</a>
-        <a href="#section-8">A staged collaboration</a>
+        <a href="#section-1">Why I built it</a>
+        <a href="#section-2">What has been demonstrated</a>
+        <a href="#section-3">What Easy Live Auction gains</a>
+        <a href="#section-4">Why collaboration matters</a>
+        <a href="#section-5">Responsible data use</a>
+        <a href="#section-6">How this might proceed</a>
+        <a href="#section-7">The invitation</a>
         <a href="#appendix-a">Membership model</a>
         <a href="#appendix-b">Future directions</a>
       </nav>
       <div class="contents__note">
         <strong>Private working page</strong><br>
-        This visual copy mirrors the finished proposal. The PDF remains the formal document.
+        This working page contains both a visual overview and the detailed proposal.
       </div>
     </aside>
 
@@ -1259,8 +1262,8 @@
         <p class="view-intro">Start with the visual overview, then read the detailed proposal for the working evidence, safeguards and partnership thinking behind each part.</p>
         <div class="meta">
           <span><strong>Prepared by:</strong> Ken Gibbins, founder of AuctionSavvy</span>
-          <span><strong>Version:</strong> Draft v0.3</span>
-          <span><strong>Date:</strong> 26 July 2026</span>
+          <span><strong>Version:</strong> Draft v0.4</span>
+          <span><strong>Date:</strong> 17 August 2026</span>
         </div>
       </header>
 
@@ -1281,51 +1284,30 @@
       <div class="overview-panel" id="proposal-overview-view" role="tabpanel" aria-labelledby="overview-tab">
         <div class="overview-heading">
           <h2>Every AuctionSavvy journey leads to Easy Live Auction</h2>
-          <p>This deliberately comprehensive first view brings the audiences, information, working tools and future possibilities together. Hover over any element for a quick explanation, or select it to keep the explanation visible.</p>
+          <p>A concise view of the buyer problem, the working evidence and the value of shaping the next stage together. Hover over any element for a quick explanation, or select it to keep the explanation visible.</p>
         </div>
 
         <section class="ecosystem-phase" aria-labelledby="ecosystem-inputs-title">
           <div class="ecosystem-phase__heading">
-            <h3 id="ecosystem-inputs-title">1. What feeds into AuctionSavvy</h3>
-            <span>People and needs · information and preferences · promotion and reach</span>
+            <h3 id="ecosystem-inputs-title">1. The buyer’s problem</h3>
+            <span>Too much repetition · highly personal relevance · practical constraints</span>
           </div>
-          <div class="ecosystem-tributaries">
+          <div class="ecosystem-capabilities">
             <div class="ecosystem-group">
-              <h3>People and needs</h3>
+              <h3>Finding what matters</h3>
               <div class="ecosystem-nodes">
-                <button class="ecosystem-node" type="button" data-title="Collectors" data-detail="Private buyers following particular makers, periods, subjects or types of object need a manageable way to notice relevant opportunities.">Collectors</button>
-                <button class="ecosystem-node" type="button" data-title="Dealers and trade buyers" data-detail="Dealers need efficient daily stock sourcing, alongside a simple way to monitor precise requests from their own customers.">Dealers and trade buyers</button>
-                <button class="ecosystem-node" type="button" data-title="Art and antiques advisers" data-detail="Professional advisers and auction buying agents may manage several precise acquisition briefs for private clients at once.">Art and antiques advisers</button>
-                <button class="ecosystem-node" type="button" data-title="Interior sourcing specialists" data-detail="Design professionals can use auctions to find furniture, art and decorative objects for private or commercial projects.">Interior sourcing specialists</button>
-                <button class="ecosystem-node" type="button" data-title="Overseas buyers and buying tours" data-detail="International buyers could identify relevant UK sales before a sourcing trip or work remotely through established UK contacts.">Overseas buyers and tours</button>
-                <button class="ecosystem-node" type="button" data-title="Prospective sellers" data-detail="Owners unfamiliar with auctions could be guided towards a potentially suitable auction house and its official enquiry process.">Prospective sellers</button>
-                <button class="ecosystem-node" type="button" data-title="Free visitors" data-detail="Non-members could explore the map and a rotating Daily Showcase before deciding whether personalised discovery would help them.">Free visitors</button>
+                <button class="ecosystem-node" type="button" data-title="Repeated searches" data-detail="Dealers and collectors may repeat the same searches across numerous houses and sale dates simply to discover what is new.">Repeated searches across houses and dates</button>
+                <button class="ecosystem-node" type="button" data-title="Personal relevance" data-detail="The right lot depends on each buyer’s interests, stock needs, collecting focus or current sourcing brief.">Highly personal interests and requirements</button>
+                <button class="ecosystem-node" type="button" data-title="Easy-to-miss opportunities" data-detail="Relevant lots can be missed when catalogue wording varies or when they appear outside the buyer’s usual houses and geographical area.">Relevant lots are easy to miss</button>
               </div>
             </div>
 
             <div class="ecosystem-group">
-              <h3>Information and preferences</h3>
+              <h3>Deciding what is practical</h3>
               <div class="ecosystem-nodes">
-                <button class="ecosystem-node" type="button" data-title="Authorised catalogue feed" data-detail="An agreed Easy Live Auction feed would provide the reliable, compliant foundation required for a live member service at scale.">Authorised catalogue feed</button>
-                <button class="ecosystem-node" type="button" data-title="Auction-house locations" data-detail="Addresses and postcodes support mapping, local classification, journey planning and possible delivery guidance.">House addresses and postcodes</button>
-                <button class="ecosystem-node" type="button" data-title="Auction and sale dates" data-detail="Dates provide the urgency behind Today, Later, forthcoming-sale mapping and timely reminder functions.">Auction and sale dates</button>
-                <button class="ecosystem-node" type="button" data-title="Featured searches" data-detail="Broad chosen interests create the personalised first layer of each member's regular Morning Briefing.">Featured searches</button>
-                <button class="ecosystem-node" type="button" data-title="Preferred local houses" data-detail="Members could define the auction houses they consider local, practical or particularly relevant.">Preferred local houses</button>
-                <button class="ecosystem-node" type="button" data-title="Wanted-item briefs" data-detail="Specific item and client-sourcing requirements provide the second layer used by Refined search and AI-assisted matching.">Wanted-item briefs</button>
-                <button class="ecosystem-node" type="button" data-title="Postcode and travel preferences" data-detail="Member-controlled location information could support distance, route and delivery guidance with appropriate privacy safeguards.">Postcode and travel preferences</button>
-              </div>
-            </div>
-
-            <div class="ecosystem-group">
-              <h3>Promotion and reach</h3>
-              <div class="ecosystem-nodes">
-                <button class="ecosystem-node" type="button" data-title="Daily Showcase" data-detail="A rotating public example could introduce non-members to different auction categories without providing a complete personalised briefing.">Daily Showcase</button>
-                <button class="ecosystem-node" type="button" data-title="YouTube walkthroughs" data-detail="Instructional videos could show the full journey from discovering an item to opening its official Easy Live Auction listing.">YouTube walkthroughs</button>
-                <button class="ecosystem-node" type="button" data-title="Instagram demonstrations" data-detail="Short visual demonstrations and genuine auction finds could introduce AuctionSavvy and Easy Live Auction to new audiences.">Instagram demonstrations</button>
-                <button class="ecosystem-node" type="button" data-title="Auction-house visits" data-detail="Authentic, permission-based visits and videos could introduce participating auction houses and the people behind them.">Auction-house visits</button>
-                <button class="ecosystem-node" type="button" data-title="Buying-tour relationships" data-detail="Buying-tour organisers could include relevant auctions alongside dealers, fairs and other stops on UK sourcing itineraries.">Buying-tour relationships</button>
-                <button class="ecosystem-node" type="button" data-title="EasyLive customer benefit" data-detail="Subject to agreement, existing Easy Live Auction customers could receive an introductory offer through a referral link or code without customer-data sharing.">EasyLive customer offer</button>
-                <button class="ecosystem-node" type="button" data-title="Chrome companion" data-detail="The working private browser companion already reveals auction-house addresses and postcodes while browsing Easy Live Auction.">Chrome companion</button>
+                <button class="ecosystem-node" type="button" data-title="Location and urgency" data-detail="Where a lot is being sold and how soon the auction takes place can be as important as the object itself.">Location and auction urgency</button>
+                <button class="ecosystem-node" type="button" data-title="Collection practicality" data-detail="Travel, collection windows and possible delivery costs influence whether a promising purchase is genuinely viable.">Collection and delivery practicality</button>
+                <button class="ecosystem-node" type="button" data-title="Limited morning time" data-detail="The aim is to let a buyer understand the most relevant opportunities in roughly ten minutes, not spend the morning browsing broadly.">A useful decision in about ten minutes</button>
               </div>
             </div>
           </div>
@@ -1341,38 +1323,31 @@
 
         <section class="ecosystem-phase" aria-labelledby="ecosystem-tools-title">
           <div class="ecosystem-phase__heading">
-            <h3 id="ecosystem-tools-title">2. Discovery and decision tools</h3>
-            <span>Working evidence alongside possibilities requiring agreement or development</span>
+            <h3 id="ecosystem-tools-title">2. What AuctionSavvy has demonstrated</h3>
+            <span>Working evidence separated clearly from future directions</span>
           </div>
           <div class="ecosystem-capabilities">
             <div class="ecosystem-group">
-              <h3>Working or demonstrated now</h3>
+              <h3>Demonstrated in the prototype</h3>
               <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Automated briefing pipeline" data-detail="During development, the working pipeline gathered listings, applied configured interests and rebuilt the briefing automatically. The demonstration is now preserved as a stable snapshot.">Automated briefing pipeline</button>
                 <button class="ecosystem-node" type="button" data-title="Morning Briefing" data-detail="Matching lots are organised into Local Auctions, UK-Wide Today and UK-Wide Later for a rapid daily review.">Morning Briefing</button>
-                <button class="ecosystem-node" type="button" data-title="Featured search" data-detail="Broad demonstration interests create the first selection of relevant lots; a member service would personalise them.">Featured search</button>
-                <button class="ecosystem-node" type="button" data-title="Refined search" data-detail="Private wanted-item phrases can be checked against the current briefing in one action, adding a more precise second layer.">Refined search</button>
-                <button class="ecosystem-node" type="button" data-title="7am AI-assisted trial" data-detail="A working private trial emails prioritised possible wanted-item matches each morning, with explanations and direct Easy Live Auction links.">7am AI matching trial</button>
+                <button class="ecosystem-node" type="button" data-title="Featured and Refined searches" data-detail="Broad chosen interests create the briefing, while private requirement phrases provide a more precise second layer.">Featured and Refined searches</button>
                 <button class="ecosystem-node" type="button" data-title="Auction-house map" data-detail="UK auction houses can be explored by location and forthcoming sale timing, introducing houses beyond those a buyer already follows.">Auction-house map</button>
                 <button class="ecosystem-node" type="button" data-title="House information pop-ups" data-detail="Addresses, postcodes and upcoming sales provide practical context without interrupting the route to the official lot listing.">House information pop-ups</button>
-                <button class="ecosystem-node" type="button" data-title="Working Chrome companion" data-detail="The privately used companion demonstrates how small agreed browsing tools could make auction-house context clearer on Easy Live Auction itself.">Working Chrome companion</button>
-                <button class="ecosystem-node" type="button" data-title="Direct EasyLive links" data-detail="Every displayed item continues to its official Easy Live Auction page for catalogue verification, registration and bidding.">Direct EasyLive links</button>
+                <button class="ecosystem-node" type="button" data-title="Working Chrome companion" data-detail="The privately used companion already reveals auction-house addresses and postcodes while browsing Easy Live Auction.">Working Chrome companion</button>
+                <button class="ecosystem-node" type="button" data-title="Demonstrated 7am matching trial" data-detail="A private trial demonstrated a 7am email containing prioritised possible wanted-item matches, explanations and direct official links.">Demonstrated 7am matching trial</button>
+                <button class="ecosystem-node" type="button" data-title="Direct official links" data-detail="Every displayed item continues to its official Easy Live Auction page for catalogue verification, registration and bidding.">Direct official links</button>
               </div>
             </div>
 
             <div class="ecosystem-group ecosystem-group--future">
-              <h3>With agreement or further development</h3>
+              <h3>Four future directions</h3>
               <div class="ecosystem-nodes">
-                <button class="ecosystem-node" type="button" data-title="Personal member accounts" data-detail="Free, Collector and Trade access could provide increasingly personalised searches, local preferences and professional workflows.">Personal member accounts</button>
-                <button class="ecosystem-node" type="button" data-title="AI-assisted Featured Search setup" data-detail="A member could enter one broad interest, receive useful related search-term suggestions, then approve, remove or edit them before AuctionSavvy uses those saved terms for predictable daily filtering.">AI-assisted Featured Search setup</button>
-                <button class="ecosystem-node" type="button" data-title="Intelligent Refined Search" data-detail="AI could interpret specific natural-language requirements, dimensions and close alternatives while explaining its reasoning for human review.">Intelligent Refined Search</button>
-                <button class="ecosystem-node" type="button" data-title="Auction reminders" data-detail="Morning and optional pre-auction messages could return a member to an item or sale they had already marked as interesting.">Auction reminders</button>
-                <button class="ecosystem-node" type="button" data-title="Enhanced item information" data-detail="With richer supplied information, concise details and dimensions could appear before the member opens the authoritative listing.">Enhanced item information</button>
-                <button class="ecosystem-node" type="button" data-title="AI Journey &amp; Collection Planner" data-detail="A conversational assistant could combine a member's saved interests, current commitments, auction dates, collection windows and travel plans to suggest efficient routes and worthwhile opportunities, then revise the plan as new information arrives.">AI Journey &amp; Collection Planner</button>
-                <button class="ecosystem-node" type="button" data-title="Delivery support" data-detail="Auction-house services could be shown first, followed where appropriate by indicative independent specialist courier information.">Delivery support</button>
-                <button class="ecosystem-node" type="button" data-title="Condition-report requests" data-detail="This would be explored only with Easy Live Auction's advice so auction houses are not subjected to unnecessary or poorly controlled requests.">Condition-report requests</button>
-                <button class="ecosystem-node" type="button" data-title="Seller-to-house guidance" data-detail="Prospective sellers could be guided towards potentially suitable houses and then into the house's official valuation or consignment process.">Seller-to-house guidance</button>
-                <button class="ecosystem-node" type="button" data-title="Expanded Chrome companion" data-detail="Further optional browsing functions could be developed transparently and only with Easy Live Auction's agreement.">Expanded Chrome companion</button>
-                <button class="ecosystem-node" type="button" data-title="Referral measurement" data-detail="Privacy-conscious reporting could show which AuctionSavvy discovery routes lead to meaningful engagement on Easy Live Auction.">Referral measurement</button>
+                <button class="ecosystem-node" type="button" data-title="Smarter personal discovery and alerts" data-detail="Assisted search setup, explained possible matches and optional auction reminders could help members notice and return to relevant lots.">Smarter personal discovery and alerts</button>
+                <button class="ecosystem-node" type="button" data-title="Journey, collection and delivery planning" data-detail="Travel plans, auction dates, collection windows and delivery information could be combined to help buyers assess practical opportunities.">Journey, collection and delivery planning</button>
+                <button class="ecosystem-node" type="button" data-title="Chrome companion development" data-detail="Further carefully chosen browser-side functions could be explored transparently with Easy Live Auction.">Chrome companion development</button>
+                <button class="ecosystem-node" type="button" data-title="New buyer and seller routes" data-detail="Curated discovery could support overseas buyers and tours, while separate guidance could lead prospective sellers to an appropriate official auction-house enquiry.">New buyer and seller routes</button>
               </div>
             </div>
           </div>
@@ -1382,16 +1357,29 @@
 
         <section class="ecosystem-phase" aria-labelledby="ecosystem-outcomes-title">
           <div class="ecosystem-phase__heading">
-            <h3 id="ecosystem-outcomes-title">3. Practical outcomes</h3>
-            <span>What the user is now ready to do</span>
+            <h3 id="ecosystem-outcomes-title">3. What Easy Live Auction gains</h3>
+            <span>Buyer-side efficiency translated into platform value</span>
           </div>
           <div class="ecosystem-outcomes">
-            <button class="ecosystem-node" type="button" data-title="Relevant lot identified" data-detail="The right object is noticed because it matches a chosen interest, client brief, location or sense of urgency.">Relevant lot identified</button>
-            <button class="ecosystem-node" type="button" data-title="Relevant house or sale identified" data-detail="A useful auction house or forthcoming sale becomes visible beyond the user's normal browsing routine.">Relevant house or sale identified</button>
-            <button class="ecosystem-node" type="button" data-title="Practicality assessed" data-detail="Location, timing, collection and delivery information help the buyer decide whether an opportunity is realistically viable.">Practicality assessed</button>
-            <button class="ecosystem-node" type="button" data-title="Seller enquiry directed" data-detail="A prospective seller reaches an official valuation or consignment route without AuctionSavvy valuing the item or guaranteeing acceptance.">Seller enquiry directed</button>
-            <button class="ecosystem-node" type="button" data-title="Timely return encouraged" data-detail="A reminder brings an already-motivated buyer back to the official listing shortly before the relevant sale.">Timely return encouraged</button>
-            <button class="ecosystem-node" type="button" data-title="Qualified journey created" data-detail="New and existing audiences reach an opportunity that is already relevant to their interests or professional brief.">Qualified journey created</button>
+            <button class="ecosystem-node" type="button" data-title="Qualified journeys" data-detail="Interested buyers reach official listings that are already relevant to their interests or professional requirements.">Qualified journeys</button>
+            <button class="ecosystem-node" type="button" data-title="Existing-member engagement" data-detail="Personalised briefings and useful reminders are designed to help current members discover relevant opportunities and return at the right time.">Existing-member engagement</button>
+            <button class="ecosystem-node" type="button" data-title="Wider auctioneer exposure" data-detail="Suitable lots and houses can reach relevant buyers beyond the categories, locations and auctioneers they already follow.">Wider auctioneer exposure</button>
+            <button class="ecosystem-node" type="button" data-title="Measurable engagement" data-detail="Agreed referral measurement could show which discovery journeys produce meaningful visits to Easy Live Auction.">Measurable engagement</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-collaboration-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-collaboration-title">4. Why collaboration matters</h3>
+            <span>Shared foundations for presentation, trust and useful evidence</span>
+          </div>
+          <div class="ecosystem-outcomes">
+            <button class="ecosystem-node" type="button" data-title="Authorised data" data-detail="An agreed data source and permitted purpose would provide the reliable, compliant foundation required for a live service.">Authorised data</button>
+            <button class="ecosystem-node" type="button" data-title="Agreed presentation and attribution" data-detail="Easy Live Auction and its auctioneers could help shape how catalogue material is displayed, credited and linked.">Presentation and attribution</button>
+            <button class="ecosystem-node" type="button" data-title="Auctioneer alignment" data-detail="Buyer-facing ideas could be considered alongside auctioneer expectations, platform priorities and appropriate correction or removal processes.">Auctioneer alignment</button>
+            <button class="ecosystem-node" type="button" data-title="Shared measures" data-detail="Both parties could agree what useful engagement means and review evidence without assuming commercial success in advance.">Shared measures</button>
           </div>
         </section>
 
@@ -1405,11 +1393,11 @@
 
         <section class="ecosystem-phase" aria-labelledby="ecosystem-destinations-title">
           <div class="ecosystem-phase__heading">
-            <h3 id="ecosystem-destinations-title">4. Official destinations</h3>
+            <h3 id="ecosystem-destinations-title">5. Official Easy Live Auction destinations</h3>
             <span>Control returns to Easy Live Auction and its auctioneers</span>
           </div>
           <div class="ecosystem-destinations">
-            <button class="ecosystem-node" type="button" data-title="Official EasyLive lot listing" data-detail="The official listing remains the authoritative source for images, descriptions, estimates, condition information, registration and bidding.">Official EasyLive lot listing</button>
+            <button class="ecosystem-node" type="button" data-title="Official Easy Live Auction lot listing" data-detail="The official listing remains the authoritative source for images, descriptions, estimates, condition information, registration and bidding.">Official Easy Live Auction lot listing</button>
             <button class="ecosystem-node" type="button" data-title="Official auction-house page" data-detail="The participating auction house retains responsibility for sale information, valuation, consignment and its relationship with the seller.">Official auction-house page</button>
           </div>
         </section>
@@ -1435,24 +1423,25 @@
       <div class="content text-panel" id="proposal-text-view" role="tabpanel" aria-labelledby="proposal-tab">
         <section class="proposal-section" id="section-1">
           <span class="section-number">Section 1</span>
-          <h2>Executive summary</h2>
-          <p class="lead">AuctionSavvy is a working demonstration of a personalised discovery layer for auction buyers. It helps dealers and collectors identify relevant lots quickly, see where and when they are being sold, and continue to Easy Live Auction for the official catalogue, registration and bidding.</p>
+          <h2>Why I built AuctionSavvy</h2>
+          <p class="lead">I have spent many years in the antique furniture trade and, more recently, buying through online auctions. My mornings often involved repeating the same searches across numerous houses and sale dates, then working out where each auction was and whether collection was practical.</p>
+          <p>Relevant lots were easy to miss when catalogue wording varied, when they appeared outside my usual area or when they were offered by a house I did not already follow. The catalogue information existed; the difficult part was deciding quickly what deserved attention.</p>
+          <p>I built AuctionSavvy to solve that buyer-side problem. It creates a concise, personalised morning briefing, organised by relevance, location and urgency, so a dealer or collector can identify promising opportunities and continue to the official Easy Live Auction listing.</p>
           <div class="boundary">
-            <strong>The boundary is deliberate and fixed.</strong> AuctionSavvy is not a catalogue, marketplace or bidding platform. Registration and bidding remain with Easy Live Auction, transactions remain within its auctioneer relationships, and Easy Live Auction retains catalogue control throughout. AuctionSavvy’s sole role is to generate qualified journeys into Easy Live Auction — introducing relevant buyers and helping existing members find suitable lots more efficiently.
+            <strong>The boundary is deliberate and fixed.</strong> AuctionSavvy is a discovery and prioritisation layer—not a catalogue, marketplace or bidding platform. Easy Live Auction retains the official catalogue, registration, bidding, transactions and auctioneer relationships. AuctionSavvy’s role is to create qualified journeys into that environment.
           </div>
-          <p>This is a founder-led proposal, to be developed only under an authorised data arrangement with Easy Live Auction. The suggested starting point is a private walkthrough of the working system, followed — if there is mutual interest — by a data and technical discussion and a controlled pilot with jointly agreed success measures.</p>
         </section>
 
         <section class="proposal-section" id="section-2">
           <span class="section-number">Section 2</span>
-          <h2>What is running today</h2>
+          <h2>What has been demonstrated</h2>
           <div class="metrics" aria-label="Current demonstration snapshot">
             <div class="metric">
-              <strong>779</strong>
-              <span>matching lots in the current briefing</span>
+              <strong>583</strong>
+              <span>matching lots in the frozen briefing</span>
             </div>
             <div class="metric">
-              <strong>105</strong>
+              <strong>90</strong>
               <span>auction houses represented</span>
             </div>
             <div class="metric">
@@ -1460,85 +1449,63 @@
               <span>houses on the UK map</span>
             </div>
             <div class="metric">
-              <strong>Nightly</strong>
-              <span>automated updates since 5 July 2026</span>
+              <strong>Frozen</strong>
+              <span>stable snapshot from 12 August 2026</span>
             </div>
           </div>
-          <p class="snapshot-note">Snapshot reviewed 25 July 2026. These figures show present working scale; they are not claims of user adoption or commercial performance.</p>
-          <p>The demonstration is a working, automatically refreshed system rather than a mock-up. It currently provides:</p>
+          <p class="snapshot-note">These figures demonstrate working scale, not user adoption or commercial performance.</p>
+          <p>The demonstration is not a collection of manually arranged pages. During development, its working pipeline gathered new listings, applied configured interests, organised matching lots and rebuilt the briefing automatically. Further automated collection was stopped on 14 August. The site now preserves a stable proposal snapshot while an authorised future data arrangement is explored.</p>
           <ul>
-            <li><strong>A morning briefing</strong> — matching lots grouped into Local Auctions, UK-Wide Today and UK-Wide Later, so relevance, urgency and geography can be assessed at a glance.</li>
-            <li><strong>Featured searches</strong> — broad demonstration interests build the briefing; in a member service, each member would set their own.</li>
-            <li><strong>Refined search</strong> — private search phrases compared against the current briefing in one action, using transparent keyword matching.</li>
-            <li><strong>Planned auction-day reminders</strong> — a bell on each lot card demonstrates how a signed-in member could request an auction-day email containing the official Easy Live Auction lot link, with an optional second reminder shortly before the auction begins. No reminder is created in the demonstration; a live service would depend on an agreed data arrangement.</li>
-            <li><strong>A UK auction-house map</strong> — houses explored by location and forthcoming sale timing, with links to official auction pages.</li>
-            <li><strong>A working Chrome companion</strong> — a privately used browser extension reveals auction-house addresses and postcodes while browsing Easy Live Auction. Any wider distribution would be discussed transparently with Easy Live Auction.</li>
-            <li><strong>Direct continuation to Easy Live Auction</strong> — every displayed lot links to its official listing for verification, registration and bidding.</li>
+            <li><strong>Morning Briefing</strong> — relevant lots grouped into Local Auctions, UK-Wide Today and UK-Wide Later, making geography and urgency immediately visible.</li>
+            <li><strong>Featured and Refined searches</strong> — broader interests create the briefing, while a second set of private phrases narrows the displayed lots to specific current requirements.</li>
+            <li><strong>UK auction-house map</strong> — 490 houses can be explored by location, with forthcoming sale information where available and links to official auction pages.</li>
+            <li><strong>Working Chrome companion</strong> — a privately used browser extension already reveals auction-house addresses and postcodes while browsing Easy Live Auction. Any wider use or additional functions would be discussed transparently.</li>
+            <li><strong>Reminder concept</strong> — a bell on each card demonstrates a simple auction-day reminder that would return a signed-in member to the official lot at the right time.</li>
           </ul>
-          <p>Alongside the web demonstration, a working private AI-assisted sourcing trial is already operating successfully. At 7am each morning, it compares test wanted-item requirements held in a dedicated email folder with newly loaded listings, then emails a prioritised list of possible matches. Each suggestion includes a brief explanation of the match and a direct link to the official Easy Live Auction item. In a member-facing version, users would normally add, edit and remove wanted items directly inside AuctionSavvy; importing relevant requirements from a message could be an optional shortcut rather than the main method. Strong and possible matches would be prioritised, uncertain cases marked for manual review, and the service would not contact customers or place bids. Any message import would use only necessary product requirements—not complete emails or unrelated personal details—with suitable privacy, security and authorised-data arrangements.</p>
-          <p>The demonstration is private and invitation-only, and uses information gathered from publicly accessible Easy Live Auction pages for proof-of-concept purposes. A live service would operate solely on the authorised basis set out in Section 6.</p>
+          <p>A separate private sourcing trial has also demonstrated a 7am AI-assisted matching report. It compared test wanted-item requirements with newly loaded listings and emailed prioritised possibilities, short match explanations and direct official links. A member version would normally let users maintain those requirements inside AuctionSavvy, with uncertain matches clearly marked for human review. It would not contact customers or place bids.</p>
         </section>
 
         <section class="proposal-section" id="section-3">
           <span class="section-number">Section 3</span>
-          <h2>The problem it solves</h2>
-          <p>Auction catalogues contain a continuous flow of opportunity, but relevance is highly personal. A dealer may want stock within particular categories, dimensions or locations; a collector may follow a narrow subject, maker or period. Both have limited time to repeat broad searches across many houses and sale dates.</p>
-          <p>The problem is not a lack of catalogue information — it is the daily effort of deciding what deserves attention. Relevant lots are dispersed across houses and dates, broad interests may be described using many different catalogue terms, and location, urgency and collection practicality matter as much as the object itself. AuctionSavvy addresses that decision stage: it turns a large, changing catalogue into a manageable daily starting point, with Easy Live Auction as the destination.</p>
+          <h2>What Easy Live Auction gains</h2>
+          <div class="benefits">
+            <div class="benefit">
+              <strong>Qualified journeys</strong>
+              Interested buyers continue to the official Easy Live Auction listing for catalogue details, registration and bidding.
+            </div>
+            <div class="benefit">
+              <strong>Greater value for existing members</strong>
+              Personalised briefings and timely reminders are designed to help current users find relevant opportunities and return at useful moments.
+            </div>
+            <div class="benefit">
+              <strong>New buyer introductions</strong>
+              Focused promotion can introduce relevant dealers, collectors and professional sourcing advisers to Easy Live Auction.
+            </div>
+            <div class="benefit">
+              <strong>Wider exposure for auctioneers</strong>
+              Suitable lots can reach buyers beyond the houses, categories and geographical areas they already follow.
+            </div>
+            <div class="benefit">
+              <strong>Visible engagement</strong>
+              Agreed referral measurement can show which discovery routes lead to meaningful visits to Easy Live Auction.
+            </div>
+          </div>
+          <p>The same discovery approach is relevant to serious collectors, trade buyers, art and antiques advisers, interior sourcing specialists and overseas buying tours. Looking further ahead, it could also guide prospective sellers towards an appropriate auction house and its official valuation or consignment process.</p>
         </section>
 
         <section class="proposal-section" id="section-4">
           <span class="section-number">Section 4</span>
-          <h2>What Easy Live Auction gains</h2>
-          <div class="benefits">
-            <div class="benefit">
-              <strong>Qualified referrals</strong>
-              Every promising lot leads to its official Easy Live Auction page, not to a competing transaction.
-            </div>
-            <div class="benefit">
-              <strong>Timely return to auctions of interest</strong>
-              Don’t miss an auction—or a lot—you have already marked as interesting. Optional reminders could bring motivated buyers back to Easy Live Auction at useful moments.
-            </div>
-            <div class="benefit">
-              <strong>New buyer introductions</strong>
-              AuctionSavvy can be promoted directly to relevant dealer and collector audiences.
-            </div>
-            <div class="benefit">
-              <strong>Wider lot exposure</strong>
-              Suitable lots could reach buyers beyond their usual local area or followed houses.
-            </div>
-            <div class="benefit">
-              <strong>Measurable value</strong>
-              Referral measurement can show which discovery journeys produce genuine engagement, subject to agreement.
-            </div>
-          </div>
-          <p>Easy Live Auction already provides Auction Alerts, a Watch List and advanced catalogue search. AuctionSavvy complements these rather than reproducing them: its distinction is the combined morning workflow, in which matches across a member’s interests and locations arrive in one briefing, prioritised by relevance, urgency and proximity.</p>
-          <p>AI-assisted Featured Search setup could let a member enter one broad interest—such as ceramics—then propose useful search terms including pottery, porcelain, stoneware and studio pottery. The member would accept, remove or edit those suggestions before saving them. AuctionSavvy would then use only the approved terms for its regular filtering, preserving a predictable briefing and a clear explanation of why each lot appeared.</p>
+          <h2>Why collaboration matters</h2>
+          <p>AuctionSavvy introduces catalogue descriptions, photographs and auction-house information during the discovery stage, before a buyer reaches the official registration and bidding journey. Close collaboration would allow Easy Live Auction and its auctioneers to help shape how that material is presented, attributed and linked.</p>
+          <p>An agreed relationship would also give Easy Live Auction visibility of which discovery routes produce useful engagement, while allowing buyer-facing ideas to be tested against auctioneer expectations and platform priorities. AuctionSavvy can undertake the product development without requiring a large initial commitment of Easy Live Auction’s engineering resources; the appropriate level of technical and commercial involvement can be shaped together.</p>
+          <p>The purpose is not to operate at arm’s length. It is to build a complementary buyer service whose presentation, safeguards and measures are aligned with Easy Live Auction and the auctioneers it serves.</p>
         </section>
 
         <section class="proposal-section" id="section-5">
           <span class="section-number">Section 5</span>
-          <h2>Who else benefits</h2>
-          <div class="audience-grid">
-            <div class="audience-card">
-              <h3>Dealers and collectors</h3>
-              <p>Members begin the day with a concise view: new lots within chosen interests, nearby sales happening soon, UK-wide lots that may justify collection or delivery, and possible matches for a customer request — each with a direct link to the official information needed before bidding. AuctionSavvy provides prioritisation, not valuation advice or a substitute for the buyer’s own due diligence.</p>
-            </div>
-            <div class="audience-card">
-              <h3>Auction houses and sellers</h3>
-              <p>Suitable lots could reach relevant bidders who do not already follow that house or routinely browse that sale. Looking further ahead, prospective sellers could be guided towards appropriate houses and an official valuation or consignment inquiry — with suitability, acceptance and valuation remaining entirely matters for the house.</p>
-            </div>
-            <div class="audience-card">
-              <h3>Overseas buyers and UK buying tours</h3>
-              <p>Overseas dealers, designers and buying-tour visitors could identify relevant UK sales before a sourcing trip and include auction visits in their itineraries — introducing informed international buyers to houses they might not otherwise encounter. Eligibility, payment, collection, shipping and export would remain subject to official terms and the relevant providers.</p>
-            </div>
-          </div>
-          <p><strong>Professional sourcing advisers are another relevant audience.</strong> Art and antiques advisers, auction buying agents and interior sourcing specialists may manage several precise client briefs at once. AuctionSavvy could help them monitor relevant lots, prioritise possible matches and continue to each official Easy Live Auction listing—reducing repetitive research while leaving assessment and purchase advice with the professional.</p>
-        </section>
-
-        <section class="proposal-section" id="section-6">
-          <span class="section-number">Section 6</span>
           <h2>Responsible data use</h2>
-          <p>Rights in catalogue descriptions, photographs and related material remain with Easy Live Auction, participating auctioneers and their respective rights holders. A live service would not rely on unapproved automated collection. Development would proceed only under a written arrangement covering:</p>
+          <p>The private, invitation-only demonstration uses information gathered from publicly accessible Easy Live Auction pages for proof-of-concept purposes. Rights in catalogue descriptions, photographs and related material remain with Easy Live Auction, participating auctioneers and their respective rights holders.</p>
+          <p>A live service would not rely on unapproved automated collection. Development would proceed only under a written arrangement covering:</p>
           <ul>
             <li>the authorised data source and permitted purposes;</li>
             <li>attribution, linking and presentation; and</li>
@@ -1547,32 +1514,24 @@
           <p>Easy Live Auction’s listing would remain the authoritative record. Members would always be directed there to verify descriptions, condition, estimates, fees and terms before acting.</p>
         </section>
 
-        <section class="proposal-section" id="section-7">
-          <span class="section-number">Section 7</span>
-          <h2>Founder and development approach</h2>
-          <p>AuctionSavvy was conceived and built by Ken Gibbins, drawing on many years in the antique furniture trade and recent first-hand experience of buying through auctions. The morning briefing, urgency groupings, local emphasis and attention to collection practicality reflect real sourcing decisions rather than assumptions.</p>
-          <p>Ken developed the system using AI-assisted tools, demonstrating the working discovery journey from personalised match to the official Easy Live Auction listing. For production, appropriate engineering, data, security and user-experience expertise would be brought in, in consultation with Easy Live Auction, once the intended integration and scale were understood.</p>
-          <p>AuctionSavvy would remain founder-led, with Ken responsible for product direction and the buyer-side proposition. The commercial model — referral-based, membership-based or a combination — would be agreed once scope, investment and responsibilities were defined. One possible membership structure is sketched in Appendix A.</p>
+        <section class="proposal-section" id="section-6">
+          <span class="section-number">Section 6</span>
+          <h2>How this might proceed</h2>
+          <p>If the underlying proposition is of interest, a staged approach with clearly agreed responsibilities and meaningful measures would be the sensible way forward. The sequence should be shaped by Easy Live Auction: an initial walkthrough could lead to a data and technical discussion, followed by a sufficiently measured development phase if both parties wished to continue.</p>
+          <p>No public launch or commercial operation is proposed before the necessary permissions, safeguards and working arrangements are in place.</p>
         </section>
 
-        <section class="proposal-section" id="section-8">
-          <span class="section-number">Section 8</span>
-          <h2>A staged collaboration</h2>
-          <p>A controlled pilot is proposed as the natural first stage of a longer collaboration — testing the proposition responsibly and improving it through evidence, without assuming success or failure in advance:</p>
-          <ol class="steps">
-            <li><strong>Walkthrough and alignment</strong> — review the demonstration and discuss its fit with Easy Live Auction’s priorities.</li>
-            <li><strong>Data and technical discussion</strong> — establish what authorised access is feasible and what production would involve.</li>
-            <li><strong>Collaboration principles</strong> — agree catalogue control, branding, referrals, privacy and auctioneer relationships.</li>
-            <li><strong>Controlled pilot</strong> — work with a limited member group using jointly defined measures and scheduled review points.</li>
-            <li><strong>Progressive release</strong> — expand categories, membership and promotion as evidence and operational readiness support it.</li>
-          </ol>
-          <p>Both parties retain the freedom to adjust or stop at any stage, while recognising that useful personalisation and buyer habits develop over more than a single short test. No public launch, commercial operation or broader data collection is proposed until the necessary permissions and arrangements are in place.</p>
+        <section class="proposal-section" id="section-7">
+          <span class="section-number">Section 7</span>
+          <h2>An invitation to see it working</h2>
+          <p class="lead">I would welcome the opportunity to show the working system to the person responsible for product, customer experience or commercial partnerships at Easy Live Auction, and to hear an honest view on whether the buyer problem and this approach are of interest.</p>
+          <p>I am not asking for a decision on data access, integration or commercial terms at the first conversation. The immediate request is simply the opportunity to demonstrate what has been built, answer questions candidly and understand whether there is a useful basis for a further discussion.</p>
         </section>
 
         <section class="proposal-section" id="appendix-a">
           <span class="section-number">Appendix A</span>
           <h2>One possible membership model</h2>
-          <p>Included for discussion only — not a commitment on pricing or final structure. A simple three-tier outline is proposed as a starting point; exact features, access, attribution and the commercial relationship with Easy Live Auction would all be agreed before development.</p>
+          <p>Included only to show one possible commercial shape—not as a commitment on pricing or final structure.</p>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1586,65 +1545,47 @@
                 <tr>
                   <td>Free</td>
                   <td>UK auction-house map, upcoming sale dates and a limited rotating Daily Showcase</td>
-                  <td>Demonstrates the discovery journey without personal searches or a complete personalised briefing</td>
+                  <td>Introduces the discovery journey without providing a complete personalised briefing</td>
                 </tr>
                 <tr>
                   <td>Collector</td>
-                  <td>Personalised morning briefing, AI-assisted Featured Search setup, chosen interests and local houses, simple controls and auction reminders</td>
-                  <td>Saves serious private buyers routine research time and directs them to relevant official listings</td>
+                  <td>Personalised briefing, chosen interests and local houses, simple controls and reminders</td>
+                  <td>Saves serious private buyers routine research time</td>
                 </tr>
                 <tr>
                   <td>Trade</td>
-                  <td>Collector features plus multiple wanted-item or client-sourcing briefs, AI-assisted matching, morning reports and a future AI Journey &amp; Collection Planner</td>
-                  <td>Supports focused sourcing, customer requests and efficient auction and collection planning while returning buyers to Easy Live Auction</td>
+                  <td>Collector features plus multiple sourcing briefs, assisted matching and practical planning tools</td>
+                  <td>Supports professional stock and client sourcing across several active requirements</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p><strong>Possible Easy Live Auction customer benefit.</strong> Subject to agreement, AuctionSavvy could offer eligible existing Easy Live Auction customers a preferred introductory rate or trial period. This could support early adoption while giving Easy Live Auction an additional customer benefit to promote. Eligibility, duration, funding and commercial terms would be agreed together, ideally using a referral link or promotional code without sharing customer data.</p>
+          <p><strong>Possible Easy Live Auction customer benefit.</strong> An agreed introductory offer for eligible existing members could support early adoption without requiring customer data to be shared.</p>
         </section>
 
         <section class="proposal-section" id="appendix-b">
           <span class="section-number">Appendix B</span>
           <h2>Possible future directions</h2>
-          <p>Later possibilities, not existing capabilities, partnerships or commitments.</p>
+          <p>Four coherent directions for discussion—not existing partnerships or commitments.</p>
           <div class="appendix-list">
             <div class="appendix-item">
-              <h3>AI-assisted Featured Search setup</h3>
-              <p>AI could suggest related search terms when a member creates or edits a broad interest. The member would approve, remove or amend those suggestions, and only the saved terms would be used for regular catalogue filtering. This keeps the process transparent and avoids an unnecessary AI decision against every incoming lot.</p>
+              <h3>Smarter personal discovery and alerts</h3>
+              <p>Assisted search setup could suggest related terms for a member to approve, while more specific natural-language requirements could produce explained possible matches. Optional reminders could then return interested members to the official listing on the auction day.</p>
             </div>
             <div class="appendix-item">
-              <h3>Intelligent Refined Search and alerts</h3>
-              <p>Specific natural-language requirements could be compared with incoming lots, including dimensions and close alternatives, with match explanations, human review and optional alerts.</p>
-            </div>
-            <div class="appendix-item">
-              <h3>AI Journey &amp; Collection Planner</h3>
-              <p>With authorised catalogue data and user-controlled memory, a conversational assistant could combine saved interests, active requirements and current commitments with travel plans, auction dates and collection windows. It could ask clarifying questions, identify worthwhile diversions or compatible collections, and revise the plan as circumstances or new opportunities change. Members would control and be able to delete anything the assistant remembers.</p>
-            </div>
-            <div class="appendix-item">
-              <h3>Delivery information</h3>
-              <p>Auction-house options shown first, with possible introductions to specialist providers. Using a member’s stored postcode, an estimated delivery price range could appear automatically against each lot, helping buyers judge total cost before bidding; formal quotations would remain the provider’s responsibility.</p>
+              <h3>Journey, collection and delivery planning</h3>
+              <p>A conversational planning assistant could combine interests, travel plans, sale dates and collection windows. Auction-house delivery options and possible specialist-provider estimates could help buyers assess practical total cost before bidding.</p>
             </div>
             <div class="appendix-item">
               <h3>Chrome companion development</h3>
-              <p>Building on the working private companion, further carefully chosen browser-side features could be explored with Easy Live Auction’s agreement. These could make catalogue browsing clearer and help buyers continue their journey through Easy Live Auction.</p>
+              <p>The working private companion already adds auction-house location context. Further carefully chosen browser-side features could be explored transparently with Easy Live Auction.</p>
             </div>
             <div class="appendix-item">
-              <h3>Seller-to-auction-house introductions</h3>
-              <p>A guided route helping prospective sellers identify relevant houses and continue to an official valuation or consignment inquiry.</p>
-            </div>
-            <div class="appendix-item">
-              <h3>Overseas buyers and UK buying tours</h3>
-              <p>Curated discovery and trip-planning for overseas trade buyers ahead of sourcing trips, with realistic expectations on eligibility, payment, shipping and export.</p>
-            </div>
-            <div class="appendix-item">
-              <h3>Referral and relevance insight</h3>
-              <p>Subject to privacy and commercial agreement, aggregate reporting on which discovery routes produce genuine engagement on Easy Live Auction.</p>
+              <h3>New buyer and seller routes</h3>
+              <p>Curated discovery could support overseas trade buyers and buying tours, while separate guidance could help prospective sellers identify an appropriate house and continue to its official valuation or consignment enquiry.</p>
             </div>
           </div>
-          <div class="disclaimer">
-            <strong>Private and confidential.</strong> This document is an evolving discussion draft and does not create a partnership, data licence or commitment by either party.
-          </div>
+          <p>The priority would be the smallest set of additions that demonstrates useful buyer engagement without complicating the morning experience.</p>
         </section>
       </div>
 
@@ -1653,7 +1594,7 @@
       </div>
 
       <footer class="document-footer">
-        AuctionSavvy proposal v0.3 · Private working page · 26 July 2026
+        AuctionSavvy proposal v0.4 · Private working page · 17 August 2026
       </footer>
     </article>
   </main>
