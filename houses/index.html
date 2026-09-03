@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ── SETUP ────────────────────────────────────────────────────────────────────
 const map = L.map('map',{center:[54.4,-3.2],zoom:window.innerWidth < 768 ? 5 : 6});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OSM &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2vjd_1_d55b502556a22090f63fb07e',{attribution:'&copy; OSM &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
 
 const today = new Date(); today.setHours(0,0,0,0);
 const todayStr = today.toISOString().slice(0,10);
