@@ -2443,7 +2443,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       if (!leafletLoaded || !window.matchMedia('(min-width: 801px)').matches) return;
 
     const map = L.map('map', {{ center: [54.2, -2.5], zoom: 6, zoomControl: true }});
-    L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+    L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png?key=cb1_2vjd_1_d55b502556a22090f63fb07e', {{
       attribution: '&copy; OSM &copy; CARTO',
       subdomains: 'abcd',
       maxZoom: 19
