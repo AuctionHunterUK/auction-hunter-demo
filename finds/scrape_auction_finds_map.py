@@ -1253,6 +1253,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       overflow-wrap: anywhere;
     }}
     #cards-area {{
+      min-width: 0;
       background: #f2f2f2;
       flex: 1;
       overflow-y: auto;
@@ -1271,7 +1272,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .wanted-filter-summary a {{ color: var(--accent); font-weight: 700; text-decoration: none; }}
     .wanted-filter-summary button {{ border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; }}
     #cards-area section {{
-      max-width: 1400px;
+      max-width: none;
       margin: 36px auto 0;
       padding: 0;
     }}
@@ -1280,6 +1281,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     #cards-area section.later-section {{
       background: #f2f2f2;
       border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
       padding: 28px 24px 32px;
       border-radius: 0;
       margin: 36px 0 0;
@@ -1329,7 +1331,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     #back-to-top.visible {{ opacity: 1; pointer-events: auto; transform: translateY(0); }}
     /* CSS Grid (not multicolumn masonry) so every card sits in a clean,
        aligned row and all cards are the same height. */
-    .masonry {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; }}
+    .masonry {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }}
     @media (max-width: 1000px) {{ .masonry {{ grid-template-columns: repeat(2, 1fr); }} }}
     @media (max-width: 600px)  {{ .masonry {{ grid-template-columns: 1fr; }} }}
     .card-shell {{ position: relative; min-width: 0; height: 100%; }}
@@ -1612,6 +1614,16 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }}
       body.map-open #map-close {{ display: block; }}
       body.map-open #map-fab {{ display: none; }}
+    }}
+
+    /* One spacing rhythm across the desktop map and three-card grid. */
+    @media (min-width: 801px) {{
+      #main-layout {{ padding-left: 18px; gap: 18px; background: #f2f2f2; }}
+      #cards-area {{ padding-left: 0; padding-right: 18px; }}
+      #cards-area section.local-section,
+      #cards-area section.today-section,
+      #cards-area section.later-section {{ border: 0; padding-left: 0; padding-right: 0; }}
+      #cards-area section h2 {{ margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }}
     }}
 
     /* Edge-to-edge cards on mobile — CHANGE 4 */
