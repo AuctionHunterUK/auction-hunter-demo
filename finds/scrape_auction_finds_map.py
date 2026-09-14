@@ -605,7 +605,7 @@ def _card_html(lot, is_new, postcodes, is_priority=False):
         loading = "eager" if is_priority else "lazy"
         fetch_priority = "high" if is_priority else "low"
         img_tag = (
-            f'<img src="{img_src}" alt="{title_attr}" width="400" height="300" '
+            f'<img data-src="{img_src}" alt="{title_attr}" width="400" height="300" '
             f'loading="{loading}" decoding="async" fetchpriority="{fetch_priority}">'
         )
     else:
@@ -667,8 +667,9 @@ def _card_html(lot, is_new, postcodes, is_priority=False):
 
 
 def _section_html(title, lots, anchor, seen, postcodes, css_class="", priority_ids=None):
+    hidden = "" if anchor == "local" else " hidden"
     if not lots:
-        return f'<section id="{anchor}" class="{css_class}"><h2>{title}</h2><p class="empty">No results found.</p></section>'
+        return f'<section{hidden} id="{anchor}" class="{css_class}"><h2>{title}</h2><p class="empty">No results found.</p></section>'
     priority_ids = priority_ids or set()
     cards = "\n".join(
         _card_html(l, l["id"] not in seen, postcodes, l["id"] in priority_ids)
@@ -677,7 +678,7 @@ def _section_html(title, lots, anchor, seen, postcodes, css_class="", priority_i
     new_count = sum(1 for l in lots if l["id"] not in seen)
     new_pill = f' <span class="new-count">{new_count} new</span>' if new_count else ""
     return f"""
-    <section id="{anchor}" class="{css_class}">
+    <section{hidden} id="{anchor}" class="{css_class}">
       <h2>{title} <span class="count">{len(lots)} lots</span>{new_pill} <span class="progress" data-total="{len(lots)}"></span></h2>
       <div class="masonry">{cards}</div>
     </section>"""
@@ -844,7 +845,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     today_html = _section_html(
         f"🔥 UK-Wide · selling today ({today_str})", wide_today, "today", seen,
         postcodes, "today-section", priority_ids,
-    ) if wide_today else ""
+    )
     later_html = _section_html(
         "🇬🇧 UK-Wide · later", wide_later, "uk-wide", seen, postcodes,
         "later-section", priority_ids,
@@ -1077,7 +1078,10 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     }}
     .app-nav-link.on:hover {{ background: var(--accent); }}
     nav.jump {{ display: flex; gap: 16px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; }}
-    nav.jump a {{
+    nav.jump .group-tab {{
+      font: inherit;
+      border: 0;
+      cursor: pointer;
       font-size: 0.7rem;
       position: relative;
       padding: 4px 0 6px;
@@ -1088,14 +1092,15 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       font-weight: 500;
       transition: 0.15s;
     }}
-    nav.jump a .jump-count {{ color: var(--muted); font-size: .9em; font-weight: 400; }}
+    nav.jump .group-tab .jump-count {{ color: var(--muted); font-size: .9em; font-weight: 400; }}
     /* Desktop mouse hover only darkens flat tab text; it never adds a pill. */
     @media (hover: hover) and (pointer: fine) {{
-      nav.jump a:hover {{ color: var(--ink); }}
+      nav.jump .group-tab:hover {{ color: var(--ink); }}
     }}
-    /* Active = the section currently in view (scrollspy) or just clicked. */
-    nav.jump a.active {{ color: var(--accent); }}
-    nav.jump a.active::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent); }}
+    /* Active = the selected lot group. */
+    #cards-area section[hidden] {{ display: none; }}
+    nav.jump .group-tab.active {{ color: var(--accent); }}
+    nav.jump .group-tab.active::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent); }}
     nav.jump .wanted-filter-button {{
       appearance: none; border: 0; border-left: 1px solid var(--line);
       background: transparent; color: var(--accent); cursor: pointer;
@@ -1603,7 +1608,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         gap: 5px;                              /* tighter so all three fit */
       }}
       nav.jump::-webkit-scrollbar {{ display: none; }}
-      nav.jump a, nav.jump .wanted-filter-button {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }}
+      nav.jump .group-tab, nav.jump .wanted-filter-button {{ flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }}
       nav.jump .wanted-filter-button {{ border-left: 1px solid var(--line); padding-left: 9px; }}
       nav.jump .wanted-filter-button.active {{ padding-left: 8px; padding-right: 8px; }}
 
@@ -1670,13 +1675,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     </div>
     <div class="hrow2">
       <div class="header-page-tools">
-        <p class="tagline">Your latest auction matches — Local first, then UK-wide Today and Later. Click through to EasyLive for details and bidding.</p>
+        <p class="tagline">Your latest auction matches — choose Local, UK Today or UK Later. Click through to EasyLive for details and bidding.</p>
         <span class="header-update-status">✅ Successfully updated - {now}</span>
         <span class="search-results" id="searchResults"></span>
-        <nav class="jump" aria-label="Jump to section">
-          <a href="#local" data-target="local">Local <span class="jump-count">{local_local_count}</span></a>
-          {f'<a href="#today" data-target="today">UK Today <span class="jump-count">{wide_today_count}</span></a>' if wide_today_count else ''}
-          <a href="#uk-wide" data-target="uk-wide">UK Later <span class="jump-count">{wide_later_count}</span></a>
+        <nav class="jump" aria-label="Lot groups">
+          <button type="button" class="group-tab active" data-target="local" aria-controls="local" aria-pressed="true">Local <span class="jump-count">{local_local_count}</span></button>
+          <button type="button" class="group-tab" data-target="today" aria-controls="today" aria-pressed="false">UK Today <span class="jump-count">{wide_today_count}</span></button>
+          <button type="button" class="group-tab" data-target="uk-wide" aria-controls="uk-wide" aria-pressed="false">UK Later <span class="jump-count">{wide_later_count}</span></button>
           <div class="refined-search" id="refinedSearch">
             <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" aria-expanded="false" aria-describedby="refinedSearchPopover" title="Show matches from your refined search">Refined search <span class="jump-count" id="wantedMatchCount">0</span></button>
             <div class="refined-search-popover" id="refinedSearchPopover" role="dialog" aria-label="Current refined search">
@@ -1761,28 +1766,32 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
     // ── LOT IMAGE LOADING / FAILURE STATES ──
     (function initLotImageStates() {{
-      const cardsArea = document.getElementById('cards-area');
-      const cardsAreaStyle = cardsArea ? window.getComputedStyle(cardsArea) : null;
-      const cardsAreaScrolls = Boolean(
-        cardsArea &&
-        cardsAreaStyle &&
-        ['auto', 'scroll'].includes(cardsAreaStyle.overflowY) &&
-        cardsArea.scrollHeight > cardsArea.clientHeight + 2
-      );
+      function loadImage(img) {{
+        if (!img || !img.dataset.src || img.closest('section').hidden ||
+            img.closest('.card-shell').style.display === 'none') return;
+        img.src = img.dataset.src;
+        delete img.dataset.src;
+      }}
       const imagePreloader = 'IntersectionObserver' in window
         ? new IntersectionObserver(entries => {{
             entries.forEach(entry => {{
               if (!entry.isIntersecting) return;
               const img = entry.target.querySelector('img');
-              if (img && !img.complete) img.loading = 'eager';
-              imagePreloader.unobserve(entry.target);
+              loadImage(img);
+              if (!img || !img.dataset.src) imagePreloader.unobserve(entry.target);
             }});
-          }}, {{
-            root: cardsAreaScrolls ? cardsArea : null,
-            rootMargin: '2400px 0px',
-            threshold: 0
-          }})
+          }}, {{ root: null, rootMargin: '400px 0px', threshold: 0 }})
         : null;
+
+      // Re-observe after filters/tab changes; never assign URLs to inactive lots.
+      window.refreshLotImages = function() {{
+        if (imagePreloader) imagePreloader.disconnect();
+        document.querySelectorAll('#cards-area section:not([hidden]) .card-img img[data-src]').forEach(img => {{
+          if (img.closest('.card-shell').style.display === 'none') return;
+          if (imagePreloader) imagePreloader.observe(img.closest('.card-img'));
+          else loadImage(img); // Native loading="lazy" is the older-browser fallback.
+        }});
+      }};
 
       function showLoaded(img) {{
         const frame = img.closest('.card-img');
@@ -1829,7 +1838,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         }}
         img.addEventListener('load', () => showLoaded(img), {{ once: true }});
         img.addEventListener('error', () => showUnavailable(img), {{ once: true }});
-        if (imagePreloader && img.loading === 'lazy') imagePreloader.observe(frame);
+
       }});
     }})();
 
@@ -2149,102 +2158,27 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 
     // ── SEARCH ──
 
-    // ── SECTION NAV (scrollspy) ──
-    // Three buttons (Local / UK Today / UK Later) are pure navigation +
-    // position indicator — NOT filters. Click = smooth-scroll to that bunch;
-    // the button for whichever bunch is currently in view goes green on its
-    // own as you scroll. #cards-area is the scroll container on desktop; on
-    // mobile the window scrolls — detect whichever actually overflows.
-    function jumpScroller() {{
-      const ca = document.getElementById('cards-area');
-      if (ca && ca.scrollHeight > ca.clientHeight + 2) return ca;
-      return document.scrollingElement || document.documentElement;
-    }}
-    function jumpSections() {{
-      return ['local', 'today', 'uk-wide']
-        .map(id => document.getElementById(id))
-        .filter(Boolean);
-    }}
-    function jumpLinks() {{ return document.querySelectorAll('nav.jump a[data-target]'); }}
-    var jumpActiveId = null;
-    function setActiveJump(id) {{
-      if (id === jumpActiveId) return;   // no change → skip redundant DOM work
-      jumpActiveId = id;
-      jumpLinks().forEach(a => a.classList.toggle('active', a.dataset.target === id));
-    }}
-    function scrollToSection(id) {{
-      const sc = jumpScroller();
-      // Local is the first bunch / default view → go right to the very top.
-      if (id === 'local') {{
-        sc.scrollTo({{ top: 0, behavior: 'smooth' }});
-        return;
-      }}
-      const sec = document.getElementById(id);
-      if (!sec) return;
-      const scRect = (sc === document.scrollingElement || sc === document.documentElement)
-        ? {{ top: 0 }} : sc.getBoundingClientRect();
-      const delta = sec.getBoundingClientRect().top - scRect.top;
-      // Align the section (and its sticky heading) flush to the top of the
-      // scroll viewport; the app header sits outside #cards-area so nothing
-      // is hidden underneath it. Small -8px breathing gap.
-      sc.scrollTo({{ top: sc.scrollTop + delta - 8, behavior: 'smooth' }});
-    }}
-
-    // Active-section detection via IntersectionObserver. The browser computes
-    // intersections in its own compositor, independent of JS timing, so this is
-    // immune to the stale getBoundingClientRect readings Chrome-on-Samsung
-    // returns during a fast fling/momentum scroll — which is why rect-polling
-    // stuck intermittently on FAST scroll but always worked on SLOW scroll.
-    // This is the standard, reliable scrollspy.
-    var jumpVisible = {{}};
-    function recomputeActive() {{
-      const secs = jumpSections();
-      if (!secs.length) return;
-      // current = the LAST section (in page order) currently crossing the
-      // top-40% detection band; fall back to the first if none are.
-      let current = secs[0].id;
-      secs.forEach(sec => {{ if (jumpVisible[sec.id]) current = sec.id; }});
-      setActiveJump(current);
-    }}
-    function initJumpObserver() {{
-      const secs = jumpSections();
-      if (!secs.length || !('IntersectionObserver' in window)) {{ updateJumpSpy(); return; }}
-      // root:null = observe each section relative to the actual SCREEN/viewport,
-      // NOT a specific scroll container. This is the crucial fix: on desktop
-      // #cards-area scrolls internally, but on mobile (esp. Chrome-on-Samsung)
-      // the whole PAGE scrolls (the header scrolls away). Pinning the observer
-      // to #cards-area meant that on Samsung the sections barely moved relative
-      // to the observed root, so the green stuck during a fast fling. Viewport
-      // intersection always reflects what's actually on screen, whatever scrolls.
-      // rootMargin bottom -60% → the "active band" is the top 40% of the screen.
-      const io = new IntersectionObserver((entries) => {{
-        entries.forEach(e => {{ jumpVisible[e.target.id] = e.isIntersecting; }});
-        recomputeActive();
-      }}, {{ root: null, rootMargin: '0px 0px -60% 0px', threshold: 0 }});
-      secs.forEach(sec => io.observe(sec));
-    }}
-
-    // Fallback / initial paint only (used if IntersectionObserver is missing).
-    function updateJumpSpy() {{
-      const secs = jumpSections();
-      if (!secs.length) return;
-      let current = secs[0].id;
-      const line = Math.max(120, (window.innerHeight || 600) * 0.4);
-      secs.forEach(sec => {{
-        if (sec.getBoundingClientRect().top <= line) current = sec.id;
+    // ── EXCLUSIVE LOT GROUPS ──
+    let selectedGroup = 'local';
+    function groupButtons() {{ return document.querySelectorAll('nav.jump .group-tab'); }}
+    function selectGroup(id) {{
+      if (!['local', 'today', 'uk-wide'].includes(id)) return;
+      selectedGroup = id;
+      groupButtons().forEach(button => {{
+        const active = button.dataset.target === id;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
       }});
-      setActiveJump(current);
+      applyLotFilters();
+      const cardsArea = document.getElementById('cards-area');
+      if (['auto', 'scroll'].includes(getComputedStyle(cardsArea).overflowY)) {{
+        cardsArea.scrollTo({{ top: 0, behavior: 'instant' }});
+      }} else {{
+        window.scrollTo({{ top: 0, behavior: 'instant' }});
+      }}
+      document.dispatchEvent(new Event('lotgroupchange'));
     }}
-    document.addEventListener('DOMContentLoaded', () => {{
-      jumpLinks().forEach(a => a.addEventListener('click', e => {{
-        e.preventDefault();
-        a.blur();                          // drop focus so no sticky :focus/:hover on touch
-        setActiveJump(a.dataset.target);   // instant single-green, no stale state
-        scrollToSection(a.dataset.target);
-      }}));
-      initJumpObserver();
-      updateJumpSpy();                     // correct green on first paint
-    }});
+    groupButtons().forEach(button => button.addEventListener('click', () => selectGroup(button.dataset.target)));
 
     function normalizeSearch(text) {{
       return text
@@ -2353,19 +2287,23 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       let visibleCount = 0;
       let totalCount = 0;
       let wantedMatchCount = 0;
+      const groupCounts = {{ local: 0, today: 0, "uk-wide": 0 }};
 
       searchBox.classList.toggle('has-text', Boolean(query));
       document.querySelectorAll('.card-shell').forEach(shell => {{
-        totalCount++;
+        const group = shell.closest("section").id;
+        const inSelectedGroup = group === selectedGroup;
+        if (inSelectedGroup) totalCount++;
         const titleEl = shell.querySelector('.title');
         const title = titleEl ? titleEl.textContent : '';
         const normalizedTitle = normalizeSearch(title.toLowerCase());
         const searchMatch = !query || queryWords.every(word => normalizedTitle.includes(word));
         const wantedMatches = requests.filter(request => wantedMatchesTitle(title, request));
-        if (wantedMatches.length) wantedMatchCount++;
+        if (inSelectedGroup && wantedMatches.length) wantedMatchCount++;
         const visible = searchMatch && (!wantedFilterActive || wantedMatches.length > 0);
         shell.style.display = visible ? '' : 'none';
-        if (visible) visibleCount++;
+        if (visible) groupCounts[group]++;
+        if (visible && inSelectedGroup) visibleCount++;
 
         const oldBadge = shell.querySelector('.wanted-match-badge');
         if (oldBadge) oldBadge.remove();
@@ -2379,13 +2317,20 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }});
 
       document.querySelectorAll('#cards-area section[id]').forEach(section => {{
-        if (!wantedFilterActive) {{
-          section.style.display = '';
-          return;
+        section.hidden = section.id !== selectedGroup;
+        let empty = section.querySelector('.filter-empty');
+        if (!empty) {{
+          empty = document.createElement('p');
+          empty.className = 'empty filter-empty';
+          empty.textContent = 'No lots match your search in this group.';
+          section.appendChild(empty);
         }}
-        const hasVisibleCard = Array.from(section.querySelectorAll('.card-shell')).some(shell => shell.style.display !== 'none');
-        section.style.display = hasVisibleCard ? '' : 'none';
+        empty.hidden = groupCounts[section.id] > 0 || !section.querySelector('.card-shell');
       }});
+      groupButtons().forEach(button => {{
+        button.querySelector('.jump-count').textContent = groupCounts[button.dataset.target];
+      }});
+      window.refreshLotImages();
 
       resultsEl.textContent = query ? visibleCount + ' of ' + totalCount + ' lots' : '';
       const button = document.getElementById('wantedFilterButton');
@@ -2549,6 +2494,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
         highlightMarker(null);
       }});
     }});
+
+    document.addEventListener('lotgroupchange', () => highlightMarker(null));
 
     const allLats = Object.values(PC_MAP).map(h => h.lat);
     const allLngs = Object.values(PC_MAP).map(h => h.lng);
