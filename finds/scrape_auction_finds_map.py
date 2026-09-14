@@ -1253,6 +1253,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       overflow-wrap: anywhere;
     }}
     #cards-area {{
+      background: #f2f2f2;
       flex: 1;
       overflow-y: auto;
       padding: 0 24px 40px;
@@ -1274,25 +1275,13 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       margin: 36px auto 0;
       padding: 0;
     }}
-    #cards-area section.local-section {{
-      background: var(--local-bg);
-      border-left: 4px solid var(--local-border);
-      padding: 28px 24px 32px;
-      border-radius: var(--radius);
-      margin: 36px 0 0;
-    }}
-    #cards-area section.today-section {{
-      background: linear-gradient(180deg, rgba(75, 107, 138, 0.08), rgba(75, 107, 138, 0.02));
-      border-left: 4px solid var(--highlight);
-      padding: 28px 24px 32px;
-      border-radius: var(--radius);
-      margin: 36px 0 0;
-    }}
+    #cards-area section.local-section,
+    #cards-area section.today-section,
     #cards-area section.later-section {{
-      background: var(--later-bg);
-      border-left: 4px solid var(--later-border);
+      background: #f2f2f2;
+      border-left: 4px solid transparent;
       padding: 28px 24px 32px;
-      border-radius: var(--radius);
+      border-radius: 0;
       margin: 36px 0 0;
     }}
     /* Sticky per-section headers: as the user scrolls through a section it
@@ -1312,9 +1301,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       padding-left: 24px;
       padding-right: 24px;
     }}
-    #cards-area section.local-section h2 {{ background: var(--local-bg); }}
-    #cards-area section.today-section h2 {{ background: #eef2f6; }}
-    #cards-area section.later-section h2 {{ background: var(--later-bg); }}
+    #cards-area section h2 {{ background: #f2f2f2; }}
     #cards-area section h2 .count {{
       font-size: 0.82rem;
       font-weight: 500;
@@ -1349,7 +1336,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     .card {{
       display: flex; flex-direction: column; width: 100%;
       background: var(--panel);
-      border-radius: var(--radius);
+      border-radius: 0;
       overflow: hidden;
       text-decoration: none; color: inherit;
       box-shadow: var(--shadow);
