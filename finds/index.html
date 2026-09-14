@@ -759,6 +759,16 @@
       body.map-open #map-fab { display: none; }
     }
 
+    /* One spacing rhythm across the desktop map and three-card grid. */
+    @media (min-width: 801px) {
+      #main-layout { padding-left: 18px; gap: 18px; background: #f2f2f2; }
+      #cards-area { padding-left: 0; padding-right: 18px; }
+      #cards-area section.local-section,
+      #cards-area section.today-section,
+      #cards-area section.later-section { border: 0; padding-left: 0; padding-right: 0; }
+      #cards-area section h2 { margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+    }
+
     /* Edge-to-edge cards on mobile — CHANGE 4 */
     @media (max-width: 640px) {
       #cards-area { padding: 0 8px 24px; }
