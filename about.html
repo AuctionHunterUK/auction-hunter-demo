@@ -118,6 +118,8 @@
   @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
+<link rel="stylesheet" href="assets/header.css">
+<script src="assets/header.js" defer></script>
 </head>
 <body>
 <!-- ── PRIVATE DEMO LOGIN GATE ───────────────────────────────────────── -->
@@ -162,24 +164,24 @@ body.gate-locked{overflow:hidden}
 })();
 </script>
 
-<header>
-  <div class="headtop">
-    <a class="brand" href="finds/" aria-label="AuctionSavvy Lots">
-      <h1>AuctionSavvy</h1>
-    </a>
-    <div class="search-box search-box-spacer" aria-hidden="true"></div>
-    <nav class="app-nav" aria-label="App pages">
-      <a href="houses/" class="app-nav-link">Map</a>
-      <a href="finds/" class="app-nav-link">Lots</a>
-    </nav>
+<header class="as-header">
+  <div class="as-top">
+    <a aria-label="AuctionSavvy Lots" class="brand" href="finds/">
+<h1>AuctionSavvy</h1>
+</a>
+    <div class="as-middle"><p class="as-description">Personalised EasyLive lot discovery and UK auction-house planning</p></div>
+    <nav aria-label="App pages" class="app-nav">
+<a class="app-nav-link" href="houses/">Map</a>
+<a class="app-nav-link" href="finds/">Lots</a>
+</nav>
   </div>
-  <div class="hrow2">
-    <div class="header-page-tools"><p class="tagline">Personalised EasyLive lot discovery and UK auction-house planning</p></div>
-    <nav class="header-utility-nav" aria-label="Utility pages">
-      <a href="about.html" class="on" aria-current="page">About</a>
-      <a href="settings/">Edit</a>
-      <a href="proposal.html">Proposal</a>
-    </nav>
+  <div class="as-bottom">
+    <div class="as-page-controls"></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a aria-current="page" class="on" href="about.html">About</a>
+<a href="settings/">Edit</a>
+<a href="proposal.html">Proposal</a>
+</nav>
   </div>
 </header>
 

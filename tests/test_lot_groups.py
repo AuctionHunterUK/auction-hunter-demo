@@ -18,6 +18,11 @@ class LotGroupsTest(unittest.TestCase):
         generated = BeautifulSoup(scraper.build_html([], []), 'html.parser')
         checked_in = BeautifulSoup((ROOT / 'finds/index.html').read_bytes(), 'html.parser')
         self.assertEqual(generated.find('style').string, checked_in.find('style').string)
+        self.assertIsNotNone(generated.select_one('body > .as-header'))
+        for selector, attr in [('link[href$="assets/header.css"]', 'href'), ('script[src$="assets/header.js"]', 'src')]:
+            self.assertEqual(generated.select_one(selector)[attr], checked_in.select_one(selector)[attr])
+        self.assertEqual([b.get('id') for b in generated.select('.as-header button')],
+                         [b.get('id') for b in checked_in.select('.as-header button')])
         # Embedded catalogue/map data legitimately differ; behavior after them must match.
         marker = '// ── LOT IMAGE LOADING / FAILURE STATES ──'
         self.assertEqual(str(generated).split(marker)[1].split('// ── DESKTOP-ONLY MINI-MAP')[0], str(checked_in).split(marker)[1].split('// ── DESKTOP-ONLY MINI-MAP')[0])

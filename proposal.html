@@ -1159,6 +1159,8 @@
       }
     }
   </style>
+<link rel="stylesheet" href="assets/header.css">
+<script src="assets/header.js" defer></script>
 </head>
 <body>
   <div id="demo-gate">
@@ -1214,25 +1216,24 @@
     })();
   </script>
 
-  <header class="site-header">
-    <div class="site-header__inner">
-      <div class="header-main">
-        <a class="brand" href="finds/" aria-label="AuctionSavvy lots">AuctionSavvy</a>
-        <nav class="app-nav" aria-label="App pages">
-          <a href="houses/">Map</a>
-          <a href="finds/">Lots</a>
-        </nav>
-      </div>
-      <div class="header-sub">
-        <p class="header-note">Private proposal for discussion with Easy Live Auction</p>
-        <nav class="utility-nav" aria-label="Utility pages">
-          <a href="about.html">About</a>
-          <a href="settings/">Edit</a>
-          <a href="proposal.html" aria-current="page">Proposal</a>
-        </nav>
-      </div>
-    </div>
-  </header>
+  <header class="as-header">
+  <div class="as-top">
+    <a aria-label="AuctionSavvy lots" class="brand" href="finds/">AuctionSavvy</a>
+    <div class="as-middle"><p class="as-description">Private proposal for discussion with Easy Live Auction</p></div>
+    <nav aria-label="App pages" class="app-nav">
+<a href="houses/">Map</a>
+<a href="finds/">Lots</a>
+</nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a href="about.html">About</a>
+<a href="settings/">Edit</a>
+<a aria-current="page" href="proposal.html">Proposal</a>
+</nav>
+  </div>
+</header>
 
   <main class="page" id="top">
     <aside class="contents" aria-label="Proposal contents">
