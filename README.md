@@ -35,3 +35,7 @@ it must never be linked from auctionhunter.co.uk or promoted anywhere.
 python3 -m http.server 8899
 # open http://localhost:8899/
 ```
+
+## Shared site header
+
+All five pages use the scoped `.as-header` markup and `assets/header.css` for consistent branding, navigation, readable controls and responsive wrapping. `assets/header.js` keeps in-page destinations clear of the header when its height changes. Keep Finds header markup and asset references in sync with `finds/scrape_auction_finds_map.py`; do not apply these rules to document/body headings. Header checks are documented in `tests/README.md`.

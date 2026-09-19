@@ -444,6 +444,8 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 .src-btn{background:var(--surface-2)!important;color:var(--text-soft)!important}
 #source-toggle{border:1px solid var(--line)!important}
 </style>
+<link rel="stylesheet" href="../assets/header.css">
+<script src="../assets/header.js" defer></script>
 </head>
 <body>
 <!-- ── PRIVATE DEMO LOGIN GATE ─────────────────────────────────────────
@@ -494,35 +496,29 @@ body.gate-locked{overflow:hidden}
 })();
 </script>
 
-<header>
-  <div class="headtop">
-    <div class="brand" onclick="goHome()" title="AuctionSavvy — back to start and reset to today's auctions" aria-label="AuctionSavvy home">
-      <h1>AuctionSavvy</h1>
-    </div>
-    <div class="search-box search-box-spacer" aria-hidden="true"></div>
-    <nav class="app-nav" aria-label="App pages">
-      <a href="../houses/" class="app-nav-link on">Map</a>
-      <a href="../finds/" class="app-nav-link">Lots</a>
-    </nav>
+<header class="as-header as-header--map">
+  <div class="as-top">
+    <button aria-label="AuctionSavvy home" class="brand" onclick="goHome()" title="AuctionSavvy — back to start and reset to today's auctions" type="button">
+<h1>AuctionSavvy</h1>
+</button>
+    <div class="as-middle"><p class="as-description">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p></div>
+    <nav aria-label="App pages" class="app-nav">
+<a aria-current="page" class="app-nav-link on" href="../houses/">Map</a>
+<a class="app-nav-link" href="../finds/">Lots</a>
+</nav>
   </div>
-  <div class="hrow2">
-    <p class="tagline">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
-    <div class="header-page-tools">
-      <span id="update-status">✅ Loading dates…</span>
-      <span id="updated-badge" hidden>1 May 2026</span>
-      <span class="hright" id="hright">Loading…</span>
-      <nav id="toolbar" aria-label="Filter auction houses by timing">
-        <span class="chip chip-urgent" id="chip-urgent" onclick="setChip('urgent')">Now</span>
-        <span class="chip chip-soon" id="chip-soon" onclick="setChip('soon')">Soon</span>
-        <span class="chip chip-2wk" id="chip-2wk" onclick="setChip('2wk')">Later</span>
-        <button type="button" class="tbtn" id="chip-all" onclick="resetAll()">All</button>
-      </nav>
-    </div>
-    <nav class="header-utility-nav" aria-label="Utility pages">
-      <a href="../about.html">About</a>
-      <a href="../settings/">Edit</a>
-      <a href="../proposal.html">Proposal</a>
-    </nav>
+  <div class="as-bottom">
+    <div class="as-page-controls"><span id="update-status">✅ Loading dates…</span><span hidden="" id="updated-badge">1 May 2026</span><span class="hright" id="hright">Loading…</span><nav aria-label="Filter auction houses by timing" id="toolbar">
+<button class="chip chip-urgent" id="chip-urgent" onclick="setChip('urgent')" type="button">Now</button>
+<button class="chip chip-soon" id="chip-soon" onclick="setChip('soon')" type="button">Soon</button>
+<button class="chip chip-2wk" id="chip-2wk" onclick="setChip('2wk')" type="button">Later</button>
+<button class="tbtn" id="chip-all" onclick="resetAll()" type="button">All</button>
+</nav></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a href="../about.html">About</a>
+<a href="../settings/">Edit</a>
+<a href="../proposal.html">Proposal</a>
+</nav>
   </div>
 </header>
 <div id="body">
@@ -1052,7 +1048,10 @@ function filteredH(){
 function syncChipState(){
   ['urgent','soon','2wk','all'].forEach(mode => {
     const el = document.getElementById(mode === 'all' ? 'chip-all' : 'chip-' + mode);
-    if (el) el.classList.toggle('on', activeChip === mode);
+    if (el) {
+      el.classList.toggle('on', activeChip === mode);
+      el.setAttribute('aria-pressed', String(activeChip === mode));
+    }
   });
 }
 

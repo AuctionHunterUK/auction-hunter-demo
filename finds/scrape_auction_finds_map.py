@@ -1697,55 +1697,54 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
       }}
     }}
   </style>
+<link rel="stylesheet" href="../assets/header.css">
+<script src="../assets/header.js" defer></script>
 </head>
 <body>
 {gate_html}
-  <header>
-    <div class="headtop">
-      <div class="brand"><h1>AuctionSavvy</h1></div>
-      <div class="search-box" id="searchBox">
-        <input type="text" id="searchInput" placeholder="Search items below…" aria-label="Search items shown below" oninput="searchItems()">
-        <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
-      </div>
-      <div class="featured-searches" id="featuredSearches">
-        <button type="button" class="featured-searches-trigger" id="featuredSearchesTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="featuredSearchesPopover">Featured searches <span class="featured-searches-count">{featured_term_count}</span></button>
-        <div class="featured-searches-popover" id="featuredSearchesPopover" role="dialog" aria-label="Current featured searches">
-          <strong>Current featured searches</strong>
-          <ul>{featured_terms_html}</ul>
-          <p>These terms define the lots included in this morning’s catalogue.</p>
-        </div>
-      </div>
-      <nav class="app-nav" aria-label="App pages">
-        <a href="../houses/" class="app-nav-link">Map</a>
-        <a href="../finds/" class="app-nav-link on">Lots</a>
-      </nav>
-    </div>
-    <div class="hrow2">
-      <div class="header-page-tools">
-        <p class="tagline">Your latest auction matches — choose Local, UK Today or UK Later. Click through to EasyLive for details and bidding.</p>
-        <span class="search-results" id="searchResults"></span>
-        <nav class="jump" aria-label="Lot groups">
-          <button type="button" class="group-tab active" data-target="local" aria-controls="local" aria-pressed="true">Local <span class="jump-count">{local_local_count}</span></button>
-          <button type="button" class="group-tab" data-target="today" aria-controls="today" aria-pressed="false">UK Today <span class="jump-count">{wide_today_count}</span></button>
-          <button type="button" class="group-tab" data-target="uk-wide" aria-controls="uk-wide" aria-pressed="false">UK Later <span class="jump-count">{wide_later_count}</span></button>
-          <div class="refined-search" id="refinedSearch">
-            <button type="button" class="wanted-filter-button" id="wantedFilterButton" aria-pressed="false" aria-expanded="false" aria-describedby="refinedSearchPopover" title="Show matches from your refined search">Refined search <span class="jump-count" id="wantedMatchCount">0</span></button>
-            <div class="refined-search-popover" id="refinedSearchPopover" role="dialog" aria-label="Current refined search">
-              <strong>Current refined search</strong>
-              <ul id="refinedSearchPhrases"></ul>
-              <p>These active phrases narrow the lots already selected by your featured searches.</p>
-              <a href="../settings/#refined-items">Edit refined search</a>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <nav class="header-utility-nav" aria-label="Utility pages">
-        <a href="../about.html">About</a>
-        <a href="../settings/">Edit</a>
-        <a href="../proposal.html">Proposal</a>
-      </nav>
-    </div>
-  </header>
+  <header class="as-header">
+  <div class="as-top">
+    <div class="brand"><h1>AuctionSavvy</h1></div>
+    <div class="as-middle"><div class="search-box" id="searchBox">
+<input aria-label="Search items shown below" id="searchInput" oninput="searchItems()" placeholder="Search items below…" type="text"/>
+<button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
+</div>
+<div class="featured-searches" id="featuredSearches">
+<button aria-controls="featuredSearchesPopover" aria-expanded="false" aria-haspopup="true" class="featured-searches-trigger" id="featuredSearchesTrigger" type="button">Featured searches <span class="featured-searches-count">{featured_term_count}</span></button>
+<div aria-label="Current featured searches" class="featured-searches-popover" id="featuredSearchesPopover" role="dialog">
+<strong>Current featured searches</strong>
+<ul>{featured_terms_html}</ul>
+<p>These terms define the lots included in this morning’s catalogue.</p>
+</div>
+</div></div>
+    <nav aria-label="App pages" class="app-nav">
+<a class="app-nav-link" href="../houses/">Map</a>
+<a aria-current="page" class="app-nav-link on" href="../finds/">Lots</a>
+</nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"><nav aria-label="Lot groups" class="jump">
+<button aria-controls="local" aria-pressed="true" class="group-tab active" data-target="local" type="button">Local <span class="jump-count">{local_local_count}</span></button>
+<button aria-controls="today" aria-pressed="false" class="group-tab" data-target="today" type="button">UK Today <span class="jump-count">{wide_today_count}</span></button>
+<button aria-controls="uk-wide" aria-pressed="false" class="group-tab" data-target="uk-wide" type="button">UK Later <span class="jump-count">{wide_later_count}</span></button>
+<div class="refined-search" id="refinedSearch">
+<button aria-describedby="refinedSearchPopover" aria-expanded="false" aria-pressed="false" class="wanted-filter-button" id="wantedFilterButton" title="Show matches from your refined search" type="button">Refined search <span class="jump-count" id="wantedMatchCount">0</span></button>
+<div aria-label="Current refined search" class="refined-search-popover" id="refinedSearchPopover" role="dialog">
+<strong>Current refined search</strong>
+<ul id="refinedSearchPhrases"></ul>
+<p>These active phrases narrow the lots already selected by your featured searches.</p>
+<a href="../settings/#refined-items">Edit refined search</a>
+</div>
+</div>
+</nav>
+<span class="search-results" id="searchResults"></span></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a href="../about.html">About</a>
+<a href="../settings/">Edit</a>
+<a href="../proposal.html">Proposal</a>
+</nav>
+  </div>
+</header>
 
   <div id="main-layout">
     <div id="map-panel">
@@ -2285,7 +2284,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     function initRefinedSearchPopover() {{
       const wrap = document.getElementById('refinedSearch');
       const trigger = document.getElementById('wantedFilterButton');
-      if (!wrap || !trigger || !window.matchMedia('(min-width: 801px)').matches) return;
+      if (!wrap || !trigger) return;
 
       function setOpen(open) {{
         wrap.classList.toggle('open', open);

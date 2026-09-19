@@ -20,11 +20,23 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
 @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}main{padding:32px 12px 48px}.settings-grid{grid-template-columns:1fr}h2{font-size:1.65rem}.term-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.term-row input{grid-column:1/-1}.term-row .icon-button{min-width:0;padding:7px 5px;font-size:.76rem}}
 @media(max-width:600px){.refined-overview{display:block}.view-refined{width:100%;margin-top:14px}.setting-card{padding:18px 14px}.refined-head{display:block}.active-total{display:inline-block;margin-top:10px}.add-refined{grid-template-columns:1fr}.add-refined button{width:100%}.refined-row{grid-template-columns:max-content minmax(0,1fr);gap:9px 10px}.remove-refined{grid-column:2;justify-self:start}}
 </style>
+<link rel="stylesheet" href="../assets/header.css">
+<script src="../assets/header.js" defer></script>
 </head>
 <body>
 <!-- Private demonstration gate, shared with Map and Lots. -->
 <div id="demo-gate"><div id="demo-gate-card"><h2>AuctionSavvy</h2><p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p><form id="demo-gate-form"><input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus><button type="submit">Enter demo</button></form><p class="dg-err" id="demo-gate-err"></p></div></div>
-<header><div class="headtop"><a class="brand" href="../finds/" aria-label="AuctionSavvy Lots"><h1>AuctionSavvy</h1></a><div class="search-box search-box-spacer" aria-hidden="true"></div><nav class="app-nav" aria-label="App pages"><a href="../houses/" class="app-nav-link">Map</a><a href="../finds/" class="app-nav-link">Lots</a></nav></div><div class="hrow2"><div class="header-page-tools"><p class="tagline">Manage featured searches and your refined search in one place.</p></div><nav class="header-utility-nav" aria-label="Utility pages"><a href="../about.html">About</a><a href="../settings/" class="on" aria-current="page">Edit</a><a href="../proposal.html">Proposal</a></nav></div></header>
+<header class="as-header">
+  <div class="as-top">
+    <a aria-label="AuctionSavvy Lots" class="brand" href="../finds/"><h1>AuctionSavvy</h1></a>
+    <div class="as-middle"><p class="as-description">Manage featured searches and your refined search in one place.</p></div>
+    <nav aria-label="App pages" class="app-nav"><a class="app-nav-link" href="../houses/">Map</a><a class="app-nav-link" href="../finds/">Lots</a></nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"></div>
+    <nav aria-label="Utility pages" class="as-utilities"><a href="../about.html">About</a><a aria-current="page" class="on" href="../settings/">Edit</a><a href="../proposal.html">Proposal</a></nav>
+  </div>
+</header>
 <main>
   <span class="eyebrow">Owner controls</span>
   <h2>Edit</h2>
