@@ -166,7 +166,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 .pu-btn:active{background:#3d5f50}
 
 /* ── LEGEND ── */
-#legend{position:fixed;top:65px;right:480px;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.05);border-radius:8px;padding:10px 13px;z-index:800;font-size:.65rem;color:#374151;display:none}
+#legend{position:fixed;top:151px;right:480px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.08);border-radius:8px;padding:10px 13px;z-index:800;font-size:.65rem;color:#374151;display:none;box-shadow:0 4px 14px rgba(0,0,0,.08)}
 #legend.visible{display:block;animation:fadeIn .15s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}
 @media(max-width:768px){#legend{position:absolute;top:10px;right:10px;display:none}#legend.visible{display:block;animation:fadeIn .15s}}
@@ -616,11 +616,11 @@ body.gate-locked{overflow:hidden}
     </div>
   </div>
   <div id="legend">
-    <div class="leg-t">Timing</div>
-    <div class="leg-r leg-now"><div class="leg-d pin-soon" style="background:#22c55e"></div>Now — within 3 days</div>
-    <div class="leg-r leg-soon"><div class="leg-d" style="background:#f5e642"></div>Soon — 4–14 days</div>
-    <div class="leg-r leg-later"><div class="leg-d" style="background:#c8912a"></div>Later — 14+ days</div>
-    <div class="leg-r leg-none"><div class="leg-d" style="background:#888888"></div>No date</div>
+    <div class="leg-t">Map filters</div>
+    <div class="leg-r leg-now"><div class="leg-d pin-soon" style="background:#22c55e"></div>Now — auctions within 3 days</div>
+    <div class="leg-r leg-soon"><div class="leg-d" style="background:#f5e642"></div>Soon — auctions within 14 days</div>
+    <div class="leg-r leg-later"><div class="leg-d" style="background:#c8912a"></div>Later — all upcoming auctions</div>
+    <div class="leg-r leg-all"><div class="leg-d" style="background:#888888"></div>All — every mapped auction house</div>
   </div>
 
   <!-- Route planner panel -->
@@ -1632,9 +1632,9 @@ let legendTimer = null;
 function highlightLegend(mode) {
   document.querySelectorAll('.leg-r').forEach(r => r.classList.remove('highlight'));
   if (mode === 'urgent') document.querySelector('.leg-now')?.classList.add('highlight');
-  else if (mode === 'soon') { document.querySelector('.leg-now')?.classList.add('highlight'); document.querySelector('.leg-soon')?.classList.add('highlight'); }
-  else if (mode === '2wk') { document.querySelector('.leg-now')?.classList.add('highlight'); document.querySelector('.leg-soon')?.classList.add('highlight'); document.querySelector('.leg-later')?.classList.add('highlight'); }
-  else { document.querySelectorAll('.leg-r').forEach(r => r.classList.add('highlight')); }
+  else if (mode === 'soon') document.querySelector('.leg-soon')?.classList.add('highlight');
+  else if (mode === '2wk') document.querySelector('.leg-later')?.classList.add('highlight');
+  else document.querySelector('.leg-all')?.classList.add('highlight');
 }
 const legendEl = document.getElementById('legend');
 function showLegend(mode){ clearTimeout(legendTimer); highlightLegend(mode); legendEl.classList.add('visible'); }
