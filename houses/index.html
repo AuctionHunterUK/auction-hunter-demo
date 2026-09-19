@@ -17,7 +17,7 @@ body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;backgro
 
 /* ── SHARED HEADER CONTRACT (keep in sync with finds/scrape_auction_finds_map.py) ── */
 header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex-shrink:0;z-index:1000}
-.headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:40px}
+.headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:44px}
 .brand{display:flex;align-items:center;cursor:pointer}
 .brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap;margin:0}
 .search-box{position:relative}
@@ -29,7 +29,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 .header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}
 @media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--pine)}}
 @media(min-width:801px){
-  .header-page-tools{display:grid;grid-template-columns:minmax(0,1fr) max-content max-content max-content;column-gap:12px;align-items:center}
+  .header-page-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px) max-content max-content;column-gap:12px;align-items:center}
   .tagline{flex:none;min-width:0;width:auto}
 }
 .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:rgba(58,92,59,.1);border:1px solid var(--pine);border-radius:22px}
@@ -49,23 +49,22 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
   .header-page-tools{gap:6px 8px;flex-wrap:nowrap;overflow:hidden;white-space:nowrap}
   .header-utility-nav{gap:6px}
   .header-utility-nav a{font-size:.62rem}
-  #update-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #updated-badge,.hright{flex-shrink:0}
 }
 
 .htag{font-size:.6rem;background:rgba(45,74,62,.1);color:#2d4a3e;border:1px solid rgba(45,74,62,.2);padding:2px 7px;border-radius:10px;letter-spacing:.06em;text-transform:uppercase;display:none}
 @media(min-width:480px){.htag{display:inline}}
-#update-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:#22c55e;font-weight:600;display:flex;align-items:center;gap:4px}
+#update-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:#22c55e;font-weight:600;display:none;align-items:center;gap:4px}
 #updated-badge{font-size:.7rem;color:#6b7280;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:4px;padding:2px 6px;white-space:nowrap;display:none}
 .hright{font-size:.78rem;color:#6b7280;display:none}
-@media(min-width:600px){.hright{display:inline}}
+@media(min-width:801px){#update-status{display:flex}.hright{display:inline}}
 
-/* ── TOOLBAR ── */
-#toolbar{background:#fff;border-bottom:1px solid rgba(0,0,0,.06);padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* Timing filters share the Lots-page header's flat, underlined tab treatment. */
+#toolbar{margin:0;padding:0;display:flex;align-items:center;gap:16px;flex-shrink:0;flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 #toolbar::-webkit-scrollbar{display:none}
-.chip,.tbtn{position:relative;font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:500;padding:5px 8px 7px;border:0;border-radius:0;background:transparent;color:#6b7280;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:color .15s;user-select:none;-webkit-tap-highlight-color:transparent}
+.chip,.tbtn{position:relative;font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:500;padding:4px 0 6px;border:0;border-radius:0;background:transparent;color:#6b7280;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:color .15s;user-select:none;-webkit-tap-highlight-color:transparent}
 .chip.on,.tbtn.on{color:#2d4a3e}
-.chip.on::after,.tbtn.on::after{content:"";position:absolute;left:4px;right:4px;bottom:1px;height:2px;background:#2d4a3e}
+.chip.on::after,.tbtn.on::after{content:"";position:absolute;left:0;right:0;bottom:1px;height:2px;background:#2d4a3e}
 @media (hover:hover) and (pointer:fine){.chip:hover,.tbtn:hover{color:#1f3d28;background:transparent}}
 .tbtn{font-weight:600}
 .tbtn:active{background:transparent}
@@ -501,8 +500,14 @@ body.gate-locked{overflow:hidden}
     <div class="header-page-tools">
       <p class="tagline">A live map of UK auction houses — see what's on today and coming up, and click through to bid</p>
       <span id="update-status">✅ Loading dates…</span>
-      <span id="updated-badge">1 May 2026</span>
+      <span id="updated-badge" hidden>1 May 2026</span>
       <span class="hright" id="hright">Loading…</span>
+      <nav id="toolbar" aria-label="Filter auction houses by timing">
+        <span class="chip chip-urgent" id="chip-urgent" onclick="setChip('urgent')">Now</span>
+        <span class="chip chip-soon" id="chip-soon" onclick="setChip('soon')">Soon</span>
+        <span class="chip chip-2wk" id="chip-2wk" onclick="setChip('2wk')">Later</span>
+        <button type="button" class="tbtn" id="chip-all" onclick="resetAll()">All</button>
+      </nav>
     </div>
     <nav class="header-utility-nav" aria-label="Utility pages">
       <a href="../about.html">About</a>
@@ -511,12 +516,6 @@ body.gate-locked{overflow:hidden}
     </nav>
   </div>
 </header>
-<div id="toolbar">
-  <span class="chip chip-urgent" id="chip-urgent" onclick="setChip('urgent')">Now</span>
-  <span class="chip chip-soon" id="chip-soon" onclick="setChip('soon')">Soon</span>
-  <span class="chip chip-2wk" id="chip-2wk" onclick="setChip('2wk')">Later</span>
-  <button type="button" class="tbtn" id="chip-all" onclick="resetAll()">All</button>
-</div>
 <div id="body">
   <div id="map"></div>
 

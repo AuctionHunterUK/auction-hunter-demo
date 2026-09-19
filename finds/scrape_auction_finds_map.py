@@ -1054,11 +1054,12 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
        structure (Houses ↔ Finds) reads instantly and stands apart from links. */
     .app-nav {{
       display: inline-flex; padding: 3px; gap: 0;
-      background: var(--accent-soft); border: 1px solid var(--accent);
+      background: rgba(58,92,59,.1); border: 1px solid var(--accent);
       border-radius: 22px;
       grid-column: 4; justify-self: end;
     }}
     .app-nav-link {{
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.82rem; font-weight: 700; padding: 7px 18px;
       border-radius: 18px; border: 0; background: transparent;
       color: var(--accent); letter-spacing: -0.01em;
