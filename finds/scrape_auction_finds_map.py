@@ -1776,7 +1776,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
     <nav aria-label="Utility pages" class="as-utilities">
 <a href="../about.html">About</a>
 <a href="../settings/">Edit</a>
-<a href="../proposal.html">Proposal</a>
+<a class="private-proposal-link" href="../proposal.html">Private Proposal</a>
 </nav>
   </div>
 </header>

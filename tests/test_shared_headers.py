@@ -15,7 +15,7 @@ class SharedHeaderTest(unittest.TestCase):
                 self.assertIsNotNone(header)
                 self.assertEqual(header.select_one('.brand').get_text(strip=True), 'AuctionSavvy')
                 self.assertEqual([a.get_text(strip=True) for a in header.select('.app-nav a')], ['Map', 'Lots'])
-                self.assertEqual([a.get_text(strip=True) for a in header.select('.as-utilities a')], ['About', 'Edit', 'Proposal'])
+                self.assertEqual([a.get_text(strip=True) for a in header.select('.as-utilities a')], ['About', 'Edit', 'Private Proposal'])
                 css = soup.select_one('link[href$="assets/header.css"]')
                 js = soup.select_one('script[src$="assets/header.js"]')
                 self.assertTrue((ROOT / name).parent.joinpath(css['href']).resolve().is_file())
