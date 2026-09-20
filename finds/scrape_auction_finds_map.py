@@ -1751,7 +1751,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 <ul>{featured_terms_html}</ul>
 <p>These terms define the lots included in this morning’s catalogue.</p>
 </div>
-</div></div>
+</div><span class="snapshot-label">Private demo snapshot · 12 August 2026</span></div>
     <nav aria-label="App pages" class="app-nav">
 <a class="app-nav-link" href="../houses/">Map</a>
 <a aria-current="page" class="app-nav-link on" href="../finds/">Lots</a>
