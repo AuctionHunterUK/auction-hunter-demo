@@ -76,6 +76,13 @@
   .feature-panel h2{margin-top:0}
   .feature-panel p:last-child{margin-bottom:0}
   .feature-wanted{grid-column:1/-1;background:#f3f7f3;border-left:4px solid var(--accent)}
+  .function-list{margin:14px 0 0}
+  .function-list>div{display:grid;grid-template-columns:minmax(112px,.38fr) minmax(0,1fr);gap:14px;padding:11px 0;border-top:1px solid #e3e8e3}
+  .function-list>div:first-child{border-top:0;padding-top:0}
+  .function-list dt{font-weight:700;color:#253d27}
+  .function-list dd{margin:0;color:#4b5563;line-height:1.48}
+  .function-status{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:999px;background:#f3eadb;color:#795b2d;font-size:.64rem;font-weight:700;letter-spacing:.02em;vertical-align:1px}
+  .feature-guide-intro{max-width:780px;margin-bottom:0}
   .working-demo-box{margin-top:20px;background:#eef5ee;border:1px solid #c8d9c9;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
   .working-demo-box h2{margin-top:0}
   .working-demo-box p{max-width:780px}
@@ -115,7 +122,7 @@
   .stewardship-group .easylive-box{margin-top:0}
   .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
   @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.function-list>div{grid-template-columns:1fr;gap:3px}.morning-check,.working-demo-box,.discovery-box,.easylive-box,.monitoring-box,.easylive-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 <link rel="stylesheet" href="assets/header.css">
@@ -190,7 +197,7 @@ body.gate-locked{overflow:hidden}
     <p class="about-toc-title">On this page</p>
     <nav>
       <a class="is-active" href="#introduction">Introduction</a>
-      <a href="#tools">Lots, Map and Refined search</a>
+      <a href="#tools">Feature guide</a>
       <a href="#discovery">Supporting discovery</a>
       <a href="#membership">Membership</a>
       <a href="#support">Additional tools</a>
@@ -239,25 +246,45 @@ body.gate-locked{overflow:hidden}
   </div>
 
   <section class="section-group" id="tools">
-    <p class="section-lead">This demonstration brings three complementary tools together.</p>
+    <div class="section-lead">
+      <h2>What you can do in this demonstration</h2>
+      <p class="feature-guide-intro">A quick guide to each main control and what happens when it is selected. Everything below is working in the demonstration unless it is marked <strong>Planned</strong>.</p>
+    </div>
     <div class="feature-grid">
       <section class="feature-panel">
-        <h2>Lots</h2>
-        <p>To demonstrate how personalisation would work, this version uses two example search interests—pine furniture and butchers’ blocks—and a small selection of auction houses designated as <strong>Local</strong>. These are demonstration choices; members would select their own interests and local auction houses.</p>
-        <p>Matching items are organised into <strong>Local Auctions</strong>, <strong>UK-Wide Today</strong> and <strong>UK-Wide Later</strong>, making them quick to assess by location and urgency.</p>
-        <p><strong>Don’t miss an auction—or a lot—you have already marked as interesting.</strong> The cards demonstrate a planned reminder bell which, with an agreed live service, could send a signed-in member an auction-day email containing the official EasyLive lot link, with an optional second reminder shortly before the auction begins.</p>
+        <h2>Lots page</h2>
+        <dl class="function-list">
+          <div><dt>Featured searches</dt><dd>The broad interests used to create the morning briefing. Hover over the label to see the current terms; members would choose their own.</dd></div>
+          <div><dt>Search items below</dt><dd>Type a word or phrase to filter the lots already shown in the briefing.</dd></div>
+          <div><dt>Local</dt><dd>Shows lots from the auction houses selected as local. The number alongside it shows the current total—43 in this frozen snapshot.</dd></div>
+          <div><dt>UK Today</dt><dd>Shows matching lots in UK auctions taking place on the briefing date. This snapshot contains 70.</dd></div>
+          <div><dt>UK Later</dt><dd>Shows matching lots in later UK auctions. This snapshot contains 470.</dd></div>
+          <div><dt>Refined Search</dt><dd>A second, more precise filter for particular items. Switch it on or off; hover to see the active phrases and use Edit to change them. The number shows possible matches in the selected group.</dd></div>
+          <div><dt>Lot cards</dt><dd>Each card shows the image, title, auction house, postcode, lot number, available price information and sale date. Select a card to open the official EasyLive listing.</dd></div>
+          <div><dt>Desktop mini-map</dt><dd>Hover over a lot to highlight its auction-house location and show the house name, address, postcode and sale date.</dd></div>
+          <div><dt>Reminder bell <span class="function-status">Planned</span></dt><dd>Demonstrates a future auction-day email reminder containing the official EasyLive lot link, with a possible second reminder shortly before the sale begins.</dd></div>
+        </dl>
       </section>
 
       <section class="feature-panel">
-        <h2>Map</h2>
-        <p>An interactive map of UK auction houses, colour-coded by when their next sale takes place, with <strong>Now</strong>, <strong>Soon</strong>, <strong>Later</strong> and <strong>All</strong> views and a searchable house list. Selecting a house reveals its address, forthcoming sales and a link to its official auction page. A future route-planning feature could highlight auction houses along a journey and make collection planning easier.</p>
+        <h2>Map page</h2>
+        <dl class="function-list">
+          <div><dt>Now</dt><dd>Shows auction houses with an auction taking place within the next three days.</dd></div>
+          <div><dt>Soon</dt><dd>Shows auction houses with an auction taking place within the next fourteen days.</dd></div>
+          <div><dt>Later</dt><dd>Shows auction houses with any forthcoming auction date currently recorded.</dd></div>
+          <div><dt>All</dt><dd>Shows every mapped auction house, including houses without a forthcoming date in the current snapshot.</dd></div>
+          <div><dt>House list</dt><dd>The list on the right follows the selected map view. Search it by auction-house name or location, then select a house to find it on the map.</dd></div>
+          <div><dt>House details</dt><dd>Select a marker or list entry to see the address, forthcoming sale information and a direct link to the official auction page.</dd></div>
+        </dl>
       </section>
 
       <section class="feature-panel feature-wanted">
-        <h2>Refined search — working demonstration</h2>
-        <p>Featured searches create the broader selection of lots; the Refined search provides a second, more specific layer within it and is managed alongside those searches on the Edit page.</p>
-        <p>This working demonstration stores the private list in the user’s own browser, uploads no personal information and checks every active item against the current briefing with one click. It uses transparent keyword matching and clearly labels possible matches before directing users to EasyLive for verification.</p>
-        <p>With an authorised data feed, it could develop into AI-assisted matching that understands natural-language descriptions, dimensions and close alternatives, with optional alerts.</p>
+        <h2>Edit and personalisation</h2>
+        <dl class="function-list">
+          <div><dt>Featured searches</dt><dd>Review the broad terms that decide which types of lots enter the briefing. The demonstration shows a controlled review-and-save process for changing them.</dd></div>
+          <div><dt>Refined Search phrases</dt><dd>Add, edit, pause or remove specific wanted-item phrases. In this demonstration they are saved only in the user’s browser and are not uploaded.</dd></div>
+          <div><dt>How the two searches work together</dt><dd>Featured searches build the broad morning briefing; Refined Search narrows that briefing further when the user wants to concentrate on specific current requirements.</dd></div>
+        </dl>
       </section>
     </div>
 
