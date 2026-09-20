@@ -76,8 +76,8 @@
   min-height: 48px; padding: 8px 12px; margin: 0; border: 1px solid #bbc7bc;
   border-radius: 2px; font: 600 1rem/1.5 'DM Sans', sans-serif; color: var(--header-green); background: #fff;
 }
-.as-header nav.jump .wanted-filter-button.active { padding: 8px 12px; border-radius: 2px; background: var(--header-green); color: #fff; }
-.as-header nav.jump .wanted-filter-button.active .jump-count { background: #fff; color: var(--header-green); }
+.as-header nav.jump .wanted-filter-button.active { background: transparent; color: var(--header-green); }
+.as-header nav.jump .wanted-filter-button.active .jump-count { background: #eef3ee; color: var(--header-green); }
 .as-header #searchResults { width: 100%; order: 2; text-align: center; font-size: 1rem; line-height: 1.5; color: var(--header-muted); white-space: normal; }
 .as-header #searchResults:empty { display: none; }
 .as-header .search-box { min-width: 0; flex: 1 1 260px; position: relative; }

@@ -244,6 +244,7 @@
       background: transparent; color: var(--accent); cursor: pointer;
       font: inherit; font-size: .7rem; font-weight: 700;
       padding: 4px 0 6px 14px; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 7px;
     }
     .refined-search {
       position: relative;
@@ -310,11 +311,45 @@
       text-decoration: none;
     }
     nav.jump .wanted-filter-button .jump-count { color: var(--muted); font-size: .9em; font-weight: 400; }
-    nav.jump .wanted-filter-button.active { color: #fff; background: var(--accent); border-color: var(--accent); border-radius: 999px; padding: 4px 10px 6px; }
-    nav.jump .wanted-filter-button.active .jump-count { color: #fff; }
+    .refined-switch {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 34px;
+      flex: 0 0 20px;
+      border: 1px solid #aeb5ae;
+      border-radius: 999px;
+      background: #dfe2df;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .refined-switch-knob {
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.28);
+      transition: transform .18s ease;
+    }
+    .refined-switch-state {
+      min-width: 19px;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    nav.jump .wanted-filter-button.active { color: var(--accent); background: transparent; }
+    nav.jump .wanted-filter-button.active .jump-count { color: var(--accent); }
+    nav.jump .wanted-filter-button.active .refined-switch { background: var(--accent); border-color: var(--accent); }
+    nav.jump .wanted-filter-button.active .refined-switch-knob { transform: translateY(-14px); }
+    nav.jump .wanted-filter-button.active .refined-switch-state { color: var(--accent); }
     @media (hover: hover) and (pointer: fine) {
       nav.jump .wanted-filter-button:hover { color: var(--ink); }
-      nav.jump .wanted-filter-button.active:hover { color: #fff; background: #2c4a2d; }
+      nav.jump .wanted-filter-button.active:hover { color: var(--accent); background: transparent; }
     }
     .new-badge {
       position: absolute; top: 10px; left: 10px;
@@ -737,7 +772,7 @@
       nav.jump::-webkit-scrollbar { display: none; }
       nav.jump .group-tab, nav.jump .wanted-filter-button { flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }
       nav.jump .wanted-filter-button { border-left: 1px solid var(--line); padding-left: 9px; }
-      nav.jump .wanted-filter-button.active { padding-left: 8px; padding-right: 8px; }
+      nav.jump .wanted-filter-button.active { padding-left: 9px; }
 
       #map-panel { display: none; }
       #cards-area { padding: 0 12px 24px; }
@@ -796,9 +831,9 @@
         background: #f1f1f1; border-radius: 2px; color: #626262; font-size: .8125rem; font-weight: 500;
       }
       nav.jump .group-tab.active .jump-count { background: var(--accent-soft); color: var(--accent); }
-      nav.jump .wanted-filter-button { min-height: 42px; font-size: .9375rem; font-weight: 600; padding: 8px 14px 8px 24px; color: #333; }
-      nav.jump .wanted-filter-button.active { border-radius: 2px; padding: 8px 14px 8px 24px; color: #fff; }
-      nav.jump .wanted-filter-button.active .jump-count { color: #fff; background: rgba(255,255,255,.18); }
+      nav.jump .wanted-filter-button { min-height: 42px; font-size: .9375rem; font-weight: 600; padding: 6px 0 6px 24px; color: #333; }
+      nav.jump .wanted-filter-button.active { padding: 6px 0 6px 24px; color: var(--accent); }
+      nav.jump .wanted-filter-button.active .jump-count { color: var(--accent); background: var(--accent-soft); }
       .header-utility-nav { grid-column: 3; justify-self: end; gap: 24px; }
       .header-utility-nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: .9375rem; color: #555; }
       header button:focus-visible, header a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -918,7 +953,7 @@ body.gate-locked{overflow:hidden}
 <button aria-controls="today" aria-pressed="false" class="group-tab" data-target="today" type="button">UK Today <span class="jump-count">70</span></button>
 <button aria-controls="uk-wide" aria-pressed="false" class="group-tab" data-target="uk-wide" type="button">UK Later <span class="jump-count">470</span></button>
 <div class="refined-search" id="refinedSearch">
-<button aria-describedby="refinedSearchPopover" aria-expanded="false" aria-pressed="false" class="wanted-filter-button" id="wantedFilterButton" title="Show matches from your refined search" type="button">Refined search <span class="jump-count" id="wantedMatchCount">0</span></button>
+<button aria-describedby="refinedSearchPopover" aria-expanded="false" aria-pressed="false" class="wanted-filter-button" id="wantedFilterButton" title="Switch refined search on" type="button"><span>Refined search <span class="jump-count" id="wantedMatchCount">0</span></span><span aria-hidden="true" class="refined-switch"><span class="refined-switch-knob"></span></span><span class="refined-switch-state" id="refinedSwitchState">Off</span></button>
 <div aria-label="Current refined search" class="refined-search-popover" id="refinedSearchPopover" role="dialog">
 <strong>Current refined search</strong>
 <ul id="refinedSearchPhrases"></ul>
@@ -9953,12 +9988,15 @@ const HOUSE_POPUP_DATA = {"bourne end auction rooms": {"name": "Bourne End Aucti
       resultsEl.textContent = query ? visibleCount + ' of ' + totalCount + ' lots' : '';
       const button = document.getElementById('wantedFilterButton');
       const matchCount = document.getElementById('wantedMatchCount');
+      const switchState = document.getElementById('refinedSwitchState');
       const summary = document.getElementById('wantedFilterSummary');
       const summaryText = document.getElementById('wantedFilterSummaryText');
       renderRefinedSearchPopover(requests);
       matchCount.textContent = wantedMatchCount;
       button.classList.toggle('active', wantedFilterActive);
       button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
+      button.title = wantedFilterActive ? 'Switch refined search off' : 'Switch refined search on';
+      switchState.textContent = wantedFilterActive ? 'On' : 'Off';
       summary.classList.toggle('visible', wantedFilterActive);
       if (wantedFilterActive) {
         summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active search phrase' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
