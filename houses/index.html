@@ -1056,7 +1056,9 @@ function syncChipState(){
 }
 
 function setChip(mode){
-  activeChip = activeChip===mode ? 'all' : mode;
+  // Timing buttons select a view; only All should reveal every house.
+  if (activeChip === mode) return;
+  activeChip = mode;
   syncChipState();
   buildSB(filteredH());
   // On mobile: flash the timing legend briefly, then auto-hide so it doesn't block the map

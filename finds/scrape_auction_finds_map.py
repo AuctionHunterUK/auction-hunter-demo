@@ -1737,7 +1737,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 </head>
 <body>
 {gate_html}
-  <header class="as-header">
+  <header class="as-header as-header--lots">
   <div class="as-top">
     <div class="brand"><h1>AuctionSavvy</h1></div>
     <div class="as-middle"><div class="search-box" id="searchBox">
@@ -1760,8 +1760,8 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
   <div class="as-bottom">
     <div class="as-page-controls"><nav aria-label="Lot groups" class="jump">
 <button aria-controls="local" aria-pressed="true" class="group-tab active" data-target="local" type="button">Local <span class="jump-count">{local_local_count}</span></button>
-<button aria-controls="today" aria-pressed="false" class="group-tab" data-target="today" type="button">UK Today <span class="jump-count">{wide_today_count}</span></button>
-<button aria-controls="uk-wide" aria-pressed="false" class="group-tab" data-target="uk-wide" type="button">UK Later <span class="jump-count">{wide_later_count}</span></button>
+<button aria-controls="today" aria-pressed="false" class="group-tab" data-target="today" type="button"><span class="group-country">UK </span>Today <span class="jump-count">{wide_today_count}</span></button>
+<button aria-controls="uk-wide" aria-pressed="false" class="group-tab" data-target="uk-wide" type="button"><span class="group-country">UK </span>Later <span class="jump-count">{wide_later_count}</span></button>
 <div class="refined-search" id="refinedSearch">
 <button aria-describedby="refinedSearchPopover" aria-expanded="false" aria-pressed="false" class="wanted-filter-button" id="wantedFilterButton" title="Switch refined search on" type="button"><span>Refined search <span class="jump-count" id="wantedMatchCount">0</span></span><span aria-hidden="true" class="refined-switch"><span class="refined-switch-knob"></span></span><span class="refined-switch-state" id="refinedSwitchState">Off</span></button>
 <div aria-label="Current refined search" class="refined-search-popover" id="refinedSearchPopover" role="dialog">
