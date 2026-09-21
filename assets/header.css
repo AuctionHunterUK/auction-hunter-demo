@@ -156,28 +156,28 @@ body:has(> .as-header) .view-switcher { scroll-margin-top: 16px; }
 /* Lots keeps primary browsing controls visible; secondary controls expand on demand. */
 .lots-menu-toggle, .lots-mobile-main, .lots-mobile-options { display: none; }
 @media (max-width: 800px) {
-  .as-header--lots { padding: 0 12px; position: static; }
-  .as-header--lots .as-top { display: flex; gap: 6px; min-height: 60px; padding: 6px 0; }
-  .as-header--lots .brand { font-size: 1.25rem; margin-right: auto; }
-  .as-header--lots .as-middle, .as-header--lots .as-bottom { display: none; }
-  .as-header--lots .app-nav a { min-width: 44px; padding: 8px 6px; }
-  .as-header--lots .app-nav { flex-shrink: 0; }
-  .as-header--lots .lots-menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 52px; padding: 8px 2px; border: 0; background: transparent; color: var(--header-green); font: 600 1rem/1.5 'DM Sans', sans-serif; cursor: pointer; }
-  .as-header--lots .lots-mobile-main { display: block; padding-bottom: 4px; }
+  :is(.as-header--lots, .as-header--map) { padding: 0 12px; position: static; }
+  :is(.as-header--lots, .as-header--map) .as-top { display: flex; gap: 6px; min-height: 60px; padding: 6px 0; }
+  :is(.as-header--lots, .as-header--map) .brand { font-size: 1.25rem; margin-right: auto; }
+  :is(.as-header--lots, .as-header--map) .as-middle, :is(.as-header--lots, .as-header--map) .as-bottom { display: none; }
+  :is(.as-header--lots, .as-header--map) .app-nav a { min-width: 44px; padding: 8px 6px; }
+  :is(.as-header--lots, .as-header--map) .app-nav { flex-shrink: 0; }
+  :is(.as-header--lots, .as-header--map) .lots-menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 52px; padding: 8px 2px; border: 0; background: transparent; color: var(--header-green); font: 600 1rem/1.5 'DM Sans', sans-serif; cursor: pointer; }
+  :is(.as-header--lots, .as-header--map) .lots-mobile-main { display: block; padding-bottom: 4px; }
   .as-header--lots .search-box { margin: 0 0 4px; }
-  .as-header--lots .as-page-controls { display: block; }
+  :is(.as-header--lots, .as-header--map) .as-page-controls { display: block; }
   .as-header--lots nav.jump { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; width: 100%; }
   .as-header--lots nav.jump .group-tab { padding: 8px 2px; white-space: nowrap; }
   .as-header--lots .group-country { display: none; }
   .as-header--lots .group-tab .jump-count { min-width: 0; margin-left: 4px; padding: 1px 4px; }
-  .as-header--lots .lots-mobile-options:not([hidden]) { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; border-top: 1px solid #dedfde; }
-  .as-header--lots .lots-mobile-options h2 { margin: 0; font: 600 1rem/1.5 'DM Sans', sans-serif; }
-  .as-header--lots .as-utilities { justify-content: flex-start; flex-wrap: wrap; }
+  :is(.as-header--lots, .as-header--map) .lots-mobile-options:not([hidden]) { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; border-top: 1px solid #dedfde; }
+  :is(.as-header--lots, .as-header--map) .lots-mobile-options h2 { margin: 0; font: 600 1rem/1.5 'DM Sans', sans-serif; }
+  :is(.as-header--lots, .as-header--map) .as-utilities { justify-content: flex-start; flex-wrap: wrap; }
   .as-header--lots .featured-searches { margin: 0; }
   .as-header--lots .refined-search { display: block; }
   .as-header--lots .wanted-filter-button { min-height: 44px; font-size: 1rem; }
   .as-header--lots .featured-searches-popover, .as-header--lots .refined-search-popover { position: static; width: 100%; margin-top: 8px; }
-  .as-header--lots .snapshot-label { align-self: flex-start; white-space: normal; }
+  :is(.as-header--lots, .as-header--map) .snapshot-label { align-self: flex-start; white-space: normal; }
 }
 @media (max-width: 800px) {
   .as-header--lots .featured-searches-popover, .as-header--lots .refined-search-popover { display: none; }
@@ -190,4 +190,7 @@ body:has(> .as-header) .view-switcher { scroll-margin-top: 16px; }
     border: 0; border-radius: 0; background: transparent; color: var(--header-green);
     font: 600 1rem/1.5 'DM Sans', sans-serif; cursor: pointer;
   }
+}
+@media (max-width: 800px) {
+  .as-header--map .lots-mobile-main .as-description { margin-bottom: 4px; text-align: left; }
 }

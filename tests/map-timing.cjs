@@ -36,7 +36,7 @@ const path=require('path'),fs=require('fs'),assert=require('assert/strict');
   await page.locator('#chip-2wk').click();
   await page.evaluate(()=>window.firstResult=document.querySelector('#sblist .si'));
   await page.locator('#chip-2wk').click();assert(await page.evaluate(()=>window.firstResult===document.querySelector('#sblist .si')));
-  if(width<=800)assert.equal(await page.locator('.as-bottom').evaluate(e=>e.firstElementChild.className),'as-utilities');
+  if(width<=800)assert(!(await page.locator('.as-utilities').isVisible()));
   console.log(`PASS ${width}px: timing boundaries, repeated clicks/Enter/Space, All, marker/list agreement, stable page/map geometry`);
   await page.close();
  }

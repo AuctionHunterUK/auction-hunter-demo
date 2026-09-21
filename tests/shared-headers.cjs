@@ -20,10 +20,10 @@ const data=await page.evaluate(()=>{
  const desc=h.querySelector('.as-description');
  return {brand:metric(h.querySelector('.brand')),toggle:metric(h.querySelector('.app-nav')),link:metric(h.querySelector('.app-nav a')),utility:metric(h.querySelector('.as-utilities a')),description:desc?{w:desc.clientWidth,sw:desc.scrollWidth,h:desc.clientHeight,sh:desc.scrollHeight}:null,headerOverflow:h.scrollWidth>h.clientWidth,pageOverflow:document.documentElement.scrollWidth>innerWidth,headerHeight:h.offsetHeight};
 });
-console.log(JSON.stringify({scenario,view,...data}));if (!(view.startsWith('finds') && scenario.w <= 800)) metrics.push(data);
+console.log(JSON.stringify({scenario,view,...data}));if (!((view.startsWith('finds') || view.startsWith('houses')) && scenario.w <= 800)) metrics.push(data);
 assert(!data.headerOverflow,view+' header overflow');
 if(data.description){assert(data.description.sw<=data.description.w+1);assert(data.description.sh<=data.description.h+1)}
-assert(data.link.h>=44);if(!(view.startsWith('finds')&&scenario.w<=800))assert(data.utility.h>=44);
+assert(data.link.h>=44);if(!((view.startsWith('finds')||view.startsWith('houses'))&&scenario.w<=800))assert(data.utility.h>=44);
 await page.keyboard.press('Tab');await page.locator('.as-header .app-nav a').first().focus();
 assert.equal(await page.locator('.as-header .app-nav a').first().evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
 if(view.startsWith('finds')){
