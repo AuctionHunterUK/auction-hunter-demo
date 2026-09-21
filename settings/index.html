@@ -29,7 +29,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
 <header class="as-header">
   <div class="as-top">
     <a aria-label="AuctionSavvy Lots" class="brand" href="../finds/"><h1>AuctionSavvy</h1></a>
-    <div class="as-middle"><p class="as-description">Manage featured searches and your refined search in one place.</p></div>
+    <div class="as-middle"><p class="as-description">Manage Daily Searches and your Refined Search in one place.</p></div>
     <nav aria-label="App pages" class="app-nav"><a class="app-nav-link" href="../houses/">Map</a><a class="app-nav-link" href="../finds/">Lots</a></nav>
   </div>
   <div class="as-bottom">
@@ -40,13 +40,13 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
 <main>
   <span class="eyebrow">Owner controls</span>
   <h2>Edit</h2>
-  <p class="intro">Manage the broad featured searches used for the nightly catalogue and the specific phrases used by your refined search.</p>
+  <p class="intro">Manage the broad Daily Searches used to build the morning briefing and the specific phrases used by your Refined Search.</p>
   <div class="settings-grid">
     <section class="setting-card term-editor">
-      <h3>Featured searches</h3>
+      <h3>Daily Searches</h3>
       <p>These broad phrases build the next nightly catalogue. Use up to 20 simple search phrases.</p>
       <div id="termsEditor" aria-live="polite"></div>
-      <div class="add-term"><input id="newTerm" type="text" maxlength="80" placeholder="Add a featured search" aria-label="New featured search"><button type="button" id="addTerm">Add</button></div>
+      <div class="add-term"><input id="newTerm" type="text" maxlength="80" placeholder="Add a daily search" aria-label="New daily search"><button type="button" id="addTerm">Add</button></div>
       <button type="button" class="review-button" id="reviewSave">Review and save on GitHub</button>
       <p class="settings-note">This opens a configuration request for approval; it does not save changes directly from this page.</p>
       <p class="settings-status" id="settingsStatus" role="alert"></p>
@@ -58,7 +58,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
     </section>
     <section class="setting-card refined-editor" id="refined-items">
       <div class="refined-head">
-        <div><h3>Refined search</h3><p>Keep a short list of specific search phrases for pieces you particularly want to find. These narrow the broader featured catalogue further.</p></div>
+        <div><h3>Refined Search</h3><p>Keep a short list of specific search phrases for pieces you particularly want to find. These narrow the broader daily briefing further.</p></div>
         <span class="active-total" id="activeTotal">0 active</span>
       </div>
       <div class="refined-overview" aria-label="Refined search shortcut">
@@ -97,14 +97,14 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
   function validate(values) {
     var clean = [];
     var seen = Object.create(null);
-    if (!values.length) return { error: 'Add at least one featured search before requesting a change.' };
-    if (values.length > maxTerms) return { error: 'Use no more than ' + maxTerms + ' featured searches.' };
+    if (!values.length) return { error: 'Add at least one daily search before requesting a change.' };
+    if (values.length > maxTerms) return { error: 'Use no more than ' + maxTerms + ' daily searches.' };
     for (var i = 0; i < values.length; i += 1) {
       var term = normalise(values[i]);
-      if (!term) return { error: 'Featured searches cannot be blank.' };
-      if (!termPattern.test(term)) return { error: 'Use plain featured searches only (letters, numbers, spaces and simple punctuation).' };
+      if (!term) return { error: 'Daily Searches cannot be blank.' };
+      if (!termPattern.test(term)) return { error: 'Use plain Daily Searches only (letters, numbers, spaces and simple punctuation).' };
       var key = term.toLocaleLowerCase();
-      if (seen[key]) return { error: 'Featured searches must be unique, ignoring case.' };
+      if (seen[key]) return { error: 'Daily Searches must be unique, ignoring case.' };
       seen[key] = true;
       clean.push(term);
     }
@@ -124,7 +124,7 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
       row.className = 'term-row';
       var input = document.createElement('input');
       input.type = 'text'; input.maxLength = 80; input.value = term;
-      input.setAttribute('aria-label', 'Featured search ' + (index + 1));
+      input.setAttribute('aria-label', 'Daily Search ' + (index + 1));
       input.addEventListener('input', function () { terms[index] = input.value; showStatus(''); });
       row.appendChild(input);
       [['↑', 'Move ' + term + ' up', index === 0, -1], ['↓', 'Move ' + term + ' down', index === terms.length - 1, 1]].forEach(function (control) {
@@ -156,8 +156,8 @@ main{max-width:960px;margin:0 auto;padding:48px 24px 64px}.eyebrow{display:inlin
     if (result.error) { showStatus(result.error); return; }
     terms = result.terms; render();
     var config = { search_terms: result.terms };
-    var body = requestMarker + '\n\n## Featured search configuration request\n\n```json\n' + JSON.stringify(config, null, 2) + '\n```\n\nOnly an authorised repository collaborator can approve this update.';
-    var target = issueUrl + '?' + new URLSearchParams({ title: 'Update AuctionSavvy featured searches', body: body }).toString();
+    var body = requestMarker + '\n\n## Daily Searches update request\n\n```json\n' + JSON.stringify(config, null, 2) + '\n```\n\nOnly an authorised repository collaborator can approve this update.';
+    var target = issueUrl + '?' + new URLSearchParams({ title: 'Update AuctionSavvy Daily Searches', body: body }).toString();
     window.location.assign(target);
   });
 

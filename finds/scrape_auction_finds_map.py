@@ -1745,9 +1745,9 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 <button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
 </div>
 <div class="featured-searches" id="featuredSearches">
-<button aria-controls="featuredSearchesPopover" aria-expanded="false" aria-haspopup="true" class="featured-searches-trigger" id="featuredSearchesTrigger" type="button">Featured searches <span class="featured-searches-count">{featured_term_count}</span></button>
-<div aria-label="Current featured searches" class="featured-searches-popover" id="featuredSearchesPopover" role="dialog">
-<strong>Current featured searches</strong>
+<button aria-controls="featuredSearchesPopover" aria-expanded="false" aria-haspopup="true" class="featured-searches-trigger" id="featuredSearchesTrigger" type="button">Daily Searches <span class="featured-searches-count">{featured_term_count}</span></button>
+<div aria-label="Current Daily Searches" class="featured-searches-popover" id="featuredSearchesPopover" role="dialog">
+<strong>Current Daily Searches</strong>
 <ul>{featured_terms_html}</ul>
 <p>These terms define the lots included in this morning’s catalogue.</p>
 </div>
@@ -1767,7 +1767,7 @@ def build_html(local_lots, wide_lots, seen=None, postcodes=None):
 <div aria-label="Current refined search" class="refined-search-popover" id="refinedSearchPopover" role="dialog">
 <strong>Current refined search</strong>
 <ul id="refinedSearchPhrases"></ul>
-<p>These active phrases narrow the lots already selected by your featured searches.</p>
+<p>These active phrases narrow the lots already selected by your Daily Searches.</p>
 <a href="../settings/#refined-items">Edit refined search</a>
 </div>
 </div>
