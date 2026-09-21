@@ -27,6 +27,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}]){
  await page.locator('#searchInput').fill('zzzznomatch'); await page.waitForTimeout(150); assert.equal(await page.locator('#uk-wide .card-shell:visible').count(),0); assert(await page.locator('#uk-wide .filter-empty').isVisible());
  await page.locator('[data-target="local"]').click(); assert.deepEqual(await visible(),['local']); assert.equal(await page.locator('#local .card-shell:visible').count(),0);
  await page.locator('#searchInput').fill('pine'); await page.locator('[data-target="today"]').click(); assert((await page.locator('#today .card-shell:visible').count())>0);
+ if(viewport.width<=800)await page.locator('.lots-menu-toggle').click();
  await page.locator('#wantedFilterButton').click(); assert.deepEqual(await visible(),['today']);
  await page.locator('[data-target="uk-wide"]').click(); assert.deepEqual(await visible(),['uk-wide']);
  await page.locator('#clearWantedFilter').click(); await page.locator('#searchInput').fill('');
