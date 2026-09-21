@@ -37,3 +37,11 @@ node tests/mobile-lots-header.cjs
 ```
 
 Checks 320px/390px collapsed layout, visible item search, one row of groups, secondary menu/terms/refinement, keyboard closing and focus return, active refinement indication and restoration when resizing to desktop. `CAPTURE_DIR` optionally saves preview screenshots. The shared-header and lot-group suites open the mobile menu before using secondary controls.
+
+Mobile Map menu:
+
+```sh
+node tests/mobile-map-menu.cjs
+```
+
+Checks exact Menu positioning against Lots at 320/390/800px, collapsed/expanded links and snapshot notice, retained description/timing controls, keyboard and Escape focus return, no horizontal overflow and restoration of desktop controls. `CAPTURE_DIR` saves local preview screenshots.
