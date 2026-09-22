@@ -111,6 +111,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
 @keyframes si-pulse{0%{box-shadow:0 0 0 0 rgba(45,74,62,.35)}100%{box-shadow:0 0 0 14px rgba(45,74,62,0)}}
 .si.pulse{animation:si-pulse .8s ease-out}
 .si:hover{box-shadow:0 4px 14px rgba(0,0,0,.07);border-color:#dfe1e6}
+.si:focus-visible{outline:2px solid var(--pine);outline-offset:2px;box-shadow:0 4px 14px rgba(0,0,0,.07)}
 .si:active{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}
 .si.on{border-left:4px solid #2d4a3e;border-top-color:#e5e7eb;border-right-color:#e5e7eb;border-bottom-color:#e5e7eb;background:#f1f5f1;box-shadow:0 2px 10px rgba(45,74,62,.18)}
 .si-name{font-size:.85rem;font-weight:600;color:#111827;line-height:1.3;margin-bottom:4px}
@@ -183,6 +184,13 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:8px 24px;flex
   100%{box-shadow:0 0 0 0 rgba(34,197,94,0),0 1px 5px rgba(0,0,0,.4)}
 }
 .pin-soon{animation:pin-pulse 1.6s ease-out infinite}
+
+/* The list locator is cream-and-dark rather than green because green pins
+   already pulse to communicate that an auction is imminent. */
+@keyframes list-pin-locate{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.pin-list-locator{width:100%;height:100%;display:grid;place-items:center}
+.pin-list-highlight{box-sizing:border-box;border:3px solid #fff;outline:3px solid var(--pine-xd);border-radius:50%;background:var(--pin-color);box-shadow:0 0 0 7px rgba(246,241,233,.92),0 5px 16px rgba(0,0,0,.42);animation:list-pin-locate .9s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.pin-list-highlight{animation:none}}
 
 /* ── HOVER TOOLTIP (desktop only) ── */
 .auction-tooltip{background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important}
@@ -876,6 +884,7 @@ let allH = ALL_HOUSES.map((h, i) => ({
 }));
 
 let markers = {}, activeChip = 'all', auctionsHidden = false, sourceFilter = 'el';
+let highlightedListMarkerId = null;
 let routeLayer = null, routeHighlightLayer = null, routeResults = [];
 let dragSrc = null, _routeRefreshTimer = null;
 
@@ -902,6 +911,18 @@ function mkIcon(color, sz=12, pulse=false){
     iconSize: [size, size],
     iconAnchor: [size/2, size/2],
     popupAnchor: [0, -size/2+2]
+  });
+}
+
+function mkListHighlightIcon(color){
+  const pinSize = window.innerWidth < 768 ? 26 : 22;
+  const outerSize = pinSize + 18;
+  return L.divIcon({
+    className: '',
+    html: `<div class="pin-list-locator"><div class="pin-list-highlight" style="--pin-color:${color};width:${pinSize}px;height:${pinSize}px"></div></div>`,
+    iconSize: [outerSize, outerSize],
+    iconAnchor: [outerSize/2, outerSize/2],
+    popupAnchor: [0, -pinSize/2]
   });
 }
 
@@ -964,16 +985,43 @@ function refreshMarkers(){
     const m=markers[h._id];
     if(!m) return;
     const {color, pulse} = mc(h);
-    m.setIcon(mkIcon(color, 12, pulse));
+    m.setIcon(highlightedListMarkerId === h._id ? mkListHighlightIcon(color) : mkIcon(color, 12, pulse));
     m.setPopupContent(buildPopup(h));
     m.setTooltipContent(buildTooltip(h));
   });
+}
+
+function restoreListMarker(id){
+  const h=allH.find(item=>item._id===id);
+  const m=markers[id];
+  if(!h||!m) return;
+  const {color,pulse}=mc(h);
+  m.setIcon(mkIcon(color,12,pulse));
+  m.setZIndexOffset(0);
+}
+
+function highlightListMarker(h){
+  const m=markers[h._id];
+  if(!m||!map.hasLayer(m)) return;
+  if(highlightedListMarkerId!==null&&highlightedListMarkerId!==h._id){
+    restoreListMarker(highlightedListMarkerId);
+  }
+  highlightedListMarkerId=h._id;
+  m.setIcon(mkListHighlightIcon(mc(h).color));
+  m.setZIndexOffset(1000);
+}
+
+function clearListMarkerHighlight(id){
+  if(highlightedListMarkerId!==id) return;
+  restoreListMarker(id);
+  highlightedListMarkerId=null;
 }
 
 // ── SIDEBAR ──────────────────────────────────────────────────────────────────
 function buildSB(houses){
   const list=document.getElementById('sblist');
   const cnt=document.getElementById('sheet-count');
+  if(highlightedListMarkerId!==null) clearListMarkerHighlight(highlightedListMarkerId);
   list.innerHTML='';
   let vis=houses;
   if(activeChip==='urgent') vis=houses.filter(h=>h.sales.some(s=>dft(s.date)>=0&&dft(s.date)<=3));
@@ -992,8 +1040,25 @@ function buildSB(houses){
     const sh=fs.length?fs.map(s=>{const c=sc(s.date);return`<div class="si-sale"><div class="sdot sdot-${c}"></div><span class="sdate">${fd(s.date)}</span>${s.time?`<span class="stitle">${s.time}</span>`:''}${s.title?`<div class="si-title">${s.title}</div>`:''}</div>`;}).join(''):`<div class="no-sales">No upcoming dates</div>`;
     const d=document.createElement('div');
     d.className='si'; d.dataset.name=h.name; d.dataset.id=h._id;
+    d.tabIndex=0;
+    d.setAttribute('role','button');
+    d.setAttribute('aria-label',`${h.name}. Highlight on map and view details.`);
     d.innerHTML=`<div class="si-name">${h.name}</div><div class="si-addr">${h.address.replace(' United Kingdom','').substring(0,60)}</div><div class="si-sales">${sh}</div>`;
+    let pointerHighlight=false;
+    let focusHighlight=false;
+    const syncMarkerHighlight=()=>{
+      if(pointerHighlight||focusHighlight) highlightListMarker(h);
+      else clearListMarkerHighlight(h._id);
+    };
+    d.addEventListener('mouseenter',()=>{pointerHighlight=true;syncMarkerHighlight();});
+    d.addEventListener('mouseleave',()=>{pointerHighlight=false;syncMarkerHighlight();});
+    d.addEventListener('focus',()=>{focusHighlight=true;syncMarkerHighlight();});
+    d.addEventListener('blur',()=>{focusHighlight=false;syncMarkerHighlight();});
+    d.addEventListener('keydown',event=>{
+      if(event.key==='Enter'||event.key===' '){event.preventDefault();d.click();}
+    });
     d.addEventListener('click',()=>{
+      highlightListMarker(h);
       const m=markers[h._id];
       if(m){
         if(window.innerWidth < 768){
