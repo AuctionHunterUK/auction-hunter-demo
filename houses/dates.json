@@ -1,0 +1,150 @@
+{
+  "scraped_at": null,
+  "demo": true,
+  "houses": {
+    "Alder & Ash Auction Rooms": [
+      {
+        "date": "2026-10-05",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Northmere Fine Art Auctions": [
+      {
+        "date": "2026-10-06",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Fenwick & Rowe Salerooms": [
+      {
+        "date": "2026-10-07",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Harbour & Heath Auctions": [
+      {
+        "date": "2026-10-08",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Calder Vale Auction Rooms": [
+      {
+        "date": "2026-10-09",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Thistle & Oak Auctioneers": [
+      {
+        "date": "2026-10-10",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Cambrian House Auctions": [
+      {
+        "date": "2026-10-11",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Lagan & Linen Auction Rooms": [
+      {
+        "date": "2026-10-12",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Wessex House Auctions": [
+      {
+        "date": "2026-10-13",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Merefield & Co.": [
+      {
+        "date": "2026-10-14",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Crown & County Salerooms": [
+      {
+        "date": "2026-10-15",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Redbridge Auction Gallery": [
+      {
+        "date": "2026-10-16",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Westmoor Antiques Auctions": [
+      {
+        "date": "2026-10-17",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Tyne & Fell Auction Rooms": [
+      {
+        "date": "2026-10-18",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Severn Valley Salerooms": [
+      {
+        "date": "2026-10-19",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Orchard Gate Auctions": [
+      {
+        "date": "2026-10-20",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Silver Birch Auction House": [
+      {
+        "date": "2026-10-21",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ],
+    "Clyde & Heather Auctions": [
+      {
+        "date": "2026-10-04",
+        "time": "10:00",
+        "title": "Fictional interiors and collectables sale",
+        "demo": true
+      }
+    ]
+  }
+}

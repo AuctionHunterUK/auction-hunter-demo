@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuctionSavvy — Auction Finds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    // The Lots mini-map is desktop-only. Do not download Leaflet or map
+    // resources on phones, where the map is intentionally hidden.
+    window.auctionSavvyLeafletReady = Promise.resolve(false);
+    if (window.matchMedia('(min-width: 801px)').matches) {
+      const leafletCssReady = new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.appendChild(link);
+      });
+      const leafletScriptReady = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      window.auctionSavvyLeafletReady = Promise.all([
+        leafletCssReady,
+        leafletScriptReady
+      ]).then(() => true);
+    }
+  </script>
+  <style>
+    :root {
+      /* Shared design tokens — extracted from AuctionSavvy (/houses) */
+      --bg: #f9fafb;
+      --panel: #ffffff;
+      --ink: #1a1a18;
+      --muted: #6b7280;
+      --accent: #3a5c3b;      /* AH --pine */
+      --accent-soft: #e9ece9;
+      --line: #ecedf0;        /* AH --line */
+      --chip-bg: #f3f4f6;     /* AH .chip base */
+      --chip-ink: #4b5563;
+      --local-bg: #f1f5f1;
+      --local-border: #3a5c3b;
+      --later-bg: #f6f5f2;
+      --later-border: #a8a196;
+      --shadow: 0 1px 3px rgba(20,30,40,0.05), 0 4px 12px rgba(20,30,40,0.05);
+      --shadow-hover: 0 4px 10px rgba(20,30,40,0.09), 0 10px 28px rgba(20,30,40,0.10);
+      --radius: 10px;
+      --new-bg: #3a5c3b;
+      --highlight: #4b6b8a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: var(--bg); color: var(--ink); height: 100%; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── SHARED HEADER CONTRACT (keep in sync with houses/index.html) ── */
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 24px;
+      position: sticky; top: 0; z-index: 1000;
+      backdrop-filter: blur(8px);
+      flex-shrink: 0;
+    }
+    /* Two balanced desktop rows: brand/search/toggle above, tagline/tools/links below. */
+    header .tagline { flex: 0 1 480px; min-width: 0; font-size: .78rem; color: #6b7280; margin: 0; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .headtop { display: grid; grid-template-columns: max-content minmax(0, 520px) minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; min-height: 44px; }
+    .hrow2 { min-height: 26px; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 12px; }
+    .header-page-tools { min-width: 0; display: flex; align-items: center; gap: 8px 12px; flex-wrap: nowrap; }
+    .header-utility-nav { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .header-utility-nav a { font-size: .72rem; color: var(--muted); text-decoration: none; }
+    @media (hover: hover) and (pointer: fine) { .header-utility-nav a:hover { color: var(--accent); } }
+    .term-tag {
+      font-size: 0.74rem; color: var(--accent); font-weight: 600;
+      background: var(--accent-soft); border: 1px solid var(--accent);
+      padding: 5px 12px; border-radius: 20px; white-space: nowrap;
+    }
+    .term-tag .term-soon { color: var(--muted); font-weight: 400; }
+    @media (max-width: 700px) { .term-tag .term-soon { display: none; } }
+    header nav.jump { flex-basis: auto; margin: 0; padding: 0; }
+    .brand { display: flex; align-items: center; }
+    .demo-tag { font-size: .62rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .brand h1 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; color: #111827; white-space: nowrap; }
+    .meta { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+    .meta strong { color: var(--ink); }
+    .search-box {
+      position: relative;
+    }
+    .search-box-spacer { height: 35px; visibility: hidden; pointer-events: none; }
+    .search-box input {
+      width: 100%;
+      padding: 8px 36px 8px 12px;
+      border: 1px solid var(--accent-soft);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .search-box .clear-btn {
+      display: none;
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      background: var(--accent-soft); border: none;
+      font-size: 0.7rem; cursor: pointer;
+      width: 20px; height: 20px; border-radius: 50%;
+      align-items: center; justify-content: center; color: var(--muted);
+    }
+    .search-box.has-text .clear-btn { display: flex; }
+    .search-results { font-size: 0.78rem; color: var(--muted); }
+    .featured-searches {
+      position: relative;
+      display: block;
+      justify-self: start;
+    }
+    .featured-searches-trigger {
+      appearance: none;
+      border: 0;
+      border-bottom: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      padding: 5px 1px 4px;
+      font: inherit;
+      font-size: .72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .featured-searches-count {
+      color: var(--muted);
+      font-weight: 500;
+      margin-left: 3px;
+    }
+    .featured-searches-popover {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 1700;
+      width: 250px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s;
+    }
+    .featured-searches.open .featured-searches-popover,
+    .featured-searches:hover .featured-searches-popover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .featured-searches-popover strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: .92rem;
+      line-height: 1.25;
+    }
+    .featured-searches-popover ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .featured-searches-popover li {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 600;
+    }
+    .featured-searches-popover p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.4;
+    }
+    /* Shared app nav (Houses ↔ Finds) — mirrors AH .tbtn pill style */
+    /* Segmented page toggle: one control, split in two, so the two-page
+       structure (Houses ↔ Finds) reads instantly and stands apart from links. */
+    .app-nav {
+      display: inline-flex; padding: 3px; gap: 0;
+      background: rgba(58,92,59,.1); border: 1px solid var(--accent);
+      border-radius: 22px;
+      grid-column: 4; justify-self: end;
+    }
+    .app-nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 700; padding: 7px 18px;
+      border-radius: 18px; border: 0; background: transparent;
+      color: var(--accent); letter-spacing: -0.01em;
+      text-decoration: none; white-space: nowrap; transition: all .18s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .app-nav-link:hover { color: #fff; background: rgba(58,92,59,.55); }
+    .app-nav-link.on {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 1px 4px rgba(58,92,59,.35);
+    }
+    .app-nav-link.on:hover { background: var(--accent); }
+    nav.jump { display: flex; gap: 16px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; }
+    nav.jump .group-tab {
+      font: inherit;
+      border: 0;
+      cursor: pointer;
+      font-size: 0.7rem;
+      position: relative;
+      padding: 4px 0 6px;
+      background: transparent;
+      border-radius: 0;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.15s;
+    }
+    nav.jump .group-tab .jump-count { color: var(--muted); font-size: .9em; font-weight: 400; }
+    /* Desktop mouse hover only darkens flat tab text; it never adds a pill. */
+    @media (hover: hover) and (pointer: fine) {
+      nav.jump .group-tab:hover { color: var(--ink); }
+    }
+    /* Active = the selected lot group. */
+    #cards-area section[hidden] { display: none; }
+    nav.jump .group-tab.active { color: var(--accent); }
+    nav.jump .group-tab.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent); }
+    nav.jump .wanted-filter-button {
+      appearance: none; border: 0; border-left: 1px solid var(--line);
+      background: transparent; color: var(--accent); cursor: pointer;
+      font: inherit; font-size: .7rem; font-weight: 700;
+      padding: 4px 0 6px 14px; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .refined-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .refined-search-popover {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 1700;
+      width: 270px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s;
+      white-space: normal;
+    }
+    .refined-search.open .refined-search-popover,
+    .refined-search:hover .refined-search-popover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .refined-search-popover strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: .92rem;
+      line-height: 1.25;
+    }
+    .refined-search-popover ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .refined-search-popover li {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 600;
+    }
+    .refined-search-popover p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.4;
+    }
+    .refined-search-popover a {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--accent);
+      font-size: .7rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    nav.jump .wanted-filter-button .jump-count { color: var(--muted); font-size: .9em; font-weight: 400; }
+    .refined-switch {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 34px;
+      flex: 0 0 20px;
+      border: 1px solid #aeb5ae;
+      border-radius: 999px;
+      background: #dfe2df;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .refined-switch-knob {
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.28);
+      transition: transform .18s ease;
+    }
+    .refined-switch-state {
+      min-width: 19px;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    nav.jump .wanted-filter-button.active { color: var(--accent); background: transparent; }
+    nav.jump .wanted-filter-button.active .jump-count { color: var(--accent); }
+    nav.jump .wanted-filter-button.active .refined-switch { background: var(--accent); border-color: var(--accent); }
+    nav.jump .wanted-filter-button.active .refined-switch-knob { transform: translateY(-14px); }
+    nav.jump .wanted-filter-button.active .refined-switch-state { color: var(--accent); }
+    @media (hover: hover) and (pointer: fine) {
+      nav.jump .wanted-filter-button:hover { color: var(--ink); }
+      nav.jump .wanted-filter-button.active:hover { color: var(--accent); background: transparent; }
+    }
+    .new-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--new-bg); color: #fff;
+      font-size: 0.65rem; font-weight: 800;
+      padding: 4px 8px; border-radius: 4px;
+      letter-spacing: 0.06em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #main-layout {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+    #map-panel {
+      width: 320px;
+      min-width: 320px;
+      position: relative;
+      border-right: 1px solid var(--accent-soft);
+      flex-shrink: 0;
+    }
+    #map-panel #map { width: 100%; height: 100%; }
+    #map-panel .map-label {
+      position: absolute;
+      top: 8px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 5px 14px;
+      border-radius: 8px;
+      pointer-events: none;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .lot-map-card {
+      position: absolute;
+      z-index: 750;
+      display: none;
+      width: 238px;
+      pointer-events: none;
+      box-sizing: border-box;
+      background: rgba(255,255,255,.97);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 9px;
+      box-shadow: 0 5px 18px rgba(30,40,32,.18);
+      padding: 10px 12px;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.35;
+    }
+    .lot-map-card.visible { display: block; }
+    .lot-map-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: .88rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .lot-map-card-address {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .68rem;
+      overflow-wrap: anywhere;
+    }
+    .lot-map-card-sale {
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px solid var(--line);
+      color: var(--accent);
+      font-size: .69rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+    #cards-area {
+      min-width: 0;
+      background: #f2f2f2;
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 24px 40px;
+    }
+    .wanted-filter-summary {
+      display: none; max-width: 1400px; margin: 24px auto -12px;
+      align-items: center; justify-content: space-between; gap: 14px;
+      padding: 13px 16px; border: 1px solid #d5e1d5;
+      border-left: 4px solid var(--accent); border-radius: 8px;
+      background: #f3f7f3; color: #314d32; font-size: .78rem;
+    }
+    .wanted-filter-summary.visible { display: flex; }
+    .wanted-filter-summary strong { color: var(--accent); }
+    .wanted-filter-summary-actions { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+    .wanted-filter-summary a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .wanted-filter-summary button { border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; }
+    #cards-area section {
+      max-width: none;
+      margin: 36px auto 0;
+      padding: 0;
+    }
+    #cards-area section.local-section,
+    #cards-area section.today-section,
+    #cards-area section.later-section {
+      background: #f2f2f2;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      padding: 28px 24px 32px;
+      border-radius: 0;
+      margin: 36px 0 0;
+    }
+    /* Sticky per-section headers: as the user scrolls through a section it
+       stays pinned just under the main header, so which group (Local/Today/
+       Later) they're browsing is always visible. #cards-area is the scroll
+       container, so top:0 here means "flush against the app header." */
+    #cards-area section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 10px 0;
+      margin: 0 -24px 8px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    #cards-area section h2 { background: #f2f2f2; }
+    #cards-area section h2 .count {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    #cards-area section h2 .progress {
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      float: right;
+    }
+    #back-to-top {
+      position: fixed; left: 16px; bottom: 16px; z-index: 1400;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 999px;
+      width: 44px; height: 44px;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(40,30,15,0.28);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    #back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    /* CSS Grid (not multicolumn masonry) so every card sits in a clean,
+       aligned row and all cards are the same height. */
+    .masonry { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+    @media (max-width: 1000px) { .masonry { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .masonry { grid-template-columns: 1fr; } }
+    .card-shell { position: relative; min-width: 0; height: 100%; }
+    .card {
+      display: flex; flex-direction: column; width: 100%;
+      background: var(--panel);
+      border-radius: 0;
+      overflow: hidden;
+      text-decoration: none; color: inherit;
+      box-shadow: var(--shadow);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .card-img { position: relative; width: 100%; line-height: 0; background: var(--accent-soft); }
+    .card-img::before {
+      content: "Loading image…";
+      position: absolute; inset: 0; z-index: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: .72rem; line-height: 1.35;
+      background: linear-gradient(145deg, #f2f5f2, #e7ece7);
+      opacity: 0; transition: opacity .15s ease;
+      pointer-events: none;
+    }
+    .card-img.image-pending::before { opacity: 1; }
+    /* Uniform SQUARE image crop for a tidy catalogue look. height:auto is
+       essential — the <img> tags carry a height="300" HTML attribute that
+       otherwise overrides aspect-ratio, making cards render at different
+       shapes depending on their column width (3-col local vs 4-col later). */
+    .card-img img {
+      position: relative; z-index: 1;
+      width: 100%; height: auto; aspect-ratio: 1/1;
+      object-fit: cover; display: block;
+      opacity: 1; transition: opacity .15s ease;
+    }
+    .card-img.image-pending img { opacity: 0; }
+    .no-img {
+      aspect-ratio: 1/1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      padding: 24px; text-align: center; line-height: 1.35;
+      color: var(--muted);
+      background: linear-gradient(145deg, #f2f5f2, #e7ece7);
+    }
+    .no-img-icon {
+      width: 42px; height: 42px; display: inline-flex;
+      align-items: center; justify-content: center;
+      border: 1px solid #bdc8bd; border-radius: 50%;
+      color: var(--accent); font-size: 1.25rem; line-height: 1;
+      background: rgba(255,255,255,.65);
+    }
+    .no-img strong {
+      color: var(--ink); font-size: .82rem; font-weight: 600;
+    }
+    .no-img span:last-child {
+      max-width: 190px; font-size: .7rem;
+    }
+    .card-body { padding: 12px 14px 14px; }
+    .card-body .title {
+      font-size: 0.82rem; font-weight: 600;
+      line-height: 1.4; margin-bottom: 6px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+      /* Reserve exactly 3 lines so every card body is the same height,
+         keeping grid rows perfectly aligned regardless of title length. */
+      height: calc(3 * 1.4em);
+    }
+    .lot-title-text { display: inline; }
+    .wanted-match-badge {
+      display: inline-flex; max-width: 100%; margin: 0 0 7px;
+      padding: 4px 8px; border-radius: 999px;
+      background: #edf4ed; color: var(--accent);
+      font-size: .63rem; font-weight: 700; line-height: 1.25;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .lot-preview-trigger {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      cursor: pointer;
+    }
+    .lot-preview-trigger:focus-visible {
+      width: auto; height: auto; margin: 0; padding: 3px 7px; clip: auto; overflow: visible;
+      right: 8px; top: 8px; z-index: 3; border: 1px solid var(--accent);
+      border-radius: 999px; background: var(--accent-soft); color: var(--accent);
+      font-size: .66rem; font-weight: 700;
+    }
+    .lot-reminder-trigger {
+      position: absolute; top: 8px; right: 8px; z-index: 4;
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; padding: 0;
+      border: 1px solid #bdbdbd; border-radius: 50%;
+      background: #fff; color: #111;
+      font: 400 1rem/1 'DM Sans', sans-serif;
+      cursor: pointer; box-shadow: 0 2px 7px rgba(20,30,40,.12);
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lot-reminder-trigger:hover,
+    .lot-reminder-trigger:focus-visible {
+      background: #fff; border-color: #111; transform: translateY(-1px);
+      outline: none;
+    }
+    .lot-reminder-popup {
+      position: fixed; z-index: 1650; display: none;
+      width: min(300px, calc(100vw - 28px));
+      background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+      border-radius: var(--radius); box-shadow: var(--shadow-hover);
+      padding: 13px 15px; color: var(--ink); font-size: .74rem; line-height: 1.45;
+    }
+    .lot-reminder-popup.visible { display: block; }
+    .lot-reminder-popup-title {
+      padding-right: 24px; font-family: 'Playfair Display', serif;
+      font-size: .92rem; font-weight: 700; line-height: 1.3;
+    }
+    .lot-reminder-popup-copy { margin-top: 6px; color: var(--muted); }
+    .lot-reminder-popup-note { margin-top: 8px; color: var(--accent); font-size: .68rem; font-weight: 700; }
+    .lot-reminder-close { display: none; }
+    .lot-preview-popup {
+      position: fixed; z-index: 1600; display: none;
+      width: min(320px, calc(100vw - 28px)); max-height: min(70vh, 420px); overflow: auto;
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow-hover); padding: 14px 16px; font-size: .76rem; line-height: 1.45;
+    }
+    .lot-preview-popup.visible { display: block; }
+    .lot-preview-popup-title { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+    .lot-preview-close { display: none; }
+    .lot-preview-planned { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 9px; }
+    .lot-preview-planned-label { color: var(--accent); font-size: .66rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .lot-preview-planned-copy { color: var(--muted); margin-top: 4px; overflow-wrap: anywhere; }
+    @media (hover: none), (pointer: coarse) {
+      .lot-preview-trigger {
+        position: absolute; right: 46px; top: 8px; z-index: 3; display: inline-block;
+        width: auto; height: auto; padding: 3px 7px; margin: 0;
+        overflow: visible; clip: auto; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px;
+        background: var(--accent-soft); color: var(--accent); font-size: .62rem; font-weight: 700;
+      }
+      .lot-preview-popup-title { padding-right: 34px; }
+      .lot-preview-close {
+        position: absolute; top: 7px; right: 7px; display: flex; align-items: center; justify-content: center;
+        width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%;
+        background: transparent; color: var(--muted); font: 400 1.45rem/1 'DM Sans', sans-serif;
+        cursor: pointer; -webkit-tap-highlight-color: transparent;
+      }
+      .lot-preview-close:active { background: var(--accent-soft); color: var(--accent); }
+      .lot-reminder-close {
+        position: absolute; top: 5px; right: 5px; display: flex;
+        align-items: center; justify-content: center;
+        width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%;
+        background: transparent; color: var(--muted); font: 400 1.35rem/1 'DM Sans', sans-serif;
+        cursor: pointer;
+      }
+      .lot-reminder-close:active { background: var(--accent-soft); color: var(--accent); }
+    }
+    .house-line { font-size: 0.74rem; color: var(--muted); line-height: 1.3; }
+    .house {
+      position: relative; cursor: pointer;
+      border-bottom: 1px dotted var(--muted);
+    }
+    .house:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .house.highlighted { color: var(--highlight); border-bottom-color: var(--highlight); }
+    .house.unknown { opacity: 0.7; }
+    @media (hover: hover) and (pointer: fine) {
+      .house[data-house-key]:hover { color: var(--accent); border-bottom-color: var(--accent); }
+      .house-popup {
+        position: fixed; z-index: 1600; display: none; width: min(280px, calc(100vw - 32px));
+        background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+        box-shadow: var(--shadow-hover); padding: 12px 14px; pointer-events: none;
+        font-size: 0.76rem; line-height: 1.4;
+      }
+      .house-popup.visible { display: block; }
+      .house-popup-name { font-family: 'Playfair Display', serif; font-size: .93rem; font-weight: 700; line-height: 1.25; }
+      .house-popup-address { color: var(--muted); margin-top: 5px; overflow-wrap: anywhere; }
+      .house-popup-sales { border-top: 1px solid var(--line); margin-top: 9px; padding-top: 8px; }
+      .house-popup-sales-title { color: var(--muted); font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 5px; }
+      .house-popup-sale { margin-top: 6px; overflow-wrap: anywhere; }
+      .house-popup-sale-date { color: var(--ink); font-weight: 600; }
+      .house-popup-sale-title { color: var(--muted); margin-top: 1px; }
+      .house-popup-empty { color: var(--muted); }
+      .house-popup-hint { color: var(--accent); font-size: .7rem; margin-top: 9px; }
+    }
+    .pc {
+      display: inline-block; margin-left: 4px;
+      background: var(--accent-soft); color: var(--accent);
+      padding: 1px 6px; border-radius: 4px;
+      font-size: 0.65rem; font-weight: 600;
+    }
+    .card-body .meta {
+      display: flex; align-items: center;
+      gap: 10px; margin-top: 6px;
+      font-size: 0.72rem;
+      flex-wrap: nowrap; overflow: hidden; white-space: nowrap;
+    }
+    .lot-number {
+      background: var(--ink); color: var(--panel);
+      padding: 1px 8px; border-radius: 4px;
+      font-weight: 600; font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+    .estimate { font-weight: 600; color: var(--accent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .saledate { color: var(--muted); flex-shrink: 0; margin-left: auto; }
+
+    /* ── MAP PIN STYLES ── */
+    .pin-highlighted {
+      width: 16px; height: 16px;
+      background: #1f2a21;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(31,42,33,.55);
+    }
+
+    /* ── MOBILE MAP OVERLAY ── */
+    #map-fab {
+      display: none;
+      position: fixed; right: 16px; bottom: 16px; z-index: 1500;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 999px;
+      padding: 13px 20px; font-size: 0.9rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(40,30,15,0.28);
+    }
+    #map-close {
+      display: none;
+      position: absolute; right: 12px; top: 12px; z-index: 1600;
+      background: rgba(0,0,0,0.7); color: #fff;
+      border: none; border-radius: 999px;
+      padding: 9px 18px; font-size: 0.85rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+      /* ── COMPACT MOBILE HEADER ──
+         Header un-sticks (scrolls away with content) and shrinks hard so
+         the lots get the screen. Also kills sideways scroll: nowrap items
+         are allowed to wrap, tab rows become horizontal swipers. */
+      html, body { overflow-x: hidden; }
+      header {
+        position: static;             /* scrolls away — frees the whole screen */
+        padding: 8px 12px;
+      }
+      header .tagline { display: none; }
+      .headtop { grid-template-columns: max-content minmax(0, 1fr) max-content; column-gap: 10px; min-height: 33px; }
+      .brand h1 { font-size: 0.88rem; }
+      .demo-tag { font-size: .52rem; padding: 2px 7px; }
+      .app-nav { grid-column: auto; justify-self: auto; padding: 2px; }
+      .app-nav-link { font-size: .64rem; padding: 4px 9px; }
+      .featured-searches { display: none; }
+      .refined-search-popover { display: none; }
+      .search-box { min-width: 0; }
+      .search-box-spacer { height: 33px; }
+      .search-box input { font-size: 0.8rem; padding: 7px 32px 7px 10px; }
+      .hrow2 { min-height: 23px; column-gap: 8px; }
+      .header-page-tools { gap: 6px 8px; flex-wrap: wrap; }
+      .header-utility-nav { gap: 6px; }
+      .header-utility-nav a { font-size: .62rem; }
+      .hrow2 { grid-template-columns: 1fr; row-gap: 4px; }
+      .header-utility-nav { grid-row: 1; justify-self: end; }
+      .header-page-tools { grid-row: 2; width: 100%; }
+      .jump { max-width: 100%; }
+      .term-tag { font-size: .6rem; padding: 3px 9px; }
+      nav.jump {
+        margin-left: 0; flex-basis: 100%;
+        flex-wrap: nowrap; overflow-x: auto;   /* one swipeable row */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 5px;                              /* tighter so all three fit */
+      }
+      nav.jump::-webkit-scrollbar { display: none; }
+      nav.jump .group-tab, nav.jump .wanted-filter-button { flex-shrink: 0; font-size: 0.62rem; padding: 5px 4px 6px; }
+      nav.jump .wanted-filter-button { border-left: 1px solid var(--line); padding-left: 9px; }
+      nav.jump .wanted-filter-button.active { padding-left: 9px; }
+
+      #map-panel { display: none; }
+      #cards-area { padding: 0 12px 24px; }
+      .wanted-filter-summary { margin-top: 14px; margin-bottom: -10px; }
+      /* No standalone map on mobile (Ken's call): a cold map with no pin lit
+         answers nothing. Map entrance will be tap-item -> pin (planned). */
+      #map-fab { display: none; }
+      body.map-open #map-panel {
+        display: block;
+        position: fixed; inset: 0; z-index: 1550;
+        width: 100%; min-width: 0; border-right: none;
+      }
+      body.map-open #map-close { display: block; }
+      body.map-open #map-fab { display: none; }
+    }
+
+    /* One spacing rhythm across the desktop map and three-card grid. */
+    @media (min-width: 801px) {
+      #main-layout { padding-left: 18px; gap: 18px; background: #f2f2f2; }
+      #cards-area { padding-left: 0; padding-right: 18px; }
+      #cards-area section.local-section,
+      #cards-area section.today-section,
+      #cards-area section.later-section { border: 0; padding-left: 0; padding-right: 0; }
+      #cards-area section h2 { margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+    }
+
+    /* Finds header proposal: search first, then prominent catalogue controls. */
+    @media (min-width: 801px) {
+      header { padding: 0 24px; }
+      .headtop {
+        min-height: 76px;
+        grid-template-columns: max-content minmax(160px, 620px) minmax(0, 1fr) max-content;
+        column-gap: 24px;
+      }
+      .brand h1 { font-size: 1.5rem; }
+      .search-box input { min-height: 44px; border-radius: 2px; border-color: #d6d6d6; font-size: 1rem; padding-left: 14px; }
+      .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+      .search-box .clear-btn { width: 26px; height: 26px; }
+      .featured-searches-trigger { font-size: .875rem; padding: 10px 0; border-bottom-color: #c6cec6; }
+      .app-nav { border-radius: 22px; padding: 3px; background: rgba(58,92,59,.1); border-color: var(--accent); }
+      .app-nav-link { border-radius: 18px; font-size: .82rem; padding: 7px 18px; }
+      .app-nav-link.on { box-shadow: 0 1px 4px rgba(58,92,59,.35); }
+      .hrow2 { min-height: 64px; grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr); border-top: 1px solid #ececec; column-gap: 28px; }
+      .header-page-tools { grid-column: 2; justify-self: center; display: flex; align-items: center; justify-content: center; gap: 18px; }
+      header .tagline { display: none; }
+      #searchResults { order: 2; font-size: .8125rem; white-space: nowrap; }
+      #searchResults:empty { display: none; }
+      header nav.jump { gap: 12px; min-width: 0; }
+      nav.jump .group-tab { min-height: 48px; font-size: 1rem; font-weight: 600; padding: 10px 14px; color: #555; }
+      nav.jump .group-tab:first-child { padding-left: 0; }
+      nav.jump .group-tab.active { color: var(--accent); }
+      nav.jump .group-tab.active::after { bottom: 0; height: 3px; }
+      nav.jump .group-tab .jump-count,
+      nav.jump .wanted-filter-button .jump-count {
+        display: inline-block; min-width: 26px; padding: 2px 6px; margin-left: 5px;
+        background: #f1f1f1; border-radius: 2px; color: #626262; font-size: .8125rem; font-weight: 500;
+      }
+      nav.jump .group-tab.active .jump-count { background: var(--accent-soft); color: var(--accent); }
+      nav.jump .wanted-filter-button { min-height: 42px; font-size: .9375rem; font-weight: 600; padding: 6px 0 6px 24px; color: #333; }
+      nav.jump .wanted-filter-button.active { padding: 6px 0 6px 24px; color: var(--accent); }
+      nav.jump .wanted-filter-button.active .jump-count { color: var(--accent); background: var(--accent-soft); }
+      .header-utility-nav { grid-column: 3; justify-self: end; gap: 24px; }
+      .header-utility-nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: .9375rem; color: #555; }
+      header button:focus-visible, header a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+      .featured-searches-popover, .refined-search-popover { border-radius: 2px; }
+      .featured-searches-popover p, .refined-search-popover p,
+      .featured-searches-popover li, .refined-search-popover li,
+      .refined-search-popover a { font-size: .8125rem; }
+    }
+    @media (min-width: 801px) and (max-width: 1100px) {
+      .headtop { column-gap: 16px; grid-template-columns: max-content minmax(120px, 1fr) max-content max-content; }
+      .brand h1 { font-size: 1.25rem; }
+      .app-nav-link { padding-left: 14px; padding-right: 14px; }
+      .hrow2 { display: flex; flex-wrap: wrap; column-gap: 20px; }
+      .header-page-tools { flex: 1 1 auto; flex-wrap: wrap; gap: 0 14px; }
+      .header-utility-nav { margin-left: auto; gap: 18px; }
+      nav.jump .group-tab { padding-left: 10px; padding-right: 10px; }
+    }
+
+    /* Edge-to-edge cards on mobile — CHANGE 4 */
+    @media (max-width: 640px) {
+      #cards-area { padding: 0 8px 24px; }
+      #cards-area section {
+        margin: 24px 0 0;
+      }
+      #cards-area section.local-section,
+      #cards-area section.today-section,
+      #cards-area section.later-section {
+        padding: 20px 12px 24px;
+        margin: 24px 0 0;
+      }
+      #cards-area section h2 {
+        margin: 0 -12px 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      .masonry { gap: 12px; }
+      .card {
+        margin: 0;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="../assets/header.css">
+<script src="../assets/header.js" defer></script>
+
+  <style id="fictional-demo-style">
+    .fictional-demo-banner{background:#2f4f34;color:#fff;padding:9px 18px;text-align:center;font:600 .78rem/1.45 'DM Sans',sans-serif;letter-spacing:.01em}
+    .fictional-demo-banner strong{margin-right:8px;letter-spacing:.08em}
+    .card-img{overflow:hidden}
+    .card-img::after{content:"FICTIONAL DEMO · AI GENERATED";position:absolute;left:10px;bottom:10px;z-index:4;background:rgba(20,32,22,.82);color:#fff;padding:5px 8px;border-radius:3px;font:700 .58rem/1 'DM Sans',sans-serif;letter-spacing:.08em;pointer-events:none}
+    .new-badge{display:none!important}
+    @media(max-width:700px){.fictional-demo-banner{font-size:.67rem;padding:8px 10px}}
+  </style>
+</head>
+<body>
+<!-- ── PRIVATE DEMO LOGIN GATE ─────────────────────────────────────────
+     This app is a private demonstration. It is NOT open to the public.
+     Client-side gate: password is checked as a SHA-256 hash and access
+     lasts for the browser session only. To change the password, run:
+       echo -n "NewPassword" | shasum -a 256
+     and replace GATE_HASH below (in BOTH houses/ and finds/, and in the
+     finds scraper template). -->
+<div id="demo-gate">
+  <div id="demo-gate-card">
+    <h2>AuctionSavvy</h2>
+    <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+    <form id="demo-gate-form">
+      <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">Enter demo</button>
+    </form>
+    <p class="dg-err" id="demo-gate-err"></p>
+  </div>
+</div>
+<style>
+#demo-gate{position:fixed;inset:0;z-index:99999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#demo-gate-card{background:#fff;border:1px solid #ecedf0;border-radius:14px;box-shadow:0 8px 30px rgba(20,30,40,.08);padding:38px 40px;text-align:center;max-width:340px;width:90%}
+#demo-gate-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:#111827;margin:0 0 6px}
+#demo-gate-card .dg-sub{font-size:.8rem;color:#6b7280;line-height:1.5;margin:0 0 18px}
+#demo-gate-pw{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box}
+#demo-gate-pw:focus{border-color:#3a5c3b}
+#demo-gate-form button{width:100%;padding:10px 14px;border:none;border-radius:20px;background:#3a5c3b;color:#fff;font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer}
+#demo-gate-form button:hover{background:#2c4a2d}
+.dg-err{font-size:.75rem;color:#b91c1c;min-height:1em;margin:10px 0 0}
+body.gate-locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  var GATE_HASH='66a1a83686ae998b35ca2600ee0c620410d3975904243bae29f70ed5c6a6c547';
+  var KEY='ah_demo_ok';
+  function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  document.body.classList.add('gate-locked');
+  async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
+  document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var pw=document.getElementById('demo-gate-pw').value;
+    var h=await sha256(pw);
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
+    else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
+  });
+})();
+</script>
+
+
+  <div class="fictional-demo-banner" role="note"><strong>FICTIONAL DEMO</strong> All auction houses, lots, estimates and dates shown here are invented. Product imagery is AI-generated. No affiliation with any real auctioneer is implied.</div>
+  <header class="as-header as-header--lots">
+  <div class="as-top">
+    <div class="brand"><h1>AuctionSavvy</h1></div>
+    <div class="as-middle"><div class="search-box" id="searchBox">
+<input aria-label="Search items shown below" id="searchInput" oninput="searchItems()" placeholder="Search items below…" type="text"/>
+<button class="clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
+</div>
+<div class="featured-searches" id="featuredSearches">
+<button aria-controls="featuredSearchesPopover" aria-expanded="false" aria-haspopup="true" class="featured-searches-trigger" id="featuredSearchesTrigger" type="button">Demo Categories <span class="featured-searches-count">6</span></button>
+<div aria-label="Fictional Demo Categories" class="featured-searches-popover" id="featuredSearchesPopover" role="dialog">
+<strong>Fictional Demo Categories</strong>
+<ul><li>pine</li><li>country furniture</li><li>farmhouse</li><li>storage</li><li>tables</li><li>wardrobes</li></ul>
+<p>These categories demonstrate how a personalised catalogue can be presented.</p>
+</div>
+</div><span class="snapshot-label">Fictional demo data · AI-generated imagery</span></div>
+    <nav aria-label="App pages" class="app-nav">
+<a class="app-nav-link" href="../houses/">Map</a>
+<a aria-current="page" class="app-nav-link on" href="../finds/">Lots</a>
+</nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"><nav aria-label="Lot groups" class="jump">
+<button aria-controls="local" aria-pressed="true" class="group-tab active" data-target="local" type="button">Local <span class="jump-count">10</span></button>
+<button aria-controls="today" aria-pressed="false" class="group-tab" data-target="today" type="button"><span class="group-country">UK </span>Today <span class="jump-count">3</span></button>
+<button aria-controls="uk-wide" aria-pressed="false" class="group-tab" data-target="uk-wide" type="button"><span class="group-country">UK </span>Later <span class="jump-count">17</span></button>
+<div class="refined-search" id="refinedSearch">
+<button aria-describedby="refinedSearchPopover" aria-expanded="false" aria-pressed="false" class="wanted-filter-button" id="wantedFilterButton" title="Switch refined search on" type="button"><span>Refined search <span class="jump-count" id="wantedMatchCount">0</span></span><span aria-hidden="true" class="refined-switch"><span class="refined-switch-knob"></span></span><span class="refined-switch-state" id="refinedSwitchState">Off</span></button>
+<div aria-label="Current refined search" class="refined-search-popover" id="refinedSearchPopover" role="dialog">
+<strong>Current refined search</strong>
+<ul id="refinedSearchPhrases"></ul>
+<p>These active phrases narrow the lots already selected by your Demo Categories.</p>
+<a href="../settings/#refined-items">Edit refined search</a>
+</div>
+</div>
+</nav>
+<span class="search-results" id="searchResults"></span></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a href="../about.html">About</a>
+<a href="../settings/">Edit</a>
+<a class="private-proposal-link" href="../proposal.html">Private Proposal</a>
+</nav>
+  </div>
+</header>
+
+  <div id="main-layout">
+    <div id="map-panel">
+      <button id="map-close" onclick="closeMobileMap()">✕ Close map</button>
+      <div id="map"></div>
+      <div class="map-label">Hover a lot for location and sale details</div>
+    </div>
+    <div id="cards-area">
+      <div class="wanted-filter-summary" id="wantedFilterSummary" role="status" aria-live="polite">
+        <span id="wantedFilterSummaryText"></span>
+        <span class="wanted-filter-summary-actions"><a href="../settings/#refined-items">Edit refined search</a><button type="button" id="clearWantedFilter">Show all</button></span>
+      </div>
+      
+    <section id="local" class="local-section">
+      <h2>📍 Local auctions <span class="count">10 lots</span> <span class="progress" data-total="10"></span></h2>
+      <div class="masonry">
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-001" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/wardrobe.png" alt="Late Victorian scrubbed pine two-door wardrobe" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Late Victorian scrubbed pine two-door wardrobe</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Buckinghamshire demo location" data-house-key="alder &amp; ash auction rooms">Alder & Ash Auction Rooms <span class="pc pc-intl">Buckinghamshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 101</span><span class="estimate">Est £320–£480</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Late Victorian scrubbed pine two-door wardrobe" data-full-title="Late Victorian scrubbed pine two-door wardrobe">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-002" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/dresser-base.png" alt="Georgian-style pine dresser base with three drawers" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Georgian-style pine dresser base with three drawers</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 North Yorkshire demo location" data-house-key="northmere fine art auctions">Northmere Fine Art Auctions <span class="pc pc-intl">North Yorkshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 102</span><span class="estimate">Est £240–£360</span><span class="saledate" data-tip="📅 Mon 5th Oct 2026 10am">📅 Mon 5th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Georgian-style pine dresser base with three drawers" data-full-title="Georgian-style pine dresser base with three drawers">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-003" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/farmhouse-table.png" alt="Rustic antique pine farmhouse table" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Rustic antique pine farmhouse table</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Norfolk demo location" data-house-key="fenwick &amp; rowe salerooms">Fenwick & Rowe Salerooms <span class="pc pc-intl">Norfolk demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 103</span><span class="estimate">Est £280–£420</span><span class="saledate" data-tip="📅 Tue 6th Oct 2026 10am">📅 Tue 6th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Rustic antique pine farmhouse table" data-full-title="Rustic antique pine farmhouse table">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-004" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/blanket-chest.png" alt="Nineteenth-century pine blanket chest" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Nineteenth-century pine blanket chest</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Dorset demo location" data-house-key="harbour &amp; heath auctions">Harbour & Heath Auctions <span class="pc pc-intl">Dorset demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 104</span><span class="estimate">Est £160–£240</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Nineteenth-century pine blanket chest" data-full-title="Nineteenth-century pine blanket chest">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-005" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/housekeepers-cupboard.png" alt="Tall narrow pine housekeeper's cupboard" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Tall narrow pine housekeeper&#x27;s cupboard</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Lancashire demo location" data-house-key="calder vale auction rooms">Calder Vale Auction Rooms <span class="pc pc-intl">Lancashire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 105</span><span class="estimate">Est £260–£380</span><span class="saledate" data-tip="📅 Thu 8th Oct 2026 10am">📅 Thu 8th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Tall narrow pine housekeeper&#x27;s cupboard" data-full-title="Tall narrow pine housekeeper&#x27;s cupboard">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-006" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/bedside-cupboards.png" alt="Pair of antique pine bedside cupboards" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Pair of antique pine bedside cupboards</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Edinburgh demo location" data-house-key="thistle &amp; oak auctioneers">Thistle & Oak Auctioneers <span class="pc pc-intl">Edinburgh demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 106</span><span class="estimate">Est £180–£260</span><span class="saledate" data-tip="📅 Fri 9th Oct 2026 10am">📅 Fri 9th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Pair of antique pine bedside cupboards" data-full-title="Pair of antique pine bedside cupboards">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-007" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/wardrobe.png" alt="Late Victorian scrubbed pine two-door wardrobe — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Late Victorian scrubbed pine two-door wardrobe — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Cardiff demo location" data-house-key="cambrian house auctions">Cambrian House Auctions <span class="pc pc-intl">Cardiff demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 107</span><span class="estimate">Est £320–£480</span><span class="saledate" data-tip="📅 Sat 10th Oct 2026 10am">📅 Sat 10th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Late Victorian scrubbed pine two-door wardrobe — country-house proportions" data-full-title="Late Victorian scrubbed pine two-door wardrobe — country-house proportions">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-008" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/dresser-base.png" alt="Georgian-style pine dresser base with three drawers — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Georgian-style pine dresser base with three drawers — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Belfast demo location" data-house-key="lagan &amp; linen auction rooms">Lagan & Linen Auction Rooms <span class="pc pc-intl">Belfast demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 108</span><span class="estimate">Est £240–£360</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Georgian-style pine dresser base with three drawers — country-house proportions" data-full-title="Georgian-style pine dresser base with three drawers — country-house proportions">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-009" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/farmhouse-table.png" alt="Rustic antique pine farmhouse table — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Rustic antique pine farmhouse table — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Wiltshire demo location" data-house-key="wessex house auctions">Wessex House Auctions <span class="pc pc-intl">Wiltshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 109</span><span class="estimate">Est £280–£420</span><span class="saledate" data-tip="📅 Mon 12th Oct 2026 10am">📅 Mon 12th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Rustic antique pine farmhouse table — country-house proportions" data-full-title="Rustic antique pine farmhouse table — country-house proportions">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-010" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/blanket-chest.png" alt="Nineteenth-century pine blanket chest — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Nineteenth-century pine blanket chest — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Nottinghamshire demo location" data-house-key="merefield &amp; co">Merefield & Co. <span class="pc pc-intl">Nottinghamshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 110</span><span class="estimate">Est £160–£240</span><span class="saledate" data-tip="📅 Tue 13th Oct 2026 10am">📅 Tue 13th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Nineteenth-century pine blanket chest — country-house proportions" data-full-title="Nineteenth-century pine blanket chest — country-house proportions">Details</button>
+    </div></div>
+    </section>
+      
+    <section hidden id="today" class="today-section">
+      <h2>🔥 UK-Wide · selling today (Sat 3rd Oct 2026) <span class="count">3 lots</span> <span class="progress" data-total="3"></span></h2>
+      <div class="masonry">
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-013" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/wardrobe.png" alt="Late Victorian scrubbed pine two-door wardrobe — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Late Victorian scrubbed pine two-door wardrobe — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Devon demo location" data-house-key="westmoor antiques auctions">Westmoor Antiques Auctions <span class="pc pc-intl">Devon demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 113</span><span class="estimate">Est £320–£480</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Late Victorian scrubbed pine two-door wardrobe — restored condition" data-full-title="Late Victorian scrubbed pine two-door wardrobe — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-019" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/wardrobe.png" alt="Late Victorian scrubbed pine two-door wardrobe — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Late Victorian scrubbed pine two-door wardrobe — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Buckinghamshire demo location" data-house-key="alder &amp; ash auction rooms">Alder & Ash Auction Rooms <span class="pc pc-intl">Buckinghamshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 119</span><span class="estimate">Est £320–£480</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Late Victorian scrubbed pine two-door wardrobe — original character" data-full-title="Late Victorian scrubbed pine two-door wardrobe — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-025" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/wardrobe.png" alt="Late Victorian scrubbed pine two-door wardrobe — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Late Victorian scrubbed pine two-door wardrobe — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Cardiff demo location" data-house-key="cambrian house auctions">Cambrian House Auctions <span class="pc pc-intl">Cardiff demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 125</span><span class="estimate">Est £320–£480</span><span class="saledate" data-tip="📅 Sat 3rd Oct 2026 10am">📅 Sat 3rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Late Victorian scrubbed pine two-door wardrobe — warm waxed finish" data-full-title="Late Victorian scrubbed pine two-door wardrobe — warm waxed finish">Details</button>
+    </div></div>
+    </section>
+      
+    <section hidden id="uk-wide" class="later-section">
+      <h2>🇬🇧 UK-Wide · later <span class="count">17 lots</span> <span class="progress" data-total="17"></span></h2>
+      <div class="masonry">
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-011" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/housekeepers-cupboard.png" alt="Tall narrow pine housekeeper's cupboard — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Tall narrow pine housekeeper&#x27;s cupboard — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Warwickshire demo location" data-house-key="crown &amp; county salerooms">Crown & County Salerooms <span class="pc pc-intl">Warwickshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 111</span><span class="estimate">Est £260–£380</span><span class="saledate" data-tip="📅 Wed 14th Oct 2026 10am">📅 Wed 14th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Tall narrow pine housekeeper&#x27;s cupboard — country-house proportions" data-full-title="Tall narrow pine housekeeper&#x27;s cupboard — country-house proportions">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-012" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/bedside-cupboards.png" alt="Pair of antique pine bedside cupboards — country-house proportions" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Pair of antique pine bedside cupboards — country-house proportions</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Essex demo location" data-house-key="redbridge auction gallery">Redbridge Auction Gallery <span class="pc pc-intl">Essex demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 112</span><span class="estimate">Est £180–£260</span><span class="saledate" data-tip="📅 Thu 15th Oct 2026 10am">📅 Thu 15th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Pair of antique pine bedside cupboards — country-house proportions" data-full-title="Pair of antique pine bedside cupboards — country-house proportions">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-014" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/dresser-base.png" alt="Georgian-style pine dresser base with three drawers — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Georgian-style pine dresser base with three drawers — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Newcastle demo location" data-house-key="tyne &amp; fell auction rooms">Tyne & Fell Auction Rooms <span class="pc pc-intl">Newcastle demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 114</span><span class="estimate">Est £240–£360</span><span class="saledate" data-tip="📅 Sat 17th Oct 2026 10am">📅 Sat 17th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Georgian-style pine dresser base with three drawers — restored condition" data-full-title="Georgian-style pine dresser base with three drawers — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-015" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/farmhouse-table.png" alt="Rustic antique pine farmhouse table — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Rustic antique pine farmhouse table — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Shropshire demo location" data-house-key="severn valley salerooms">Severn Valley Salerooms <span class="pc pc-intl">Shropshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 115</span><span class="estimate">Est £280–£420</span><span class="saledate" data-tip="📅 Sun 18th Oct 2026 10am">📅 Sun 18th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Rustic antique pine farmhouse table — restored condition" data-full-title="Rustic antique pine farmhouse table — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-016" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/blanket-chest.png" alt="Nineteenth-century pine blanket chest — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Nineteenth-century pine blanket chest — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Kent demo location" data-house-key="orchard gate auctions">Orchard Gate Auctions <span class="pc pc-intl">Kent demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 116</span><span class="estimate">Est £160–£240</span><span class="saledate" data-tip="📅 Mon 19th Oct 2026 10am">📅 Mon 19th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Nineteenth-century pine blanket chest — restored condition" data-full-title="Nineteenth-century pine blanket chest — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-017" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/housekeepers-cupboard.png" alt="Tall narrow pine housekeeper's cupboard — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Tall narrow pine housekeeper&#x27;s cupboard — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Cambridgeshire demo location" data-house-key="silver birch auction house">Silver Birch Auction House <span class="pc pc-intl">Cambridgeshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 117</span><span class="estimate">Est £260–£380</span><span class="saledate" data-tip="📅 Tue 20th Oct 2026 10am">📅 Tue 20th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Tall narrow pine housekeeper&#x27;s cupboard — restored condition" data-full-title="Tall narrow pine housekeeper&#x27;s cupboard — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-018" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/bedside-cupboards.png" alt="Pair of antique pine bedside cupboards — restored condition" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Pair of antique pine bedside cupboards — restored condition</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Glasgow demo location" data-house-key="clyde &amp; heather auctions">Clyde & Heather Auctions <span class="pc pc-intl">Glasgow demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 118</span><span class="estimate">Est £180–£260</span><span class="saledate" data-tip="📅 Wed 21st Oct 2026 10am">📅 Wed 21st Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Pair of antique pine bedside cupboards — restored condition" data-full-title="Pair of antique pine bedside cupboards — restored condition">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-020" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/dresser-base.png" alt="Georgian-style pine dresser base with three drawers — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Georgian-style pine dresser base with three drawers — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 North Yorkshire demo location" data-house-key="northmere fine art auctions">Northmere Fine Art Auctions <span class="pc pc-intl">North Yorkshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 120</span><span class="estimate">Est £240–£360</span><span class="saledate" data-tip="📅 Fri 23rd Oct 2026 10am">📅 Fri 23rd Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Georgian-style pine dresser base with three drawers — original character" data-full-title="Georgian-style pine dresser base with three drawers — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-021" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/farmhouse-table.png" alt="Rustic antique pine farmhouse table — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Rustic antique pine farmhouse table — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Norfolk demo location" data-house-key="fenwick &amp; rowe salerooms">Fenwick & Rowe Salerooms <span class="pc pc-intl">Norfolk demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 121</span><span class="estimate">Est £280–£420</span><span class="saledate" data-tip="📅 Sun 4th Oct 2026 10am">📅 Sun 4th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Rustic antique pine farmhouse table — original character" data-full-title="Rustic antique pine farmhouse table — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-022" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/blanket-chest.png" alt="Nineteenth-century pine blanket chest — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Nineteenth-century pine blanket chest — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Dorset demo location" data-house-key="harbour &amp; heath auctions">Harbour & Heath Auctions <span class="pc pc-intl">Dorset demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 122</span><span class="estimate">Est £160–£240</span><span class="saledate" data-tip="📅 Mon 5th Oct 2026 10am">📅 Mon 5th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Nineteenth-century pine blanket chest — original character" data-full-title="Nineteenth-century pine blanket chest — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-023" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/housekeepers-cupboard.png" alt="Tall narrow pine housekeeper's cupboard — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Tall narrow pine housekeeper&#x27;s cupboard — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Lancashire demo location" data-house-key="calder vale auction rooms">Calder Vale Auction Rooms <span class="pc pc-intl">Lancashire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 123</span><span class="estimate">Est £260–£380</span><span class="saledate" data-tip="📅 Tue 6th Oct 2026 10am">📅 Tue 6th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Tall narrow pine housekeeper&#x27;s cupboard — original character" data-full-title="Tall narrow pine housekeeper&#x27;s cupboard — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-024" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/bedside-cupboards.png" alt="Pair of antique pine bedside cupboards — original character" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Pair of antique pine bedside cupboards — original character</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Edinburgh demo location" data-house-key="thistle &amp; oak auctioneers">Thistle & Oak Auctioneers <span class="pc pc-intl">Edinburgh demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 124</span><span class="estimate">Est £180–£260</span><span class="saledate" data-tip="📅 Wed 7th Oct 2026 10am">📅 Wed 7th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Pair of antique pine bedside cupboards — original character" data-full-title="Pair of antique pine bedside cupboards — original character">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-026" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/dresser-base.png" alt="Georgian-style pine dresser base with three drawers — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Georgian-style pine dresser base with three drawers — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Belfast demo location" data-house-key="lagan &amp; linen auction rooms">Lagan & Linen Auction Rooms <span class="pc pc-intl">Belfast demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 126</span><span class="estimate">Est £240–£360</span><span class="saledate" data-tip="📅 Fri 9th Oct 2026 10am">📅 Fri 9th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Georgian-style pine dresser base with three drawers — warm waxed finish" data-full-title="Georgian-style pine dresser base with three drawers — warm waxed finish">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-027" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/farmhouse-table.png" alt="Rustic antique pine farmhouse table — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Rustic antique pine farmhouse table — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Wiltshire demo location" data-house-key="wessex house auctions">Wessex House Auctions <span class="pc pc-intl">Wiltshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 127</span><span class="estimate">Est £280–£420</span><span class="saledate" data-tip="📅 Sat 10th Oct 2026 10am">📅 Sat 10th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Rustic antique pine farmhouse table — warm waxed finish" data-full-title="Rustic antique pine farmhouse table — warm waxed finish">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-028" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/blanket-chest.png" alt="Nineteenth-century pine blanket chest — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Nineteenth-century pine blanket chest — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Nottinghamshire demo location" data-house-key="merefield &amp; co">Merefield & Co. <span class="pc pc-intl">Nottinghamshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 128</span><span class="estimate">Est £160–£240</span><span class="saledate" data-tip="📅 Sun 11th Oct 2026 10am">📅 Sun 11th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Nineteenth-century pine blanket chest — warm waxed finish" data-full-title="Nineteenth-century pine blanket chest — warm waxed finish">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-029" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/housekeepers-cupboard.png" alt="Tall narrow pine housekeeper's cupboard — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Tall narrow pine housekeeper&#x27;s cupboard — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Warwickshire demo location" data-house-key="crown &amp; county salerooms">Crown & County Salerooms <span class="pc pc-intl">Warwickshire demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 129</span><span class="estimate">Est £260–£380</span><span class="saledate" data-tip="📅 Mon 12th Oct 2026 10am">📅 Mon 12th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Tall narrow pine housekeeper&#x27;s cupboard — warm waxed finish" data-full-title="Tall narrow pine housekeeper&#x27;s cupboard — warm waxed finish">Details</button>
+    </div>
+
+    <div class="card-shell">
+      <a class="card" href="#demo-lot-030" target="_blank" rel="noopener">
+        <div class="card-img"><img data-src="images/bedside-cupboards.png" alt="Pair of antique pine bedside cupboards — warm waxed finish" width="400" height="300" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="card-body">
+          <p class="title"><span class="lot-title-text">Pair of antique pine bedside cupboards — warm waxed finish</span></p>
+          <p class="house-line"><span class="house" data-tip="🌍 Essex demo location" data-house-key="redbridge auction gallery">Redbridge Auction Gallery <span class="pc pc-intl">Essex demo location</span></span></p>
+          <div class="meta"><span class="lot-number">Lot 130</span><span class="estimate">Est £180–£260</span><span class="saledate" data-tip="📅 Tue 13th Oct 2026 10am">📅 Tue 13th Oct 2026</span></div>
+        </div>
+      </a>
+      <button type="button" class="lot-preview-trigger" aria-controls="lot-preview-popup" aria-expanded="false" aria-label="Show planned lot preview for: Pair of antique pine bedside cupboards — warm waxed finish" data-full-title="Pair of antique pine bedside cupboards — warm waxed finish">Details</button>
+    </div></div>
+    </section>
+    </div>
+  </div>
+
+  <button id="map-fab" onclick="openMobileMap()">🗺 Map</button>
+  <button id="back-to-top" onclick="scrollCardsToTop()" aria-label="Back to top" title="Back to top">↑</button>
+
+  <script>
+const PC_MAP = {
+
+};
+
+const HOUSE_POPUP_DATA = {"alder & ash auction rooms": {"name": "Alder & Ash Auction Rooms", "address": "Buckinghamshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-05", "displayDate": "Mon 5 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "northmere fine art auctions": {"name": "Northmere Fine Art Auctions", "address": "North Yorkshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-06", "displayDate": "Tue 6 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "fenwick & rowe salerooms": {"name": "Fenwick & Rowe Salerooms", "address": "Norfolk demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-07", "displayDate": "Wed 7 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "harbour & heath auctions": {"name": "Harbour & Heath Auctions", "address": "Dorset demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-08", "displayDate": "Thu 8 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "calder vale auction rooms": {"name": "Calder Vale Auction Rooms", "address": "Lancashire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-09", "displayDate": "Fri 9 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "thistle & oak auctioneers": {"name": "Thistle & Oak Auctioneers", "address": "Edinburgh demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-10", "displayDate": "Sat 10 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "cambrian house auctions": {"name": "Cambrian House Auctions", "address": "Cardiff demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-11", "displayDate": "Sun 11 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "lagan & linen auction rooms": {"name": "Lagan & Linen Auction Rooms", "address": "Belfast demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-12", "displayDate": "Mon 12 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "wessex house auctions": {"name": "Wessex House Auctions", "address": "Wiltshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-13", "displayDate": "Tue 13 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "merefield & co": {"name": "Merefield & Co.", "address": "Nottinghamshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-14", "displayDate": "Wed 14 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "crown & county salerooms": {"name": "Crown & County Salerooms", "address": "Warwickshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-15", "displayDate": "Thu 15 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "redbridge auction gallery": {"name": "Redbridge Auction Gallery", "address": "Essex demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-16", "displayDate": "Fri 16 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "westmoor antiques auctions": {"name": "Westmoor Antiques Auctions", "address": "Devon demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-17", "displayDate": "Sat 17 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "tyne & fell auction rooms": {"name": "Tyne & Fell Auction Rooms", "address": "Newcastle demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-18", "displayDate": "Sun 18 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "severn valley salerooms": {"name": "Severn Valley Salerooms", "address": "Shropshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-19", "displayDate": "Mon 19 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "orchard gate auctions": {"name": "Orchard Gate Auctions", "address": "Kent demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-20", "displayDate": "Tue 20 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "silver birch auction house": {"name": "Silver Birch Auction House", "address": "Cambridgeshire demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-21", "displayDate": "Wed 21 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}, "clyde & heather auctions": {"name": "Clyde & Heather Auctions", "address": "Glasgow demo location", "catalogueUrl": "", "sales": [{"date": "2026-10-04", "displayDate": "Sun 4 Oct 2026", "time": "10:00", "title": "Fictional interiors and collectables sale"}]}};
+
+    // ── FEATURED SEARCHES (desktop hover, click and keyboard) ──
+    (function initFeaturedSearches() {
+      const wrap = document.getElementById('featuredSearches');
+      const trigger = document.getElementById('featuredSearchesTrigger');
+      if (!wrap || !trigger) return;
+
+      let pinnedOpen = false;
+      function setOpen(open) {
+        wrap.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      wrap.addEventListener('mouseenter', () => setOpen(true));
+      wrap.addEventListener('mouseleave', () => {
+        if (!pinnedOpen) setOpen(false);
+      });
+      wrap.addEventListener('focusin', () => setOpen(true));
+      wrap.addEventListener('focusout', () => {
+        if (!pinnedOpen) setOpen(false);
+      });
+      trigger.addEventListener('click', event => {
+        event.stopPropagation();
+        pinnedOpen = !pinnedOpen;
+        setOpen(pinnedOpen);
+      });
+      trigger.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        pinnedOpen = false;
+        setOpen(false);
+        trigger.focus();
+      });
+      document.addEventListener('click', event => {
+        if (wrap.contains(event.target)) return;
+        pinnedOpen = false;
+        setOpen(false);
+      });
+    })();
+
+    // ── LOT IMAGE LOADING / FAILURE STATES ──
+    (function initLotImageStates() {
+      function loadImage(img) {
+        if (!img || !img.dataset.src || img.closest('section').hidden ||
+            img.closest('.card-shell').style.display === 'none') return;
+        img.src = img.dataset.src;
+        delete img.dataset.src;
+      }
+      const imagePreloader = 'IntersectionObserver' in window
+        ? new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+              const img = entry.target.querySelector('img');
+              loadImage(img);
+              if (!img || !img.dataset.src) imagePreloader.unobserve(entry.target);
+            });
+          }, { root: null, rootMargin: '400px 0px', threshold: 0 })
+        : null;
+
+      // Re-observe after filters/tab changes; never assign URLs to inactive lots.
+      window.refreshLotImages = function() {
+        if (imagePreloader) imagePreloader.disconnect();
+        document.querySelectorAll('#cards-area section:not([hidden]) .card-img img[data-src]').forEach(img => {
+          if (img.closest('.card-shell').style.display === 'none') return;
+          if (imagePreloader) imagePreloader.observe(img.closest('.card-img'));
+          else loadImage(img); // Native loading="lazy" is the older-browser fallback.
+        });
+      };
+
+      function showLoaded(img) {
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        frame.classList.remove('image-pending');
+      }
+
+      function showUnavailable(img) {
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        const fallback = document.createElement('div');
+        fallback.className = 'no-img';
+
+        const icon = document.createElement('span');
+        icon.className = 'no-img-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = '▧';
+
+        const title = document.createElement('strong');
+        title.textContent = 'Image temporarily unavailable';
+
+        const hint = document.createElement('span');
+        hint.textContent = 'Fictional demonstration item';
+
+        fallback.append(icon, title, hint);
+        frame.classList.remove('image-pending');
+        frame.replaceChildren(fallback);
+      }
+
+      document.querySelectorAll('.card-img img').forEach(img => {
+        const frame = img.closest('.card-img');
+        if (!frame) return;
+        frame.classList.add('image-pending');
+        if (img.complete && img.naturalWidth > 0) {
+          showLoaded(img);
+          return;
+        }
+        // A native lazy image can report complete before its request has
+        // started. Only treat a zero-width completed image as failed when the
+        // browser has actually selected a source for it.
+        if (img.complete && img.currentSrc) {
+          showUnavailable(img);
+          return;
+        }
+        img.addEventListener('load', () => showLoaded(img), { once: true });
+        img.addEventListener('error', () => showUnavailable(img), { once: true });
+
+      });
+    })();
+
+    // ── HOUSE POPUP (desktop hover only) ──
+    (function initHousePopup() {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      const popup = document.createElement('div');
+      popup.className = 'house-popup';
+      document.body.appendChild(popup);
+      let showTimer = null;
+
+      function appendText(parent, className, value) {
+        const el = document.createElement('div');
+        el.className = className;
+        el.textContent = value;
+        parent.appendChild(el);
+        return el;
+      }
+
+      function positionPopup(houseEl) {
+        const rect = houseEl.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.left), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${left}px`;
+        popup.style.top = `${Math.max(edge, top)}px`;
+      }
+
+      function showPopup(houseEl) {
+        const data = HOUSE_POPUP_DATA[houseEl.dataset.houseKey];
+        if (!data) return;
+        popup.replaceChildren();
+        appendText(popup, 'house-popup-name', data.name);
+        if (data.address) appendText(popup, 'house-popup-address', data.address);
+        const sales = Array.isArray(data.sales) ? data.sales : [];
+        const salesEl = document.createElement('div');
+        salesEl.className = 'house-popup-sales';
+        if (sales.length) {
+          appendText(salesEl, 'house-popup-sales-title', 'Upcoming auctions');
+          sales.forEach(sale => {
+            const saleEl = document.createElement('div');
+            saleEl.className = 'house-popup-sale';
+            appendText(saleEl, 'house-popup-sale-date', sale.displayDate + (sale.time ? ' · ' + sale.time : ''));
+            if (sale.title) appendText(saleEl, 'house-popup-sale-title', sale.title);
+            salesEl.appendChild(saleEl);
+          });
+        } else {
+          appendText(salesEl, 'house-popup-empty', 'No upcoming auctions currently listed.');
+        }
+        popup.appendChild(salesEl);
+        if (data.catalogueUrl) appendText(popup, 'house-popup-hint', 'Click the house name to view on demo catalogue.');
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        positionPopup(houseEl);
+        popup.style.visibility = '';
+      }
+
+      function hidePopup() {
+        clearTimeout(showTimer);
+        popup.classList.remove('visible');
+      }
+
+      document.querySelectorAll('.house[data-house-key]').forEach(houseEl => {
+        houseEl.addEventListener('mouseenter', () => {
+          showTimer = window.setTimeout(() => showPopup(houseEl), 200);
+        });
+        houseEl.addEventListener('mouseleave', hidePopup);
+      });
+      window.addEventListener('scroll', hidePopup, true);
+      window.addEventListener('resize', hidePopup);
+    })();
+
+    // ── PLANNED LOT PREVIEW (shared popup; hover/focus/tap) ──
+    (function initLotPreview() {
+      const popup = document.createElement('div');
+      popup.className = 'lot-preview-popup';
+      popup.id = 'lot-preview-popup';
+      popup.setAttribute('role', 'dialog');
+      popup.setAttribute('aria-label', 'Planned lot preview');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(popup);
+      const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      let showTimer = null;
+      let activeTrigger = null;
+
+      function appendText(parent, className, value, tagName = 'div') {
+        const el = document.createElement(tagName);
+        el.className = className;
+        el.textContent = value;
+        parent.appendChild(el);
+        return el;
+      }
+
+      function positionPopup(anchor) {
+        const rect = anchor.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.left), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${Math.max(edge, left)}px`;
+        popup.style.top = `${Math.max(edge, top)}px`;
+      }
+
+      function showPreview(titleEl, trigger) {
+        const title = (trigger && trigger.dataset.fullTitle) || titleEl.textContent.trim();
+        if (!title) return;
+        if (activeTrigger && activeTrigger !== trigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = trigger || null;
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'true');
+        popup.replaceChildren();
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'lot-preview-close';
+        closeButton.setAttribute('aria-label', 'Close lot details');
+        closeButton.textContent = '×';
+        closeButton.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePreview();
+        });
+        popup.appendChild(closeButton);
+        const titleHeading = appendText(popup, 'lot-preview-popup-title', title, 'h3');
+        titleHeading.id = 'lot-preview-popup-title';
+        popup.setAttribute('aria-labelledby', titleHeading.id);
+        const planned = document.createElement('div');
+        planned.className = 'lot-preview-planned';
+        appendText(planned, 'lot-preview-planned-label', 'Planned lot preview');
+        appendText(planned, 'lot-preview-planned-copy', 'With an authorised data feed, the full description, dimensions and condition information would appear here.');
+        popup.appendChild(planned);
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        popup.setAttribute('aria-hidden', 'false');
+        positionPopup(titleEl);
+        popup.style.visibility = '';
+      }
+
+      function hidePreview() {
+        clearTimeout(showTimer);
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = null;
+        popup.classList.remove('visible');
+        popup.setAttribute('aria-hidden', 'true');
+      }
+
+      function schedulePreview(titleEl, trigger) {
+        clearTimeout(showTimer);
+        showTimer = window.setTimeout(() => showPreview(titleEl, trigger), 200);
+      }
+
+      document.querySelectorAll('.card-shell').forEach(shell => {
+        const titleEl = shell.querySelector('.title');
+        const trigger = shell.querySelector('.lot-preview-trigger');
+        if (!titleEl || !trigger) return;
+        if (hoverCapable) {
+          titleEl.addEventListener('mouseenter', () => schedulePreview(titleEl, trigger));
+          titleEl.addEventListener('mouseleave', hidePreview);
+        }
+        trigger.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === trigger) hidePreview();
+          else showPreview(titleEl, trigger);
+        });
+        trigger.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === trigger) hidePreview();
+          else showPreview(titleEl, trigger);
+        });
+        if (hoverCapable) trigger.addEventListener('focus', () => showPreview(titleEl, trigger));
+        trigger.addEventListener('blur', hidePreview);
+      });
+
+      document.addEventListener('pointerdown', event => {
+        if (!popup.classList.contains('visible')) return;
+        if (event.target === activeTrigger || popup.contains(event.target)) return;
+        hidePreview();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') hidePreview();
+      });
+      window.addEventListener('scroll', hidePreview, true);
+      window.addEventListener('resize', hidePreview);
+    })();
+
+    // ── PLANNED AUCTION REMINDER (demonstration only) ──
+    (function initPlannedReminders() {
+      const popup = document.createElement('div');
+      popup.className = 'lot-reminder-popup';
+      popup.id = 'lot-reminder-popup';
+      popup.setAttribute('role', 'dialog');
+      popup.setAttribute('aria-label', 'Planned auction reminder');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(popup);
+
+      const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      let activeTrigger = null;
+      let showTimer = null;
+      let pinnedOpen = false;
+
+      function appendText(className, value, tagName = 'div') {
+        const el = document.createElement(tagName);
+        el.className = className;
+        el.textContent = value;
+        popup.appendChild(el);
+        return el;
+      }
+
+      function positionPopup(anchor) {
+        const rect = anchor.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const edge = 14;
+        let left = Math.min(Math.max(edge, rect.right - popupRect.width), window.innerWidth - popupRect.width - edge);
+        let top = rect.bottom + 8;
+        if (top + popupRect.height > window.innerHeight - edge) top = rect.top - popupRect.height - 8;
+        popup.style.left = `${Math.max(edge, left)}px`;
+        popup.style.top = `${Math.max(edge, top)}px`;
+      }
+
+      function showPopup(trigger, pin = false) {
+        clearTimeout(showTimer);
+        activeTrigger = trigger;
+        pinnedOpen = pin;
+        popup.replaceChildren();
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'lot-reminder-close';
+        closeButton.setAttribute('aria-label', 'Close reminder information');
+        closeButton.textContent = '×';
+        closeButton.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePopup();
+        });
+        popup.appendChild(closeButton);
+
+        appendText('lot-reminder-popup-title', 'Auction reminder — planned', 'h3');
+        appendText(
+          'lot-reminder-popup-copy',
+          'Don’t miss an auction—or a lot—you have already marked as interesting. With an agreed demo catalogue data arrangement, signed-in members could use this bell to receive an email at 7:30am on the morning of the auction.'
+        );
+        appendText(
+          'lot-reminder-popup-copy',
+          'The email could include the official demo catalogue lot link, with a future option for a second reminder shortly before the auction begins. Live lot-position alerts would require real-time demo catalogue integration.'
+        );
+        appendText('lot-reminder-popup-note', 'Demonstration only — no reminder has been created.');
+        popup.style.visibility = 'hidden';
+        popup.classList.add('visible');
+        popup.setAttribute('aria-hidden', 'false');
+        trigger.setAttribute('aria-expanded', 'true');
+        positionPopup(trigger);
+        popup.style.visibility = '';
+      }
+
+      function hidePopup() {
+        clearTimeout(showTimer);
+        if (activeTrigger) activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = null;
+        pinnedOpen = false;
+        popup.classList.remove('visible');
+        popup.setAttribute('aria-hidden', 'true');
+      }
+
+      document.querySelectorAll('.card-shell').forEach(shell => {
+        const title = (shell.querySelector('.lot-title-text')?.textContent || 'this lot').trim();
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'lot-reminder-trigger';
+        button.setAttribute('aria-label', 'Planned reminder for: ' + title);
+        button.setAttribute('aria-controls', popup.id);
+        button.setAttribute('aria-expanded', 'false');
+        button.title = 'Planned auction email reminder';
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4M12 2V1"/></svg>';
+        shell.appendChild(button);
+
+        if (hoverCapable) {
+          button.addEventListener('mouseenter', () => {
+            showTimer = window.setTimeout(() => showPopup(button), 180);
+          });
+          button.addEventListener('mouseleave', () => {
+            clearTimeout(showTimer);
+            if (!pinnedOpen) hidePopup();
+          });
+          button.addEventListener('focus', () => showPopup(button));
+          button.addEventListener('blur', () => {
+            if (!pinnedOpen) hidePopup();
+          });
+        }
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (activeTrigger === button && pinnedOpen) hidePopup();
+          else showPopup(button, true);
+        });
+        button.addEventListener('keydown', event => {
+          if (event.key === 'Escape') hidePopup();
+        });
+      });
+
+      document.addEventListener('pointerdown', event => {
+        if (!popup.classList.contains('visible')) return;
+        if (event.target === activeTrigger || popup.contains(event.target)) return;
+        hidePopup();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') hidePopup();
+      });
+      window.addEventListener('scroll', hidePopup, true);
+      window.addEventListener('resize', hidePopup);
+    })();
+
+    // ── SEARCH ──
+
+    // ── EXCLUSIVE LOT GROUPS ──
+    let selectedGroup = 'local';
+    function groupButtons() { return document.querySelectorAll('nav.jump .group-tab'); }
+    function selectGroup(id) {
+      if (!['local', 'today', 'uk-wide'].includes(id)) return;
+      selectedGroup = id;
+      groupButtons().forEach(button => {
+        const active = button.dataset.target === id;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      applyLotFilters();
+      const cardsArea = document.getElementById('cards-area');
+      if (['auto', 'scroll'].includes(getComputedStyle(cardsArea).overflowY)) {
+        cardsArea.scrollTo({ top: 0, behavior: 'instant' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+      document.dispatchEvent(new Event('lotgroupchange'));
+    }
+    groupButtons().forEach(button => button.addEventListener('click', () => selectGroup(button.dataset.target)));
+
+    function normalizeSearch(text) {
+      return text
+        .replace(/cupboards?/gi, 'cupboard')
+        .replace(/chests?/gi, 'chest')
+        .replace(/drawers?/gi, 'drawer')
+        .replace(/tables?/gi, 'table')
+        .replace(/chairs?/gi, 'chair')
+        .replace(/cabinets?/gi, 'cabinet')
+        .replace(/bedsides?/gi, 'bedside')
+        .replace(/wardrobes?/gi, 'wardrobe')
+        .replace(/dressers?/gi, 'dresser')
+        .replace(/shelves?/gi, 'shelf')
+        .replace(/bookcase(s)?/gi, 'bookcase');
+    }
+
+    const WANTED_STORAGE_KEY = 'auctionSavvyWantedItemsV1';
+    const WANTED_DEFAULTS = [
+      { id: 'example-large-pine-table', text: 'Very large pine table', active: true },
+      { id: 'example-glazed-pine-dresser', text: 'Glazed pine dresser', active: true },
+      { id: 'example-butchers-block', text: "Butchers' block", active: true }
+    ];
+    let wantedFilterActive = false;
+
+    function loadWantedRequests() {
+      try {
+        const stored = localStorage.getItem(WANTED_STORAGE_KEY);
+        if (stored === null) {
+          localStorage.setItem(WANTED_STORAGE_KEY, JSON.stringify(WANTED_DEFAULTS));
+          return WANTED_DEFAULTS.slice();
+        }
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed)
+          ? parsed.filter(item => item && typeof item.text === 'string' && item.active !== false && item.text.trim())
+          : [];
+      } catch (error) {
+        return WANTED_DEFAULTS.slice();
+      }
+    }
+
+    function renderRefinedSearchPopover(requests) {
+      const list = document.getElementById('refinedSearchPhrases');
+      if (!list) return;
+      list.replaceChildren();
+      if (!requests.length) {
+        const empty = document.createElement('li');
+        empty.textContent = 'No active phrases';
+        list.appendChild(empty);
+        return;
+      }
+      requests.forEach(request => {
+        const item = document.createElement('li');
+        item.textContent = request.text;
+        list.appendChild(item);
+      });
+    }
+
+    function initRefinedSearchPopover() {
+      const wrap = document.getElementById('refinedSearch');
+      const trigger = document.getElementById('wantedFilterButton');
+      if (!wrap || !trigger) return;
+
+      function setOpen(open) {
+        wrap.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      wrap.addEventListener('mouseenter', () => setOpen(true));
+      wrap.addEventListener('mouseleave', () => setOpen(false));
+      wrap.addEventListener('focusin', () => setOpen(true));
+      wrap.addEventListener('focusout', () => {
+        window.setTimeout(() => setOpen(wrap.contains(document.activeElement)), 0);
+      });
+      wrap.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        setOpen(false);
+        trigger.focus();
+      });
+      document.addEventListener('click', event => {
+        if (!wrap.contains(event.target)) setOpen(false);
+      });
+    }
+
+    function wantedWords(text) {
+      const ignored = new Set(['a', 'an', 'the', 'very', 'really', 'about', 'around', 'approximately', 'approx', 'wanted', 'looking', 'for', 'find', 'me']);
+      const normalized = normalizeSearch(String(text || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' '))
+        .replace(/\bbutchers?\b/g, 'butcher');
+      return normalized.split(/\s+/).filter(word => word && !ignored.has(word));
+    }
+
+    function wantedMatchesTitle(title, request) {
+      const normalizedTitle = normalizeSearch(String(title || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' '))
+        .replace(/\bbutchers?\b/g, 'butcher');
+      const words = wantedWords(request.text);
+      return words.length > 0 && words.every(word => normalizedTitle.includes(word));
+    }
+
+    function applyLotFilters() {
+      const input = document.getElementById('searchInput');
+      const query = input.value.toLowerCase().trim();
+      const searchBox = document.getElementById('searchBox');
+      const resultsEl = document.getElementById('searchResults');
+      const requests = loadWantedRequests();
+      const normalizedQuery = normalizeSearch(query);
+      const queryWords = normalizedQuery.split(/\s+/).filter(Boolean);
+      let visibleCount = 0;
+      let totalCount = 0;
+      let wantedMatchCount = 0;
+      const groupCounts = { local: 0, today: 0, "uk-wide": 0 };
+
+      searchBox.classList.toggle('has-text', Boolean(query));
+      document.querySelectorAll('.card-shell').forEach(shell => {
+        const group = shell.closest("section").id;
+        const inSelectedGroup = group === selectedGroup;
+        if (inSelectedGroup) totalCount++;
+        const titleEl = shell.querySelector('.title');
+        const title = titleEl ? titleEl.textContent : '';
+        const normalizedTitle = normalizeSearch(title.toLowerCase());
+        const searchMatch = !query || queryWords.every(word => normalizedTitle.includes(word));
+        const wantedMatches = requests.filter(request => wantedMatchesTitle(title, request));
+        if (inSelectedGroup && wantedMatches.length) wantedMatchCount++;
+        const visible = searchMatch && (!wantedFilterActive || wantedMatches.length > 0);
+        shell.style.display = visible ? '' : 'none';
+        if (visible) groupCounts[group]++;
+        if (visible && inSelectedGroup) visibleCount++;
+
+        const oldBadge = shell.querySelector('.wanted-match-badge');
+        if (oldBadge) oldBadge.remove();
+        if (wantedFilterActive && wantedMatches.length && titleEl) {
+          const badge = document.createElement('span');
+          badge.className = 'wanted-match-badge';
+          badge.textContent = 'Matched: ' + wantedMatches[0].text + (wantedMatches.length > 1 ? ' +' + (wantedMatches.length - 1) : '');
+          badge.title = 'Possible title match: ' + wantedMatches.map(request => request.text).join(', ');
+          titleEl.insertAdjacentElement('afterend', badge);
+        }
+      });
+
+      document.querySelectorAll('#cards-area section[id]').forEach(section => {
+        section.hidden = section.id !== selectedGroup;
+        let empty = section.querySelector('.filter-empty');
+        if (!empty) {
+          empty = document.createElement('p');
+          empty.className = 'empty filter-empty';
+          empty.textContent = 'No lots match your search in this group.';
+          section.appendChild(empty);
+        }
+        empty.hidden = groupCounts[section.id] > 0 || !section.querySelector('.card-shell');
+      });
+      groupButtons().forEach(button => {
+        button.querySelector('.jump-count').textContent = groupCounts[button.dataset.target];
+      });
+      window.refreshLotImages();
+
+      resultsEl.textContent = query ? visibleCount + ' of ' + totalCount + ' lots' : '';
+      const button = document.getElementById('wantedFilterButton');
+      const matchCount = document.getElementById('wantedMatchCount');
+      const switchState = document.getElementById('refinedSwitchState');
+      const summary = document.getElementById('wantedFilterSummary');
+      const summaryText = document.getElementById('wantedFilterSummaryText');
+      renderRefinedSearchPopover(requests);
+      matchCount.textContent = wantedMatchCount;
+      button.classList.toggle('active', wantedFilterActive);
+      button.setAttribute('aria-pressed', wantedFilterActive ? 'true' : 'false');
+      button.title = wantedFilterActive ? 'Switch refined search off' : 'Switch refined search on';
+      switchState.textContent = wantedFilterActive ? 'On' : 'Off';
+      summary.classList.toggle('visible', wantedFilterActive);
+      if (wantedFilterActive) {
+        summaryText.innerHTML = '<strong>' + visibleCount + ' possible match' + (visibleCount === 1 ? '' : 'es') + '</strong> across ' + requests.length + ' active search phrase' + (requests.length === 1 ? '' : 's') + '. Verify each official listing before bidding.';
+      }
+    }
+
+    function searchItems() {
+      applyLotFilters();
+    }
+
+    function toggleWantedFilter() {
+      const requests = loadWantedRequests();
+      if (!requests.length) {
+        window.location.href = '../settings/#refined-items';
+        return;
+      }
+      wantedFilterActive = !wantedFilterActive;
+      applyLotFilters();
+      const cardsArea = document.getElementById('cards-area');
+      if (cardsArea) cardsArea.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      applyLotFilters();
+      document.getElementById('searchInput').focus();
+    }
+
+    initRefinedSearchPopover();
+    document.getElementById('wantedFilterButton').addEventListener('click', toggleWantedFilter);
+    document.getElementById('clearWantedFilter').addEventListener('click', () => {
+      wantedFilterActive = false;
+      applyLotFilters();
+    });
+    if (new URLSearchParams(window.location.search).get('wanted') === '1' && loadWantedRequests().length) {
+      wantedFilterActive = true;
+    }
+    window.addEventListener('storage', event => {
+      if (event.key === WANTED_STORAGE_KEY) applyLotFilters();
+    });
+    applyLotFilters();
+
+    // ── DESKTOP-ONLY MINI-MAP ──
+    window.auctionSavvyLeafletReady.then((leafletLoaded) => {
+      if (!leafletLoaded || !window.matchMedia('(min-width: 801px)').matches) return;
+
+    const map = L.map('map', { center: [54.2, -2.5], zoom: 6, zoomControl: true });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2vjd_1_d55b502556a22090f63fb07e', {
+      attribution: '&copy; OSM &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let markerVisible = false;
+    const highlightedMarker = L.marker([0, 0], {
+      icon: L.divIcon({
+        className: '',
+        html: '<div class="pin-highlighted"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      })
+    });
+    const mapInfoOverlay = document.createElement('div');
+    mapInfoOverlay.className = 'lot-map-card';
+    map.getContainer().appendChild(mapInfoOverlay);
+
+    function fillMapInfo(houseEl, postcode, saleText) {
+      const houseKey = houseEl ? houseEl.dataset.houseKey : '';
+      const houseInfo = houseKey ? HOUSE_POPUP_DATA[houseKey] : null;
+      const fallbackName = houseEl && houseEl.firstChild ? houseEl.firstChild.textContent.trim() : '';
+      mapInfoOverlay.replaceChildren();
+
+      const name = document.createElement('div');
+      name.className = 'lot-map-card-name';
+      name.textContent = (houseInfo && houseInfo.name) || fallbackName || 'Auction house';
+      mapInfoOverlay.appendChild(name);
+
+      let addressText = houseInfo && houseInfo.address ? houseInfo.address.trim() : '';
+      const compactAddress = addressText.replace(/\s+/g, '').toUpperCase();
+      const compactPostcode = (postcode || '').replace(/\s+/g, '').toUpperCase();
+      if (postcode && !compactAddress.includes(compactPostcode)) {
+        addressText = addressText ? addressText + ' · ' + postcode : postcode;
+      }
+      const address = document.createElement('div');
+      address.className = 'lot-map-card-address';
+      address.textContent = addressText || 'Address unavailable';
+      mapInfoOverlay.appendChild(address);
+
+      const sale = document.createElement('div');
+      sale.className = 'lot-map-card-sale';
+      sale.textContent = saleText ? 'Sale: ' + saleText : 'Sale date unavailable';
+      mapInfoOverlay.appendChild(sale);
+    }
+
+    function positionMapInfo() {
+      if (!markerVisible || !mapInfoOverlay.classList.contains('visible')) return;
+      const point = map.latLngToContainerPoint(highlightedMarker.getLatLng());
+      const size = map.getSize();
+      const width = Math.min(238, Math.max(180, size.x - 24));
+      mapInfoOverlay.style.width = width + 'px';
+      const height = mapInfoOverlay.offsetHeight;
+      let left = point.x - width / 2;
+      let top = point.y + 20;
+      if (top + height > size.y - 12) top = point.y - height - 20;
+      left = Math.max(12, Math.min(left, size.x - width - 12));
+      top = Math.max(44, Math.min(top, size.y - height - 12));
+      mapInfoOverlay.style.left = Math.round(left) + 'px';
+      mapInfoOverlay.style.top = Math.round(top) + 'px';
+    }
+
+    function highlightMarker(pc, houseEl, postcode, saleText) {
+      if (!pc || !PC_MAP[pc]) {
+        if (markerVisible) {
+          map.removeLayer(highlightedMarker);
+          markerVisible = false;
+        }
+        mapInfoOverlay.classList.remove('visible');
+        mapInfoOverlay.replaceChildren();
+        return;
+      }
+      const h = PC_MAP[pc];
+      highlightedMarker.setLatLng([h.lat, h.lng]);
+      if (!markerVisible) {
+        highlightedMarker.addTo(map);
+        markerVisible = true;
+      }
+      fillMapInfo(houseEl, postcode, saleText);
+      mapInfoOverlay.classList.add('visible');
+      positionMapInfo();
+    }
+
+    map.on('move zoom resize', positionMapInfo);
+
+    // Hover ANYWHERE on a lot card highlights that lot's auction house on the
+    // map (not just hovering the house name) — makes the map earn its place
+    // instead of sitting blank. Postcode is read from the .house .pc inside the card.
+    document.querySelectorAll('.card').forEach(card => {
+      const houseEl = card.querySelector('.house');
+      const pcRaw = card.querySelector('.pc');
+      if (!pcRaw) return;
+      const postcode = pcRaw.textContent.trim();
+      const pc = postcode.replace(/\s+/g, '').toUpperCase();
+      const dateEl = card.querySelector('.saledate, .timeleft');
+      const saleText = dateEl ? dateEl.textContent.replace(/^[📅⏱]\s*/, '').trim() : '';
+      card.addEventListener('mouseenter', () => {
+        if (houseEl) houseEl.classList.add('highlighted');
+        highlightMarker(pc, houseEl, postcode, saleText);
+      });
+      card.addEventListener('mouseleave', () => {
+        if (houseEl) houseEl.classList.remove('highlighted');
+        highlightMarker(null);
+      });
+    });
+
+    document.addEventListener('lotgroupchange', () => highlightMarker(null));
+
+    const allLats = Object.values(PC_MAP).map(h => h.lat);
+    const allLngs = Object.values(PC_MAP).map(h => h.lng);
+    const bounds = [[Math.min(...allLats), Math.min(...allLngs)], [Math.max(...allLats), Math.max(...allLngs)]];
+    map.fitBounds(bounds, { padding: [30, 30] });
+    if (map.getZoom() > 8) map.setZoom(8);
+
+    // ── MOBILE MAP OVERLAY TOGGLE ──
+    function openMobileMap() {
+      document.body.classList.add('map-open');
+      setTimeout(() => {
+        map.invalidateSize();
+        map.fitBounds(bounds, { padding: [30, 30] });
+        if (map.getZoom() > 8) map.setZoom(8);
+      }, 60);
+    }
+    function closeMobileMap() {
+      document.body.classList.remove('map-open');
+    }
+    }).catch((error) => {
+      console.warn('Lots mini-map could not be loaded.', error);
+    });
+
+    // ── Scroll progress counter ──
+    // Updates each section's "X of Y seen" label as the user scrolls past
+    // cards. Counts only currently-visible cards (offsetParent check) so it
+    // stays accurate when the search box has filtered some lots out.
+    (function initScrollProgress() {
+      const cardsArea = document.getElementById('cards-area');
+      if (!cardsArea) return;
+      const sections = Array.from(cardsArea.querySelectorAll('section[id]'));
+      let ticking = false;
+      function updateProgress() {
+        const headerBottom = cardsArea.getBoundingClientRect().top;
+        sections.forEach(section => {
+          const progressEl = section.querySelector('.progress');
+          if (!progressEl) return;
+          const cards = Array.from(section.querySelectorAll('.card')).filter(c => c.offsetParent !== null);
+          const total = cards.length;
+          if (!total) { progressEl.textContent = ''; return; }
+          const passed = cards.filter(c => c.getBoundingClientRect().top < headerBottom).length;
+          progressEl.textContent = passed > 0 ? `${passed} of ${total} seen` : '';
+        });
+        ticking = false;
+      }
+      cardsArea.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(updateProgress); ticking = true; }
+      }, { passive: true });
+      updateProgress();
+    })();
+
+    // ── Back to top ──
+    function scrollCardsToTop() {
+      const cardsArea = document.getElementById('cards-area');
+      if (cardsArea) cardsArea.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    (function initBackToTop() {
+      const cardsArea = document.getElementById('cards-area');
+      const btn = document.getElementById('back-to-top');
+      if (!cardsArea || !btn) return;
+      cardsArea.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', cardsArea.scrollTop > 500);
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

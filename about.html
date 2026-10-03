@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuctionSavvy — About</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="AuctionSavvy — a personalised morning briefing for discovering relevant a partner marketplace auction lots.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f9fafb;--panel:#fff;--ink:#1a1a18;--muted:#6b7280;--accent:#3a5c3b;--accent-soft:#e9ece9;--line:#ecedf0;--radius:10px}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#374151;line-height:1.65;min-height:100vh}
+  /* ── SHARED HEADER CONTRACT (keep in sync with settings/index.html) ── */
+  header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 24px;position:sticky;top:0;z-index:1000;backdrop-filter:blur(8px);flex-shrink:0}
+  .headtop{display:grid;grid-template-columns:max-content minmax(0,520px) minmax(0,1fr) max-content;align-items:center;column-gap:12px;min-height:40px}.brand{display:flex;align-items:center;text-decoration:none}.brand h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;color:#111827;white-space:nowrap}.search-box{position:relative}.search-box-spacer{height:35px;visibility:hidden;pointer-events:none}.tagline{flex:0 1 480px;min-width:0;font-size:.78rem;color:#6b7280;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hrow2{min-height:26px;display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:12px}.header-page-tools{min-width:0;display:flex;align-items:center;gap:8px 12px;flex-wrap:nowrap}.header-utility-nav{display:flex;align-items:center;gap:10px;white-space:nowrap}.header-utility-nav a{font-size:.72rem;color:var(--muted);text-decoration:none}.header-utility-nav a.on{color:var(--accent);font-weight:600}@media (hover:hover) and (pointer:fine){.header-utility-nav a:hover{color:var(--accent)}}
+  .app-nav{display:inline-flex;grid-column:4;justify-self:end;padding:3px;gap:0;background:var(--accent-soft);border:1px solid var(--accent);border-radius:22px}.app-nav-link{font-size:.82rem;font-weight:700;padding:7px 18px;border-radius:18px;color:var(--accent);text-decoration:none;white-space:nowrap}.app-nav-link:hover{color:#fff;background:rgba(58,92,59,.55)}
+  .about-main{padding:52px 20px 72px}
+  .about-layout{max-width:1160px;width:100%;margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;align-items:start}
+  .about-toc{position:sticky;top:88px;padding:18px 0 18px 2px}
+  .about-toc-title{font-size:.68rem;color:#879083;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin:0 0 11px}
+  .about-toc nav{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+  .about-toc a{display:block;width:100%;padding:7px 10px;border-left:2px solid transparent;color:#778077;font-size:.78rem;line-height:1.3;text-decoration:none;transition:color .18s ease,border-color .18s ease,background .18s ease}
+  .about-toc a:hover,.about-toc a.is-active{color:var(--accent);border-left-color:var(--accent);background:#f2f6f2}
+  .journey-graphic{margin:24px 8px 0;padding-top:20px;border-top:1px solid #dde3dd;text-align:center}
+  .journey-graphic figcaption{margin-bottom:11px;color:#879083;font-size:.66rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+  .journey-sources{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .journey-node{min-width:0;background:#fff;border:1px solid #d8e2d8;border-radius:8px;padding:8px 5px;color:#526052;font-size:.62rem;line-height:1.25}
+  .journey-node strong{display:block;margin-bottom:2px;color:#263d28;font-family:'Playfair Display',serif;font-size:.8rem}
+  .journey-lines{display:block;width:100%;height:29px}
+  .journey-lines path{fill:none;stroke:#79907a;stroke-width:1.6;vector-effect:non-scaling-stroke}
+  .journey-opportunity{background:#eef4ee;border:1px solid #cfdccf;border-radius:8px;padding:8px 7px;color:#314d32;font-size:.68rem;font-weight:600;line-height:1.25}
+  .journey-arrow{height:25px;color:#587759;font-size:1.05rem;line-height:25px}
+  .journey-destination{background:#3a5c3b;border-radius:9px;padding:10px 7px;color:#fff;box-shadow:0 4px 12px rgba(58,92,59,.13)}
+  .journey-destination strong{display:block;font-family:'Playfair Display',serif;font-size:.92rem}
+  .journey-destination span{display:block;margin-top:3px;color:rgba(255,255,255,.82);font-size:.61rem;line-height:1.35}
+  .wrap{min-width:0;background:#fff;border:1px solid #ecedf0;border-radius:16px;box-shadow:0 8px 30px rgba(30,35,45,.06);padding:52px}
+  .reading-column{max-width:680px;margin-left:auto;margin-right:auto}
+  .section-group{margin-top:42px;padding-top:38px;border-top:1px solid var(--line);scroll-margin-top:104px}
+  .section-lead{max-width:680px;margin-left:auto;margin-right:auto}
+  h1{font-family:'Playfair Display',serif;font-size:1.85rem;color:#111827;margin-bottom:6px;font-weight:700}
+  .sub{color:#7b8290;font-size:.92rem;margin-bottom:32px}
+  .hero-intro{font-size:1rem;color:#374151}
+  .decision-summary{margin:22px 0;background:#f3f7f3;border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:17px 20px;color:#314d32;font-size:.92rem}
+  .partner-reassurance{margin:22px 0 24px;background:#fbfcfa;border:1px solid #d7e4d7;border-radius:10px;padding:20px 22px}
+  .partner-reassurance h2{margin-top:0}
+  .partner-reassurance ul{display:grid;gap:7px}
+  .partner-reassurance li{position:relative;padding:0 0 0 22px}
+  .partner-reassurance li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+  h2{font-size:.78rem;color:#3a5c3b;margin:28px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+  p{font-size:.93rem;color:#4b5563;margin-bottom:12px}
+  .wrap a{color:#4b6b8a;text-decoration:none}
+  .wrap a:hover{text-decoration:underline}
+  ul{list-style:none;padding:0}
+  ul li{padding:5px 0;font-size:.9rem;color:#4b5563}
+  ul li::before{content:"— ";color:#3a5c3b}
+  .partner-box{margin-top:28px;background:#f8faf8;border:1px solid #d7e4d7;border-left:4px solid #3a5c3b;border-radius:10px;padding:20px 22px}
+  .partner-box h2{margin-top:0}
+  .partner-box p{margin-bottom:10px}
+  .partner-box p:last-child{margin-bottom:0}
+  .monitoring-box{margin-top:16px;background:#fbfcfa;border:1px solid #dfe6df;border-left:4px solid #6f8f70;border-radius:10px;padding:20px 22px}
+  .monitoring-box h2{margin-top:0}
+  .monitoring-box p{margin-bottom:10px}
+  .monitoring-box p:last-child{margin-bottom:0}
+  .companion-box{margin-top:28px;background:#fafbf9;border:1px solid #e1e8e1;border-left:3px solid #8aa18b;border-radius:10px;padding:18px 22px}
+  .companion-box h2{margin-top:0}
+  .companion-box p{margin-bottom:10px}
+  .companion-box p:last-child{margin-bottom:0}
+  .morning-check{margin:30px 0 0;background:#f3f7f3;border:1px solid #d5e1d5;border-left:4px solid #3a5c3b;border-radius:10px;padding:24px 26px}
+  .morning-check h2{margin-top:0}
+  .morning-check p:last-child{margin-bottom:0;color:#314d32}
+  .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
+  .feature-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
+  .feature-panel h2{margin-top:0}
+  .feature-panel p:last-child{margin-bottom:0}
+  .feature-wanted{grid-column:1/-1;background:#f3f7f3;border-left:4px solid var(--accent)}
+  .function-list{margin:14px 0 0}
+  .function-list>div{display:grid;grid-template-columns:minmax(112px,.38fr) minmax(0,1fr);gap:14px;padding:11px 0;border-top:1px solid #e3e8e3}
+  .function-list>div:first-child{border-top:0;padding-top:0}
+  .function-list dt{font-weight:700;color:#253d27}
+  .function-list dd{margin:0;color:#4b5563;line-height:1.48}
+  .function-status{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:999px;background:#f3eadb;color:#795b2d;font-size:.64rem;font-weight:700;letter-spacing:.02em;vertical-align:1px}
+  .feature-guide-intro{max-width:780px;margin-bottom:0}
+  .working-demo-box{margin-top:20px;background:#eef5ee;border:1px solid #c8d9c9;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
+  .working-demo-box h2{margin-top:0}
+  .working-demo-box p{max-width:780px}
+  .working-demo-box p:last-child{margin-bottom:0}
+  .discovery-box{margin-top:42px;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:24px 26px;scroll-margin-top:104px}
+  .discovery-box h2{margin-top:0}
+  .discovery-box p{max-width:740px}
+  .discovery-box p:last-child{margin-bottom:0}
+  .membership-intro{margin-bottom:18px}
+  .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .tier-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:20px 22px}
+  .tier-panel h3{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;margin:0 0 7px}
+  .tier-panel p{margin-bottom:10px}
+  .tier-panel p:last-child{margin-bottom:0}
+  .tier-free{background:#fcfaf6;border-color:#e8dfd1}
+  .tier-collector{background:#f9fbf9;border-color:#dce6dc}
+  .tier-trade{background:#f4f8f4;border-color:#cfdccf;border-left:4px solid #3a5c3b}
+  .support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px;scroll-margin-top:104px}
+  .intelligent-search-box{grid-column:1/-1;background:#f8faf8;border:1px solid #d7e4d7;border-left:5px solid #587759;border-radius:10px;padding:24px 26px}
+  .intelligent-search-box p{max-width:780px;margin-bottom:10px}
+  .intelligent-search-box p:last-child{margin-bottom:0}
+  .planner-box{grid-column:1/-1;background:#f3f7f3;border:1px solid #cfdccf;border-left:5px solid #3a5c3b;border-radius:10px;padding:24px 26px}
+  .planner-box p{max-width:780px;margin-bottom:10px}
+  .planner-box p:last-child{margin-bottom:0}
+  .delivery-box{margin-top:0;background:#f6f9f6;border:1px solid #d4e0d4;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .delivery-box h2{margin-top:0}
+  .delivery-box p{margin-bottom:10px}
+  .delivery-box p:last-child{margin-bottom:0}
+  .support-grid .companion-box{margin-top:0}
+  .seller-box,.overseas-box{background:#fcfaf6;border:1px solid #e8dfd1;border-left:4px solid #987b50;border-radius:10px;padding:22px 24px}
+  .overseas-box{background:#f7f8fb;border-color:#dde1e9;border-left-color:#68758c}
+  .seller-box p,.overseas-box p{margin-bottom:10px}
+  .seller-box p:last-child,.overseas-box p:last-child{margin-bottom:0}
+  .condition-box{grid-column:1/-1;background:#f9fbf9;border:1px solid #dce6dc;border-left:4px solid #587759;border-radius:10px;padding:22px 24px}
+  .condition-box p:last-child{margin-bottom:0}
+  .feature-panel h2,.working-demo-box h2,.tier-panel h3,.intelligent-search-box h2,.planner-box h2,.delivery-box h2,.companion-box h2,.seller-box h2,.overseas-box h2,.condition-box h2{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;text-transform:none;letter-spacing:normal;font-weight:700;margin:0 0 7px}
+  .stewardship-group .partner-box{margin-top:0}
+  .footer{margin-top:36px;font-size:.75rem;color:#aeb3bd;text-align:center}
+  .footer-contact{margin-bottom:7px;color:#6f776f;font-size:.8rem}
+  .footer-contact a{color:#48654a;font-weight:600;text-decoration:none}
+  .footer-contact a:hover,.footer-contact a:focus{text-decoration:underline}
+  @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.function-list>div{grid-template-columns:1fr;gap:3px}.morning-check,.working-demo-box,.discovery-box,.partner-box,.monitoring-box,.partner-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
+</style>
+<link rel="stylesheet" href="assets/header.css">
+<script src="assets/header.js" defer></script>
+</head>
+<body>
+<!-- ── PRIVATE DEMO LOGIN GATE ───────────────────────────────────────── -->
+<div id="demo-gate">
+  <div id="demo-gate-card">
+    <h2>AuctionSavvy</h2>
+    <p class="dg-sub">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+    <form id="demo-gate-form">
+      <input type="password" id="demo-gate-pw" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">Enter demo</button>
+    </form>
+    <p class="dg-err" id="demo-gate-err"></p>
+  </div>
+</div>
+<style>
+#demo-gate{position:fixed;inset:0;z-index:99999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#demo-gate-card{background:#fff;border:1px solid #ecedf0;border-radius:14px;box-shadow:0 8px 30px rgba(20,30,40,.08);padding:38px 40px;text-align:center;max-width:340px;width:90%}
+#demo-gate-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:#111827;margin:0 0 6px}
+#demo-gate-card .dg-sub{font-size:.8rem;color:#6b7280;line-height:1.5;margin:0 0 18px}
+#demo-gate-pw{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box}
+#demo-gate-pw:focus{border-color:#3a5c3b}
+#demo-gate-form button{width:100%;padding:10px 14px;border:none;border-radius:20px;background:#3a5c3b;color:#fff;font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer}
+#demo-gate-form button:hover{background:#2c4a2d}
+.dg-err{font-size:.75rem;color:#b91c1c;min-height:1em;margin:10px 0 0}
+body.gate-locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  var GATE_HASH='66a1a83686ae998b35ca2600ee0c620410d3975904243bae29f70ed5c6a6c547';
+  var KEY='ah_demo_ok';
+  function unlock(){var g=document.getElementById('demo-gate');if(g)g.remove();document.body.classList.remove('gate-locked');}
+  if(localStorage.getItem(KEY)===GATE_HASH){unlock();return;}
+  document.body.classList.add('gate-locked');
+  async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
+  document.getElementById('demo-gate-form').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var pw=document.getElementById('demo-gate-pw').value;
+    var h=await sha256(pw);
+    if(h===GATE_HASH){localStorage.setItem(KEY,h);unlock();}
+    else{document.getElementById('demo-gate-err').textContent='Incorrect password.';document.getElementById('demo-gate-pw').value='';}
+  });
+})();
+</script>
+
+<header class="as-header">
+  <div class="as-top">
+    <a aria-label="AuctionSavvy Lots" class="brand" href="finds/">
+<h1>AuctionSavvy</h1>
+</a>
+    <div class="as-middle"><p class="as-description">Personalised a partner marketplace lot discovery and UK auction-house planning</p></div>
+    <nav aria-label="App pages" class="app-nav">
+<a class="app-nav-link" href="houses/">Map</a>
+<a class="app-nav-link" href="finds/">Lots</a>
+</nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a aria-current="page" class="on" href="about.html">About</a>
+<a href="settings/">Edit</a>
+<a class="private-proposal-link" href="proposal.html">Private Proposal</a>
+</nav>
+  </div>
+</header>
+
+<main class="about-main"><div class="about-layout">
+  <aside class="about-toc" aria-label="About page sections">
+    <p class="about-toc-title">On this page</p>
+    <nav>
+      <a class="is-active" href="#introduction">Introduction</a>
+      <a href="#tools">Feature guide</a>
+      <a href="#discovery">Supporting discovery</a>
+      <a href="#membership">Membership</a>
+      <a href="#support">Additional tools</a>
+      <a href="#stewardship">Responsible data use</a>
+    </nav>
+    <figure class="journey-graphic" aria-label="Lots and Map help buyers identify a promising opportunity before continuing to a partner marketplace for the official catalogue, registration and bidding.">
+      <figcaption>Discovery journey</figcaption>
+      <div class="journey-sources">
+        <div class="journey-node"><strong>Lots</strong>Relevant items</div>
+        <div class="journey-node"><strong>Map</strong>Houses and sales</div>
+      </div>
+      <svg class="journey-lines" viewBox="0 0 160 29" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M38 1 L80 28 L122 1"></path>
+      </svg>
+      <div class="journey-opportunity">Promising opportunity</div>
+      <div class="journey-arrow" aria-hidden="true">↓</div>
+      <div class="journey-destination"><strong>a partner marketplace</strong><span>Official catalogue<br>Register · Bid</span></div>
+    </figure>
+  </aside>
+  <div class="wrap">
+  <div class="reading-column" id="introduction">
+    <h1>AuctionSavvy</h1>
+    <div class="sub"><strong>A personalised morning briefing for a partner marketplace auction lots</strong></div>
+
+    <p class="hero-intro"><strong>AuctionSavvy helps motivated dealers and collectors find relevant a partner marketplace lots faster</strong>—then sends them to a partner marketplace to view and bid.</p>
+
+    <section class="partner-reassurance" aria-labelledby="for-partner-title">
+      <h2 id="for-partner-title">For auction partners</h2>
+      <ul>
+        <li>a partner marketplace remains the official catalogue, registration and bidding destination. No transaction takes place on AuctionSavvy, and every lot links to its official a partner marketplace listing.</li>
+        <li>AuctionSavvy is designed to generate additional qualified traffic by promoting the service to dealers and collectors, including people who may not currently visit a partner marketplace regularly.</li>
+        <li>It is designed to create value for existing members too—helping current a partner marketplace bidders find relevant lots faster and encouraging them to return more regularly and bid more often.</li>
+        <li>Any live service would operate under an agreed data-access arrangement.</li>
+      </ul>
+    </section>
+
+    <p>Instead of repeatedly reviewing broad search results, users choose the types of items, locations and auction houses that matter to them. AuctionSavvy then presents relevant new lots in a simple, time-sensitive briefing—a useful starting point, without attempting to replace a partner marketplace’s catalogue, search or bidding service.</p>
+
+    <section class="morning-check">
+      <h2>Designed for a ten-minute morning check</h2>
+      <p>In around ten minutes, a dealer or collector should be able to see what is new within their chosen interests, what is local, what is selling soon and what may match a customer request or personal collecting priority—then follow any promising item straight through to a partner marketplace.</p>
+      <p>Everything AuctionSavvy develops follows the same principle: plain language, sensible defaults, minimal setup and only the controls that make finding and assessing items quicker.</p>
+      <p><strong>a partner marketplace runs the auctions. AuctionSavvy helps busy dealers and collectors decide what deserves their attention.</strong></p>
+    </section>
+  </div>
+
+  <section class="section-group" id="tools">
+    <div class="section-lead">
+      <h2>What you can do in this demonstration</h2>
+      <p class="feature-guide-intro">A quick guide to each main control and what happens when it is selected. Everything below is working in the demonstration unless it is marked <strong>Planned</strong>.</p>
+    </div>
+    <div class="feature-grid">
+      <section class="feature-panel">
+        <h2>Lots page</h2>
+        <dl class="function-list">
+          <div><dt>Daily Search Terms</dt><dd>The broad interests used to create the morning briefing. Hover over the label to see the current terms; members would choose their own.</dd></div>
+          <div><dt>Search items below</dt><dd>Type a word or phrase to filter the lots already shown in the briefing.</dd></div>
+          <div><dt>Local</dt><dd>Shows lots from the auction houses selected as local. The number alongside it shows the current total—43 in this frozen snapshot.</dd></div>
+          <div><dt>UK Today</dt><dd>Shows matching lots in UK auctions taking place on the briefing date. This snapshot contains 70.</dd></div>
+          <div><dt>UK Later</dt><dd>Shows matching lots in later UK auctions. This snapshot contains 470.</dd></div>
+          <div><dt>Refined Search</dt><dd>A second, more precise filter for particular items. Switch it on or off; hover to see the active phrases and use Edit to change them. The number shows possible matches in the selected group.</dd></div>
+          <div><dt>Lot cards</dt><dd>Each card shows the image, title, auction house, postcode, lot number, available price information and sale date. Select a card to open the official a partner marketplace listing.</dd></div>
+          <div><dt>Desktop mini-map</dt><dd>Hover over a lot to highlight its auction-house location and show the house name, address, postcode and sale date.</dd></div>
+          <div><dt>Reminder bell <span class="function-status">Planned</span></dt><dd>Demonstrates a future auction-day email reminder containing the official a partner marketplace lot link, with a possible second reminder shortly before the sale begins.</dd></div>
+        </dl>
+      </section>
+
+      <section class="feature-panel">
+        <h2>Map page</h2>
+        <dl class="function-list">
+          <div><dt>Now</dt><dd>Shows auction houses with an auction taking place within the next three days.</dd></div>
+          <div><dt>Soon</dt><dd>Shows auction houses with an auction taking place within the next fourteen days.</dd></div>
+          <div><dt>Later</dt><dd>Shows auction houses with any forthcoming auction date currently recorded.</dd></div>
+          <div><dt>All</dt><dd>Shows every mapped auction house, including houses without a forthcoming date in the current snapshot.</dd></div>
+          <div><dt>House list</dt><dd>The list on the right follows the selected map view. Search it by auction-house name or location, then select a house to find it on the map.</dd></div>
+          <div><dt>Kept up to date</dt><dd>With authorised a partner marketplace information, the live directory would be kept current as new auction houses join and existing details change.</dd></div>
+          <div><dt>House details</dt><dd>Select a marker or list entry to see the address, forthcoming sale information and a direct link to the official auction page.</dd></div>
+        </dl>
+      </section>
+
+      <section class="feature-panel feature-wanted">
+        <h2>Edit and personalisation</h2>
+        <dl class="function-list">
+          <div><dt>Daily Search Terms</dt><dd>Review the broad terms that decide which types of lots enter the briefing. The demonstration shows a controlled review-and-save process for changing them.</dd></div>
+          <div><dt>Refined Search phrases</dt><dd>Add, edit, pause or remove specific wanted-item phrases. In this demonstration they are saved only in the user’s browser and are not uploaded.</dd></div>
+          <div><dt>How the two searches work together</dt><dd>Daily Search Terms build the broad morning briefing; Refined Search narrows that briefing further when the user wants to concentrate on specific current requirements.</dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <section class="working-demo-box">
+      <h2>A working demonstration, not a fixed catalogue</h2>
+      <p>The version presented to a partner marketplace will be intentionally frozen as a stable demonstration snapshot, but the processes behind it are not static. When supplied with fresh information, they automatically identify relevant lots, remove duplicates, match houses and locations, rebuild the briefing and update the map. With an authorised a partner marketplace feed, the same processes could organise supplied catalogue data reliably, at greater scale and around each member’s individual preferences.</p>
+    </section>
+  </section>
+
+  <section class="discovery-box" id="discovery">
+    <h2>Supporting discovery on a partner marketplace</h2>
+    <p>AuctionSavvy’s personalised briefing is a starting point, not a replacement for wider browsing on a partner marketplace. Members could keep their interests broad and change them easily, while the rotating Daily Showcase would introduce non-members to different categories and encourage exploration beyond a fixed shortlist.</p>
+    <p>For auction partners, the benefit could work in both directions: new dealers and collectors discovering the platform through AuctionSavvy’s own promotion, and existing customers finding relevant lots faster—returning more regularly and bidding more often. AuctionSavvy would not compete for the transaction; it would be an additional route through which relevant, motivated buyers reach a partner marketplace.</p>
+  </section>
+
+  <section class="section-group" id="membership">
+    <div class="section-lead">
+      <h2>Access and membership</h2>
+      <p class="membership-intro">For discussion only, and subject to an agreed a partner marketplace partnership and authorised data feed, one possible structure would use three simple tiers. Final features, access rules and pricing would be agreed later.</p>
+    </div>
+  <div class="tiers">
+    <section class="tier-panel tier-free">
+      <h3>Free</h3>
+      <p>Access to the UK auction-house map, upcoming sale dates and a limited Daily Showcase rotating between featured categories. It would demonstrate the discovery journey without personal searches, alerts or a complete personalised briefing.</p>
+    </section>
+    <section class="tier-panel tier-collector">
+      <h3>Collector</h3>
+      <p>A personalised morning briefing built from the member’s chosen interests, preferred auction houses and location, with AI-assisted setup for Daily Search Terms, simple controls and auction reminders. It would be designed for collectors and other serious private buyers.</p>
+    </section>
+    <section class="tier-panel tier-trade">
+      <h3>Trade</h3>
+      <p>Everything in Collector, plus professional sourcing tools such as multiple wanted-item requests, AI-assisted matching, morning reports and a future AI Journey &amp; Collection Planner developed with a partner marketplace.</p>
+      <p>A private AI-assisted trial is already testing this workflow. A future member service would normally let users add, edit and remove wanted items directly inside AuctionSavvy, with optional import of relevant product requirements from a message. Human review, direct a partner marketplace links and appropriate privacy, security and authorised-data arrangements would remain central.</p>
+    </section>
+  </div>
+  </section>
+
+  <div class="support-grid" id="support">
+    <section class="intelligent-search-box">
+      <h2>AI-assisted setup for Daily Search Terms</h2>
+      <p>Members should be able to describe a broad interest without compiling a long list of keywords themselves. Entering <strong>“ceramics”</strong>, for example, could prompt AuctionSavvy to suggest pottery, porcelain, chinaware, stoneware, earthenware, studio pottery and other associated terms.</p>
+      <p>The member would accept, remove or edit the suggestions before saving them. Only those approved terms would be used to build the daily briefing, keeping the results transparent, predictable and easy to correct without asking AI to judge every incoming lot. Daily Search Terms would remain the broad selection; Refined Search would be the more precise layer for a particular object or active requirement.</p>
+    </section>
+
+    <section class="planner-box">
+      <h2>AI Journey &amp; Collection Planner</h2>
+      <p>A future Trade feature could develop AuctionSavvy from a morning discovery tool into a continuous planning companion. A dealer might say, “I’m travelling to Newcastle on Thursday.” The assistant could ask a few useful questions, then combine saved interests and current commitments with relevant lots, auction dates, collection windows and travel information to suggest an efficient plan.</p>
+      <p>Rather than sending isolated alerts, it could keep the plan up to date as new opportunities or commitments appear—highlighting worthwhile diversions, compatible collections and auctions that fit the journey. Members would choose what the assistant remembers and could edit or delete it at any time. A live version would require authorised auction information and suitable mapping and collection data.</p>
+    </section>
+
+    <section class="delivery-box">
+      <h2>UK-wide delivery support</h2>
+      <p>Finding a suitable item is only useful if collecting it is practical. Where an auction house offers its own delivery or courier arrangement, AuctionSavvy could present that option first. Alongside this, it could introduce members to independent specialist UK-wide delivery providers, with indicative pricing based on the auction-house location and item details.</p>
+      <p>By reducing delivery uncertainty before bidding, more geographically distant lots could become practical purchases—bringing additional qualified bidders to listings they might otherwise pass over. This is a proposed capability rather than an existing partnership; any quotation and service would be provided by the independent delivery company.</p>
+    </section>
+
+    <section class="companion-box">
+      <h2>Chrome companion</h2>
+      <p>Alongside the main service, AuctionSavvy has an optional Chrome companion for people browsing a partner marketplace directly. In the current demonstration, hovering over an auction-house name reveals its address and postcode—information that can otherwise take several clicks to find.</p>
+      <p>It is a small example of the wider principle: remove avoidable steps and make daily auction research quicker. Any broader integration affecting a partner marketplace’s website, listings or data would be developed transparently and in consultation with a partner marketplace.</p>
+    </section>
+
+    <section class="seller-box">
+      <h2>Helping sellers find the right auction house</h2>
+      <p>Looking ahead, AuctionSavvy could also use the map to help people considering selling identify auction houses suited to a particular item—from furniture and collectables to art, jewellery and specialist pieces. Clear guidance could explain the selling process and provide a direct route to request a valuation or make an enquiry with the relevant auction house.</p>
+      <p>This would make the first step less daunting for new sellers while helping auction houses receive more relevant enquiries and better-matched consignments.</p>
+    </section>
+
+    <section class="overseas-box">
+      <h2>Reaching overseas buyers</h2>
+      <p>AuctionSavvy could also help specialist buying-tour organisers, overseas dealers, designers and import businesses discover relevant UK auctions. Visitors could identify suitable sales and lots before a sourcing trip, add auction visits to itineraries alongside fairs and dealer appointments, or buy remotely through existing UK contacts.</p>
+      <p>This could introduce UK auction houses to informed international buyers who might otherwise never know that a relevant sale was taking place.</p>
+    </section>
+
+    <section class="condition-box">
+      <h2>Streamlined condition report requests</h2>
+      <p>With a partner marketplace and participating auction houses, a member could send a structured request from a lot card to the auctioneer’s official enquiry route and receive an update when a report is available. The auctioneer would remain responsible for inspecting the lot and providing the condition information.</p>
+      <p>This would only be developed with a partner marketplace’s agreement and guidance, with safeguards to prevent duplicate or excessive requests and to respect each auction house’s capacity. If a partner marketplace or participating auction houses considered the feature unhelpful, it would not be pursued.</p>
+    </section>
+  </div>
+
+  <section class="section-group stewardship-group" id="stewardship">
+    <div class="partner-box">
+      <h2>Working responsibly with auction data</h2>
+      <p>All auction houses, lots, descriptions, estimates, dates and product imagery in this private demonstration are fictional. The images are AI-generated and no association with a real auctioneer or marketplace is implied.</p><p>A future live service would use catalogue information only through written permission and an authorised data-access arrangement with participating partners.</p>
+    </div>
+  </section>
+
+
+  <div class="footer">
+    <div class="footer-contact">Questions or feedback? Contact Ken at <a href="mailto:ken@auctionsavvy.co.uk">ken@auctionsavvy.co.uk</a></div>
+    <div>AuctionSavvy. Private demonstration — invitation only.</div>
+  </div>
+</div></div></main>
+<script>
+(function(){
+  var links=Array.prototype.slice.call(document.querySelectorAll('.about-toc a'));
+  var sections=links.map(function(link){return document.querySelector(link.getAttribute('href'));}).filter(Boolean);
+  if(!('IntersectionObserver' in window)||!sections.length)return;
+  var observer=new IntersectionObserver(function(entries){
+    var visible=entries.filter(function(entry){return entry.isIntersecting;}).sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});
+    if(!visible.length)return;
+    var id=visible[0].target.id;
+    links.forEach(function(link){
+      var active=link.getAttribute('href')==='#'+id;
+      link.classList.toggle('is-active',active);
+      if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+  },{rootMargin:'-20% 0px -68% 0px',threshold:0});
+  sections.forEach(function(section){observer.observe(section);});
+})();
+</script>
+</body>
+</html>

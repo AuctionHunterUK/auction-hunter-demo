@@ -1,0 +1,1794 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AuctionSavvy — auction partners proposal</title>
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="description" content="Private AuctionSavvy proposal for collaboration with auction partners.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #f4f7f4;
+      --paper: #ffffff;
+      --ink: #1a211b;
+      --text: #465047;
+      --muted: #747e75;
+      --green: #3a5c3b;
+      --green-dark: #29452a;
+      --green-soft: #eaf1ea;
+      --line: #e1e8e1;
+      --gold: #9a7547;
+      --gold-soft: #fbf7f0;
+      --navy: #233f64;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(225, 232, 225, 0.95);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .site-header__inner {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 8px 0;
+    }
+
+    .header-main,
+    .header-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .header-main {
+      min-height: 40px;
+    }
+
+    .header-sub {
+      min-height: 26px;
+    }
+
+    .brand {
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-note {
+      margin: 0;
+      min-width: 0;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-nav {
+      display: inline-flex;
+      flex: 0 0 auto;
+      padding: 3px;
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      background: var(--green-soft);
+    }
+
+    .app-nav a {
+      padding: 6px 17px;
+      border-radius: 999px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .app-nav a:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .utility-nav {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 10px;
+    }
+
+    .utility-nav a {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-decoration: none;
+    }
+
+    .utility-nav a:hover,
+    .utility-nav a[aria-current="page"] {
+      color: var(--green);
+    }
+
+    .utility-nav a[aria-current="page"] {
+      font-weight: 700;
+    }
+
+    #demo-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    #demo-gate-card {
+      width: min(90%, 340px);
+      padding: 38px 40px;
+      border: 1px solid #ecedf0;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(20, 30, 40, 0.08);
+      text-align: center;
+    }
+
+    #demo-gate-card h2 {
+      margin: 0 0 6px;
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.3rem;
+    }
+
+    #demo-gate-card .gate-subtitle {
+      margin: 0 0 18px;
+      color: #6b7280;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    #demo-gate-password {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+      outline: none;
+    }
+
+    #demo-gate-password:focus {
+      border-color: var(--green);
+    }
+
+    #demo-gate-form button {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font: 600 0.85rem "DM Sans", sans-serif;
+    }
+
+    .gate-error {
+      min-height: 1em;
+      margin: 10px 0 0;
+      color: #b91c1c;
+      font-size: 0.75rem;
+    }
+
+    body.gate-locked {
+      overflow: hidden;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      align-items: start;
+      gap: 30px;
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 38px 0 80px;
+    }
+
+    .contents {
+      position: sticky;
+      top: 98px;
+      padding: 10px 0;
+    }
+
+    .contents__label {
+      margin: 0 0 12px;
+      color: #879083;
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .contents nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .contents a {
+      padding: 6px 9px;
+      border-left: 2px solid transparent;
+      color: #747d75;
+      font-size: 0.74rem;
+      line-height: 1.3;
+      text-decoration: none;
+    }
+
+    .contents a:hover,
+    .contents a[aria-current="true"] {
+      border-left-color: var(--green);
+      background: #edf2ed;
+      color: var(--green);
+    }
+
+    .contents__note {
+      margin-top: 18px;
+      padding: 12px 13px;
+      border: 1px solid #d5e1d5;
+      border-radius: 9px;
+      background: #edf4ed;
+      color: #456046;
+      font-size: 0.72rem;
+      line-height: 1.45;
+    }
+
+    .document {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      box-shadow: 0 12px 38px rgba(35, 48, 36, 0.07);
+    }
+
+    .document-hero {
+      padding: 52px 58px 42px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 86% 14%, rgba(58, 92, 59, 0.08), transparent 29%),
+        linear-gradient(135deg, #ffffff 0%, #f3f7f3 100%);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 24px;
+      padding: 6px 11px;
+      border: 1px solid #d7c7ae;
+      border-radius: 999px;
+      background: var(--gold-soft);
+      color: #7b5b34;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      content: "";
+    }
+
+    .document-hero h1 {
+      max-width: 720px;
+      margin: 0 0 8px;
+      color: #111827;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2rem, 4.5vw, 3.1rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+
+    .document-hero .subtitle {
+      margin: 0 0 30px;
+      color: var(--green);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.2rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 22px;
+      padding-top: 20px;
+      border-top: 1px solid #dfe6df;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .meta strong {
+      color: #3d493e;
+    }
+
+    .content {
+      padding: 10px 58px 60px;
+    }
+
+    .proposal-section {
+      padding: 38px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 88px;
+    }
+
+    .proposal-section:last-child {
+      border-bottom: 0;
+    }
+
+    .section-number {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--green);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.62rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 28px 0 8px;
+      color: #304f31;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.08rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+      font-size: 0.92rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .lead {
+      color: #344236;
+      font-size: 1rem;
+    }
+
+    .boundary {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      background: #f1f6f1;
+      color: #314b32;
+      font-size: 0.94rem;
+    }
+
+    ul,
+    ol {
+      margin: 12px 0 4px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 9px 0;
+      padding-left: 4px;
+      font-size: 0.9rem;
+    }
+
+    li::marker {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 24px 0 12px;
+    }
+
+    .metric {
+      min-height: 108px;
+      padding: 17px 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fafbfa;
+      text-align: center;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--green-dark);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.7rem;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.73rem;
+      line-height: 1.35;
+    }
+
+    .snapshot-note {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      text-align: center;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .benefit {
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbfa;
+      font-size: 0.84rem;
+    }
+
+    .benefit strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #243a25;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .audience-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fafbfa;
+    }
+
+    .audience-card h3 {
+      margin: 0 0 9px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .audience-card p {
+      color: #586159;
+      font-size: 0.8rem;
+    }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .steps li {
+      position: relative;
+      margin: 0 0 12px;
+      padding: 16px 18px 16px 56px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfcfb;
+    }
+
+    .steps li::before {
+      position: absolute;
+      top: 15px;
+      left: 16px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      content: counter(step);
+      counter-increment: step;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 26px;
+      text-align: center;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    th {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    th,
+    td {
+      padding: 14px 15px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f7f9f7;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td:first-child {
+      min-width: 150px;
+      color: #253826;
+      font-weight: 700;
+    }
+
+    .appendix-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .appendix-item {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbfa;
+    }
+
+    .appendix-item h3 {
+      margin: 0 0 7px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.86rem;
+    }
+
+    .appendix-item p {
+      color: #586159;
+      font-size: 0.8rem;
+    }
+
+    .disclaimer {
+      margin-top: 34px;
+      padding: 18px 20px;
+      border: 1px solid #e2d6c5;
+      border-radius: 10px;
+      background: var(--gold-soft);
+      color: #725a3d;
+      font-size: 0.76rem;
+    }
+
+    .document-footer {
+      padding: 22px 58px;
+      border-top: 1px solid var(--line);
+      background: #fafbfa;
+      color: #8c958d;
+      font-size: 0.72rem;
+      text-align: center;
+    }
+
+    .document-footer-contact {
+      margin-bottom: 7px;
+      color: #667068;
+      font-size: 0.78rem;
+    }
+
+    .document-footer-contact a {
+      color: var(--green);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .document-footer-contact a:hover,
+    .document-footer-contact a:focus {
+      text-decoration: underline;
+    }
+
+    .view-intro {
+      max-width: 700px;
+      margin: -12px 0 28px;
+      color: #566257;
+      font-size: 0.88rem;
+    }
+
+    .view-switcher {
+      padding: 24px 58px 26px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfb;
+    }
+
+    .view-switcher__lead {
+      margin: 0 0 13px;
+      color: #69736a;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .view-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 5px;
+      border: 1px solid #cfdacf;
+      border-radius: 14px;
+      background: #edf3ed;
+    }
+
+    .view-tab {
+      min-height: 72px;
+      padding: 12px 18px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: #526153;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+    }
+
+    .view-tab strong,
+    .view-tab span {
+      display: block;
+    }
+
+    .view-tab strong {
+      margin-bottom: 2px;
+      color: #263d28;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.08rem;
+    }
+
+    .view-tab span {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .view-tab:hover {
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .view-tab[aria-selected="true"] {
+      border-color: #cdd9cd;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(35, 48, 36, 0.08);
+    }
+
+    .view-tab:focus-visible,
+    .ecosystem-node:focus-visible,
+    .view-cta:focus-visible {
+      outline: 3px solid rgba(58, 92, 59, 0.28);
+      outline-offset: 2px;
+    }
+
+    .overview-panel {
+      padding: 42px 48px 60px;
+    }
+
+    .overview-heading {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    .overview-heading h2 {
+      margin-bottom: 9px;
+      color: var(--green-dark);
+      font-size: 1.8rem;
+    }
+
+    .overview-heading p {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .ecosystem-phase {
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .ecosystem-phase:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .ecosystem-phase__heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .ecosystem-phase__heading h3,
+    .ecosystem-group h3 {
+      margin: 0;
+    }
+
+    .ecosystem-phase__heading h3 {
+      color: var(--navy);
+      font-size: 1.28rem;
+    }
+
+    .ecosystem-phase__heading span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: right;
+    }
+
+    .ecosystem-tributaries,
+    .ecosystem-capabilities,
+    .ecosystem-destinations {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .ecosystem-capabilities,
+    .ecosystem-destinations {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ecosystem-group {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fafbfa;
+    }
+
+    .ecosystem-group h3 {
+      margin-bottom: 11px;
+      color: #304f31;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .ecosystem-nodes {
+      display: grid;
+      gap: 7px;
+    }
+
+    .ecosystem-node {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #dbe4db;
+      border-radius: 8px;
+      background: #fff;
+      color: #384739;
+      cursor: pointer;
+      font: 600 0.75rem "DM Sans", sans-serif;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .ecosystem-node:hover,
+    .ecosystem-node:focus-visible,
+    .ecosystem-node.is-selected {
+      border-color: #8fa78f;
+      background: #eef4ee;
+      color: #243d26;
+    }
+
+    .ecosystem-group--future {
+      border-style: dashed;
+      background: #fcfaf6;
+    }
+
+    .ecosystem-group--future .ecosystem-node {
+      border-style: dashed;
+      border-color: #dfd1bd;
+      background: #fffdf9;
+    }
+
+    .ecosystem-group--future .ecosystem-node:hover,
+    .ecosystem-group--future .ecosystem-node:focus-visible,
+    .ecosystem-group--future .ecosystem-node.is-selected {
+      border-color: #ad8a5f;
+      background: #fbf4e9;
+      color: #5b4225;
+    }
+
+    .ecosystem-flow {
+      display: grid;
+      justify-items: center;
+      gap: 2px;
+      padding: 4px 0;
+      color: var(--green);
+    }
+
+    .ecosystem-flow::before {
+      width: 1px;
+      height: 23px;
+      background: #bac8ba;
+      content: "";
+    }
+
+    .ecosystem-flow::after {
+      content: "↓";
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .ecosystem-core,
+    .ecosystem-boundary,
+    .ecosystem-final {
+      width: min(620px, 100%);
+      margin: 0 auto;
+    }
+
+    .ecosystem-core .ecosystem-node,
+    .ecosystem-final .ecosystem-node {
+      padding: 17px 20px;
+      border-color: var(--green-dark);
+      background: var(--green);
+      color: #fff;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .ecosystem-core .ecosystem-node:hover,
+    .ecosystem-core .ecosystem-node:focus-visible,
+    .ecosystem-core .ecosystem-node.is-selected,
+    .ecosystem-final .ecosystem-node:hover,
+    .ecosystem-final .ecosystem-node:focus-visible,
+    .ecosystem-final .ecosystem-node.is-selected {
+      border-color: #1f3820;
+      background: var(--green-dark);
+      color: #fff;
+    }
+
+    .ecosystem-boundary .ecosystem-node {
+      padding: 14px 18px;
+      border-color: #d7c7ae;
+      background: var(--gold-soft);
+      color: #694e2d;
+      text-align: center;
+    }
+
+    .ecosystem-outcomes {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ecosystem-detail {
+      position: sticky;
+      bottom: 12px;
+      z-index: 5;
+      min-height: 68px;
+      margin: 28px auto 0;
+      padding: 15px 18px;
+      border: 1px solid #cdd9cd;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 6px 24px rgba(35, 48, 36, 0.1);
+      color: #3d4c3e;
+      font-size: 0.82rem;
+    }
+
+    .ecosystem-detail strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #29452a;
+    }
+
+    .ecosystem-tooltip {
+      position: fixed;
+      z-index: 10000;
+      display: none;
+      width: min(310px, calc(100vw - 24px));
+      padding: 12px 14px;
+      border: 1px solid #cdd9cd;
+      border-radius: 9px;
+      background: #fff;
+      box-shadow: 0 9px 30px rgba(20, 36, 22, 0.18);
+      color: #3b483c;
+      font-size: 0.76rem;
+      line-height: 1.45;
+      pointer-events: none;
+    }
+
+    .ecosystem-tooltip strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #29452a;
+    }
+
+    .ecosystem-tooltip.is-visible {
+      display: block;
+    }
+
+    .overview-cta,
+    .view-end-cta {
+      padding: 28px 0 0;
+      text-align: center;
+    }
+
+    .view-end-cta {
+      padding: 0 58px 42px;
+    }
+
+    .view-cta {
+      padding: 12px 20px;
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font: 700 0.8rem "DM Sans", sans-serif;
+    }
+
+    .view-cta:hover {
+      background: var(--green-dark);
+    }
+
+    .view-cta--secondary {
+      background: #fff;
+      color: var(--green);
+    }
+
+    body.view-overview .contents {
+      display: none;
+    }
+
+    body.view-overview .page {
+      display: block;
+    }
+
+    body.view-overview .document {
+      width: 100%;
+    }
+
+    body.view-overview .text-panel,
+    body.view-proposal .overview-panel {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        display: block;
+        padding-top: 24px;
+      }
+
+      .contents {
+        display: none;
+      }
+
+      .audience-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ecosystem-outcomes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-header {
+        position: static;
+      }
+
+      .site-header__inner {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .brand {
+        font-size: 1rem;
+      }
+
+      .header-note {
+        display: none;
+      }
+
+      .app-nav a {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+      }
+
+      .utility-nav {
+        gap: 7px;
+      }
+
+      .utility-nav a {
+        font-size: 0.64rem;
+      }
+
+      .page {
+        width: calc(100% - 16px);
+        padding: 12px 0 38px;
+      }
+
+      .document {
+        border-radius: 12px;
+      }
+
+      .document-hero {
+        padding: 34px 22px 28px;
+      }
+
+      .view-intro {
+        margin-bottom: 22px;
+      }
+
+      .view-switcher {
+        padding: 18px 14px 20px;
+      }
+
+      .view-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .view-tab {
+        min-height: 62px;
+        padding: 10px 13px;
+      }
+
+      .overview-panel {
+        padding: 30px 14px 42px;
+      }
+
+      .ecosystem-phase__heading {
+        display: block;
+      }
+
+      .ecosystem-phase__heading span {
+        display: block;
+        margin-top: 3px;
+        text-align: left;
+      }
+
+      .ecosystem-tributaries,
+      .ecosystem-capabilities,
+      .ecosystem-destinations,
+      .ecosystem-outcomes {
+        grid-template-columns: 1fr;
+      }
+
+      .ecosystem-detail {
+        position: static;
+      }
+
+      .content {
+        padding: 4px 22px 38px;
+      }
+
+      .proposal-section {
+        padding: 30px 0;
+        scroll-margin-top: 15px;
+      }
+
+      .metrics,
+      .benefits,
+      .appendix-list {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        min-height: 0;
+      }
+
+      .document-footer {
+        padding: 18px 22px;
+      }
+
+      .view-end-cta {
+        padding: 0 22px 34px;
+      }
+    }
+
+    @media print {
+      .site-header,
+      .contents,
+      .view-switcher,
+      .overview-panel,
+      .view-end-cta,
+      .ecosystem-tooltip {
+        display: none;
+      }
+
+      body.view-overview .text-panel,
+      body.view-proposal .text-panel {
+        display: block;
+      }
+
+      body,
+      .page {
+        background: #fff;
+      }
+
+      .page {
+        display: block;
+        width: auto;
+        padding: 0;
+      }
+
+      .document {
+        border: 0;
+        box-shadow: none;
+      }
+
+      .proposal-section,
+      .benefit,
+      .audience-card,
+      .appendix-item,
+      .table-wrap {
+        break-inside: avoid;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/header.css">
+<script src="assets/header.js" defer></script>
+</head>
+<body>
+  <div id="demo-gate">
+    <div id="demo-gate-card">
+      <h2>AuctionSavvy</h2>
+      <p class="gate-subtitle">🔒 Private demonstration — not open to the public.<br>Access is by invitation only.</p>
+      <form id="demo-gate-form">
+        <input type="password" id="demo-gate-password" placeholder="Password" autocomplete="current-password" autofocus>
+        <button type="submit">Enter demo</button>
+      </form>
+      <p class="gate-error" id="demo-gate-error"></p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const gateHash = "66a1a83686ae998b35ca2600ee0c620410d3975904243bae29f70ed5c6a6c547";
+      const storageKey = "ah_demo_ok";
+      const unlock = () => {
+        document.querySelector("#demo-gate")?.remove();
+        document.body.classList.remove("gate-locked");
+      };
+
+      if (localStorage.getItem(storageKey) === gateHash) {
+        unlock();
+        return;
+      }
+
+      document.body.classList.add("gate-locked");
+
+      const hashValue = async (value) => {
+        const bytes = new TextEncoder().encode(value);
+        const digest = await crypto.subtle.digest("SHA-256", bytes);
+        return [...new Uint8Array(digest)]
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join("");
+      };
+
+      document.querySelector("#demo-gate-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const input = document.querySelector("#demo-gate-password");
+        const submittedHash = await hashValue(input.value);
+
+        if (submittedHash === gateHash) {
+          localStorage.setItem(storageKey, submittedHash);
+          unlock();
+          return;
+        }
+
+        document.querySelector("#demo-gate-error").textContent = "Incorrect password.";
+        input.value = "";
+      });
+    })();
+  </script>
+
+  <header class="as-header">
+  <div class="as-top">
+    <a aria-label="AuctionSavvy lots" class="brand" href="finds/">AuctionSavvy</a>
+    <div class="as-middle"><p class="as-description">Private proposal for discussion with auction partners</p></div>
+    <nav aria-label="App pages" class="app-nav">
+<a href="houses/">Map</a>
+<a href="finds/">Lots</a>
+</nav>
+  </div>
+  <div class="as-bottom">
+    <div class="as-page-controls"></div>
+    <nav aria-label="Utility pages" class="as-utilities">
+<a href="about.html">About</a>
+<a href="settings/">Edit</a>
+<a aria-current="page" class="private-proposal-link" href="proposal.html">Private Proposal</a>
+</nav>
+  </div>
+</header>
+
+  <main class="page" id="top">
+    <aside class="contents" aria-label="Proposal contents">
+      <p class="contents__label">In this proposal</p>
+      <nav>
+        <a href="#section-1">Why I built it</a>
+        <a href="#section-2">What has been demonstrated</a>
+        <a href="#section-3">What auction partners gains</a>
+        <a href="#section-4">Why collaboration matters</a>
+        <a href="#section-5">Responsible data use</a>
+        <a href="#section-6">How this might proceed</a>
+        <a href="#section-7">The invitation</a>
+        <a href="#appendix-a">Membership model</a>
+        <a href="#appendix-b">Future directions</a>
+      </nav>
+      <div class="contents__note">
+        <strong>Private working page</strong><br>
+        This working page contains both a visual overview and the detailed proposal.
+      </div>
+    </aside>
+
+    <article class="document">
+      <header class="document-hero">
+        <div class="status">Private and confidential</div>
+        <h1>AuctionSavvy and auction partners</h1>
+        <p class="subtitle">A proposal for collaboration</p>
+        <p class="view-intro">Start with the visual overview, then read the detailed proposal for the working evidence, safeguards and partnership thinking behind each part.</p>
+        <div class="meta">
+          <span><strong>Prepared by:</strong> Ken Gibbins, founder of AuctionSavvy</span>
+          <span><strong>Status:</strong> Private discussion document</span>
+          <span><strong>Date:</strong> 20 September 2026</span>
+        </div>
+      </header>
+
+      <div class="view-switcher">
+        <p class="view-switcher__lead">Two complementary ways to explore the same proposal</p>
+        <div class="view-tabs" role="tablist" aria-label="Proposal views">
+          <button class="view-tab" id="overview-tab" type="button" role="tab" aria-selected="true" aria-controls="proposal-overview-view" data-view="overview">
+            <strong>Visual overview</strong>
+            <span>See how AuctionSavvy helps relevant buyers discover opportunities and reach auction partners.</span>
+          </button>
+          <button class="view-tab" id="proposal-tab" type="button" role="tab" aria-selected="false" aria-controls="proposal-text-view" data-view="proposal">
+            <strong>Detailed proposal</strong>
+            <span>Read the evidence, responsibilities, safeguards and suggested collaboration in full.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="overview-panel" id="proposal-overview-view" role="tabpanel" aria-labelledby="overview-tab">
+        <div class="overview-heading">
+          <h2>AuctionSavvy helps relevant buyers reach auction partners</h2>
+          <p>A concise view of the buyer problem, the working evidence and the value of shaping the next stage together. Hover over any element for a quick explanation, or select it to keep the explanation visible.</p>
+        </div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-inputs-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-inputs-title">1. The buyer’s problem</h3>
+            <span>Too much repetition · highly personal relevance · practical constraints</span>
+          </div>
+          <div class="ecosystem-capabilities">
+            <div class="ecosystem-group">
+              <h3>Finding what matters</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Repeated searches" data-detail="Dealers and collectors may repeat the same searches across numerous houses and sale dates simply to discover what is new.">Repeated searches across houses and dates</button>
+                <button class="ecosystem-node" type="button" data-title="Personal relevance" data-detail="The right lot depends on each buyer’s interests, stock needs, collecting focus or current sourcing brief.">Highly personal interests and requirements</button>
+                <button class="ecosystem-node" type="button" data-title="Easy-to-miss opportunities" data-detail="Relevant lots can be missed when catalogue wording varies or when they appear outside the buyer’s usual houses and geographical area.">Relevant lots are easy to miss</button>
+              </div>
+            </div>
+
+            <div class="ecosystem-group">
+              <h3>Deciding what is practical</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Location and urgency" data-detail="Where a lot is being sold and how soon the auction takes place can be as important as the object itself.">Location and auction urgency</button>
+                <button class="ecosystem-node" type="button" data-title="Collection practicality" data-detail="Travel, collection windows and possible delivery costs influence whether a promising purchase is genuinely viable.">Collection and delivery practicality</button>
+                <button class="ecosystem-node" type="button" data-title="Limited morning time" data-detail="The aim is to let a buyer understand the most relevant opportunities in roughly ten minutes, not spend the morning browsing broadly.">A useful decision in about ten minutes</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-core">
+          <button class="ecosystem-node" type="button" data-title="AuctionSavvy" data-detail="AuctionSavvy combines personal preferences, auction information and discovery tools to decide what deserves attention. It does not replace the official catalogue, marketplace or bidding platform.">AuctionSavvy — personalised discovery and decision layer</button>
+        </div>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-tools-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-tools-title">2. What AuctionSavvy has demonstrated</h3>
+            <span>Working evidence separated clearly from future directions</span>
+          </div>
+          <div class="ecosystem-capabilities">
+            <div class="ecosystem-group">
+              <h3>Demonstrated in the prototype</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Automated briefing pipeline" data-detail="During development, the working pipeline gathered listings, applied configured interests and rebuilt the briefing automatically. The demonstration is now preserved as a stable snapshot.">Automated briefing pipeline</button>
+                <button class="ecosystem-node" type="button" data-title="Morning Briefing" data-detail="Matching lots are organised into Local, UK Today and UK Later for a rapid daily review.">Morning Briefing</button>
+                <button class="ecosystem-node" type="button" data-title="Daily Search Terms and Refined Search" data-detail="Broad chosen interests create the briefing, while private requirement phrases provide a more precise second layer.">Daily Search Terms and Refined Search</button>
+                <button class="ecosystem-node" type="button" data-title="Auction-house map" data-detail="UK auction houses can be explored by location and forthcoming sale timing, introducing houses beyond those a buyer already follows.">Auction-house map</button>
+                <button class="ecosystem-node" type="button" data-title="House information pop-ups" data-detail="Addresses, postcodes and upcoming sales provide practical context without interrupting the route to the official lot listing.">House information pop-ups</button>
+                <button class="ecosystem-node" type="button" data-title="Working Chrome companion" data-detail="The privately used companion already reveals auction-house addresses and postcodes while browsing auction partners.">Working Chrome companion</button>
+                <button class="ecosystem-node" type="button" data-title="Demonstrated 7am matching trial" data-detail="A private trial demonstrated a 7am email containing prioritised possible wanted-item matches, explanations and direct official links.">Demonstrated 7am matching trial</button>
+                <button class="ecosystem-node" type="button" data-title="Direct official links" data-detail="Every displayed item continues to its official auction partners page for catalogue verification, registration and bidding.">Direct official links</button>
+              </div>
+            </div>
+
+            <div class="ecosystem-group ecosystem-group--future">
+              <h3>Four future directions</h3>
+              <div class="ecosystem-nodes">
+                <button class="ecosystem-node" type="button" data-title="Smarter personal discovery and alerts" data-detail="Assisted search setup, explained possible matches and optional auction reminders could help members notice and return to relevant lots.">Smarter personal discovery and alerts</button>
+                <button class="ecosystem-node" type="button" data-title="Journey, collection and delivery planning" data-detail="Travel plans, auction dates, collection windows and delivery information could be combined to help buyers assess practical opportunities.">Journey, collection and delivery planning</button>
+                <button class="ecosystem-node" type="button" data-title="Chrome companion development" data-detail="Further carefully chosen browser-side functions could be explored transparently with auction partners.">Chrome companion development</button>
+                <button class="ecosystem-node" type="button" data-title="New buyer and seller routes" data-detail="Curated discovery could support overseas buyers and tours, while separate guidance could lead prospective sellers to an appropriate official auction-house enquiry.">New buyer and seller routes</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-outcomes-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-outcomes-title">3. What auction partners gains</h3>
+            <span>Buyer-side efficiency translated into platform value</span>
+          </div>
+          <div class="ecosystem-outcomes">
+            <button class="ecosystem-node" type="button" data-title="Qualified journeys" data-detail="Interested buyers reach official listings that are already relevant to their interests or professional requirements.">Qualified journeys</button>
+            <button class="ecosystem-node" type="button" data-title="Existing-member engagement" data-detail="Personalised briefings and useful reminders are designed to help current members discover relevant opportunities and return at the right time.">Existing-member engagement</button>
+            <button class="ecosystem-node" type="button" data-title="Wider auctioneer exposure" data-detail="Suitable lots and houses can reach relevant buyers beyond the categories, locations and auctioneers they already follow.">Wider auctioneer exposure</button>
+            <button class="ecosystem-node" type="button" data-title="Measurable engagement" data-detail="Agreed referral measurement could show which discovery journeys produce meaningful visits to auction partners.">Measurable engagement</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-collaboration-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-collaboration-title">4. Why collaboration matters</h3>
+            <span>Shared foundations for presentation, trust and useful evidence</span>
+          </div>
+          <div class="ecosystem-outcomes">
+            <button class="ecosystem-node" type="button" data-title="Authorised data" data-detail="An agreed data source and permitted purpose would provide the reliable, compliant foundation required for a live service.">Authorised data</button>
+            <button class="ecosystem-node" type="button" data-title="Agreed presentation and attribution" data-detail="auction partners and its auctioneers could help shape how catalogue material is displayed, credited and linked.">Presentation and attribution</button>
+            <button class="ecosystem-node" type="button" data-title="Auctioneer alignment" data-detail="Buyer-facing ideas could be considered alongside auctioneer expectations, platform priorities and appropriate correction or removal processes.">Auctioneer alignment</button>
+            <button class="ecosystem-node" type="button" data-title="Shared measures" data-detail="Both parties could agree what useful engagement means and review evidence without assuming commercial success in advance.">Shared measures</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-boundary">
+          <button class="ecosystem-node" type="button" data-title="A deliberate boundary" data-detail="AuctionSavvy stops at discovery, prioritisation and practical guidance. It does not provide the official catalogue, registration, bidding or transaction.">AuctionSavvy stops at discovery and prioritisation</button>
+        </div>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <section class="ecosystem-phase" aria-labelledby="ecosystem-destinations-title">
+          <div class="ecosystem-phase__heading">
+            <h3 id="ecosystem-destinations-title">5. Official auction partners destinations</h3>
+            <span>Control returns to auction partners and its auctioneers</span>
+          </div>
+          <div class="ecosystem-destinations">
+            <button class="ecosystem-node" type="button" data-title="Official auction partners lot listing" data-detail="The official listing remains the authoritative source for images, descriptions, estimates, condition information, registration and bidding.">Official auction partners lot listing</button>
+            <button class="ecosystem-node" type="button" data-title="Official auction-house page" data-detail="The participating auction house retains responsibility for sale information, valuation, consignment and its relationship with the seller.">Official auction-house page</button>
+          </div>
+        </section>
+
+        <div class="ecosystem-flow" aria-hidden="true"></div>
+
+        <div class="ecosystem-final">
+          <button class="ecosystem-node" type="button" data-title="auction partners" data-detail="auction partners retains the official catalogue, auctioneer relationships, customer registration, bidding and transactions. AuctionSavvy is designed to deliver relevant, motivated people into that ecosystem.">auction partners — catalogue · auctioneers · registration · bidding · transactions</button>
+        </div>
+
+        <div class="ecosystem-detail" id="ecosystem-detail" aria-live="polite">
+          <strong>Explore the complete journey</strong>
+          Hover over any element for a quick explanation, or select one to keep its explanation here.
+        </div>
+
+        <div class="ecosystem-tooltip" id="ecosystem-tooltip" role="tooltip" aria-hidden="true"></div>
+
+        <div class="overview-cta">
+          <button class="view-cta" type="button" data-view-target="proposal">Now read the detailed proposal →</button>
+        </div>
+      </div>
+
+      <div class="content text-panel" id="proposal-text-view" role="tabpanel" aria-labelledby="proposal-tab">
+        <section class="proposal-section" id="section-1">
+          <span class="section-number">Section 1</span>
+          <h2>Why I built AuctionSavvy</h2>
+          <p class="lead">I have spent many years in the antique furniture trade and, more recently, buying through online auctions. My mornings often involved repeating the same searches across numerous houses and sale dates, then working out where each auction was and whether collection was practical.</p>
+          <p>Relevant lots were easy to miss when catalogue wording varied, when they appeared outside my usual area or when they were offered by a house I did not already follow. The catalogue information existed; the difficult part was deciding quickly what deserved attention.</p>
+          <p>I built AuctionSavvy to solve that buyer-side problem. It creates a concise, personalised morning briefing, organised by relevance, location and urgency, so a dealer or collector can identify promising opportunities and continue to the official auction partners listing.</p>
+          <div class="boundary">
+            <strong>The boundary is deliberate and clear.</strong> AuctionSavvy is a discovery and prioritisation layer that does not replace the official catalogue, marketplace or bidding platform. auction partners retains the official catalogue, registration, bidding, transactions and auctioneer relationships. AuctionSavvy’s role is to create qualified journeys into that environment.
+          </div>
+        </section>
+
+        <section class="proposal-section" id="section-2">
+          <span class="section-number">Section 2</span>
+          <h2>What has been demonstrated</h2>
+          <div class="metrics" aria-label="Current demonstration snapshot">
+            <div class="metric">
+              <strong>583</strong>
+              <span>matching lots in the frozen briefing</span>
+            </div>
+            <div class="metric">
+              <strong>90</strong>
+              <span>auction houses represented</span>
+            </div>
+            <div class="metric">
+              <strong>490</strong>
+              <span>houses on the UK map</span>
+            </div>
+            <div class="metric">
+              <strong>Frozen</strong>
+              <span>stable snapshot from 12 August 2026</span>
+            </div>
+          </div>
+          <p class="snapshot-note">These figures demonstrate working scale, not user adoption or commercial performance.</p>
+          <p>The demonstration is not a collection of manually arranged pages. During development, its working pipeline gathered new listings, applied configured interests, organised matching lots and rebuilt the briefing automatically. Further automated collection was stopped on 14 August. The site now preserves a stable proposal snapshot while an authorised future data arrangement is explored.</p>
+          <ul>
+            <li><strong>Morning Briefing</strong> — relevant lots grouped into Local, UK Today and UK Later, making geography and urgency immediately visible.</li>
+            <li><strong>Daily Search Terms and Refined Search</strong> — broader interests create the briefing, while a second set of private phrases narrows the displayed lots to specific current requirements.</li>
+            <li><strong>UK auction-house map</strong> — 490 houses can be explored by location, with forthcoming sale information where available and links to official auction pages.</li>
+            <li><strong>Working Chrome companion</strong> — a privately used browser extension already reveals auction-house addresses and postcodes while browsing auction partners. Any wider use or additional functions would be discussed transparently.</li>
+            <li><strong>Reminder concept</strong> — a bell on each card demonstrates a simple auction-day reminder that would return a signed-in member to the official lot at the right time.</li>
+          </ul>
+          <p>A separate private sourcing trial has also demonstrated a 7am AI-assisted matching report. It compared test wanted-item requirements with newly loaded listings and emailed prioritised possibilities, short match explanations and direct official links. A member version would normally let users maintain those requirements inside AuctionSavvy, with uncertain matches clearly marked for human review. It would not contact customers or place bids.</p>
+        </section>
+
+        <section class="proposal-section" id="section-3">
+          <span class="section-number">Section 3</span>
+          <h2>What auction partners gains</h2>
+          <div class="benefits">
+            <div class="benefit">
+              <strong>Qualified journeys</strong>
+              Interested buyers continue to the official auction partners listing for catalogue details, registration and bidding.
+            </div>
+            <div class="benefit">
+              <strong>Greater value for existing members</strong>
+              Personalised briefings and timely reminders are designed to help current users find relevant opportunities and return at useful moments.
+            </div>
+            <div class="benefit">
+              <strong>New buyer introductions</strong>
+              Focused promotion can introduce relevant dealers, collectors and professional sourcing advisers to auction partners.
+            </div>
+            <div class="benefit">
+              <strong>Wider exposure for auctioneers</strong>
+              Suitable lots can reach buyers beyond the houses, categories and geographical areas they already follow.
+            </div>
+            <div class="benefit">
+              <strong>Visible engagement</strong>
+              Agreed referral measurement can show which discovery routes lead to meaningful visits to auction partners.
+            </div>
+          </div>
+          <p>The same discovery approach is relevant to serious collectors, trade buyers, art and antiques advisers, interior sourcing specialists and overseas buying tours. Looking further ahead, it could also guide prospective sellers towards an appropriate auction house and its official valuation or consignment process.</p>
+        </section>
+
+        <section class="proposal-section" id="section-4">
+          <span class="section-number">Section 4</span>
+          <h2>Why collaboration matters</h2>
+          <p>AuctionSavvy introduces catalogue descriptions, photographs and auction-house information during the discovery stage, before a buyer reaches the official registration and bidding journey. Close collaboration would allow auction partners and its auctioneers to help shape how that material is presented, attributed and linked.</p>
+          <p>An agreed relationship would also give auction partners visibility of which discovery routes produce useful engagement, while allowing buyer-facing ideas to be tested against auctioneer expectations and platform priorities. AuctionSavvy can undertake the product development without requiring a large initial commitment of auction partners’s engineering resources; the appropriate level of technical and commercial involvement can be shaped together.</p>
+          <p>The purpose is not to operate at arm’s length. It is to build a complementary buyer service whose presentation, safeguards and measures are aligned with auction partners and the auctioneers it serves.</p>
+        </section>
+
+        <section class="proposal-section" id="section-5">
+          <span class="section-number">Section 5</span>
+          <h2>Responsible data use</h2>
+          <p>The private, invitation-only demonstration uses entirely fictional auction houses, lots and sale information, with AI-generated product imagery. Any live catalogue connection would require written permission and an authorised data-access arrangement.</p>
+          <p>A live service would not rely on unapproved automated collection. Development would proceed only under a written arrangement covering:</p>
+          <ul>
+            <li>the authorised data source and permitted purposes;</li>
+            <li>attribution, linking and presentation; and</li>
+            <li>appropriate privacy, correction and removal processes.</li>
+          </ul>
+          <p>auction partners’s listing would remain the authoritative record. Members would always be directed there to verify descriptions, condition, estimates, fees and terms before acting.</p>
+        </section>
+
+        <section class="proposal-section" id="section-6">
+          <span class="section-number">Section 6</span>
+          <h2>How this might proceed</h2>
+          <p>If the underlying proposition is of interest, a staged approach with clearly agreed responsibilities and meaningful measures would be the sensible way forward. The sequence should be shaped by auction partners: an initial walkthrough could lead to a data and technical discussion, followed by a sufficiently measured development phase if both parties wished to continue.</p>
+          <p>Following agreement on an authorised data arrangement, AuctionSavvy would enter a controlled pilot with a small group of representative buyers and dealers. Their feedback would be used to test and refine the user experience, presentation and reliability before any wider subscriber launch.</p>
+          <p>No public launch or commercial operation is proposed before the necessary permissions, safeguards and working arrangements are in place.</p>
+        </section>
+
+        <section class="proposal-section" id="section-7">
+          <span class="section-number">Section 7</span>
+          <h2>An invitation to see it working</h2>
+          <p class="lead">I would welcome the opportunity to show the working system to the person responsible for product, customer experience or commercial partnerships at auction partners, and to hear an honest view on whether the buyer problem and this approach are of interest.</p>
+          <p>I am not asking for a decision on data access, integration or commercial terms at the first conversation. The immediate request is simply the opportunity to demonstrate what has been built, answer questions candidly and understand whether there is a useful basis for a further discussion.</p>
+        </section>
+
+        <section class="proposal-section" id="appendix-a">
+          <span class="section-number">Appendix A</span>
+          <h2>One possible membership model</h2>
+          <p>Included only to show one possible commercial shape—not as a commitment on pricing or final structure.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Level</th>
+                  <th scope="col">Proposed role</th>
+                  <th scope="col">Principal value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Free</td>
+                  <td>UK auction-house map, upcoming sale dates and a limited rotating Daily Showcase</td>
+                  <td>Introduces the discovery journey without providing a complete personalised briefing</td>
+                </tr>
+                <tr>
+                  <td>Collector</td>
+                  <td>Personalised briefing, chosen interests and local houses, simple controls and reminders</td>
+                  <td>Saves serious private buyers routine research time</td>
+                </tr>
+                <tr>
+                  <td>Trade</td>
+                  <td>Collector features plus multiple sourcing briefs, assisted matching and practical planning tools</td>
+                  <td>Supports professional stock and client sourcing across several active requirements</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><strong>Possible auction partners customer benefit.</strong> An agreed introductory offer for eligible existing members could support early adoption without requiring customer data to be shared.</p>
+        </section>
+
+        <section class="proposal-section" id="appendix-b">
+          <span class="section-number">Appendix B</span>
+          <h2>Possible future directions</h2>
+          <p>Four coherent directions for discussion—not existing partnerships or commitments.</p>
+          <div class="appendix-list">
+            <div class="appendix-item">
+              <h3>Smarter personal discovery and alerts</h3>
+              <p>Assisted search setup could suggest related terms for a member to approve, while more specific natural-language requirements could produce explained possible matches. Optional reminders could then return interested members to the official listing on the auction day.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Journey, collection and delivery planning</h3>
+              <p>A conversational planning assistant could combine interests, travel plans, sale dates and collection windows. Auction-house delivery options and possible specialist-provider estimates could help buyers assess practical total cost before bidding.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>Chrome companion development</h3>
+              <p>The working private companion already adds auction-house location context. Further carefully chosen browser-side features could be explored transparently with auction partners.</p>
+            </div>
+            <div class="appendix-item">
+              <h3>New buyer and seller routes</h3>
+              <p>Curated discovery could support overseas trade buyers and buying tours, while separate guidance could help prospective sellers identify an appropriate house and continue to its official valuation or consignment enquiry.</p>
+            </div>
+          </div>
+          <p>The priority would be the smallest set of additions that demonstrates useful buyer engagement without complicating the morning experience.</p>
+        </section>
+      </div>
+
+      <div class="view-end-cta text-panel">
+        <button class="view-cta view-cta--secondary" type="button" data-view-target="overview">← Return to the visual overview</button>
+      </div>
+
+      <footer class="document-footer">
+        <div class="document-footer-contact">Questions about this proposal? Contact Ken at <a href="mailto:ken@auctionsavvy.co.uk">ken@auctionsavvy.co.uk</a></div>
+        <div>AuctionSavvy · Private discussion document · 20 September 2026</div>
+      </footer>
+    </article>
+  </main>
+
+  <script>
+    const viewTabs = [...document.querySelectorAll(".view-tab")];
+    const viewTargets = [...document.querySelectorAll("[data-view-target]")];
+    const overviewPanel = document.querySelector("#proposal-overview-view");
+    const textPanels = [...document.querySelectorAll(".text-panel")];
+    const viewSwitcher = document.querySelector(".view-switcher");
+
+    const setProposalView = (view, options = {}) => {
+      const selectedView = view === "proposal" ? "proposal" : "overview";
+      const showOverview = selectedView === "overview";
+
+      document.body.classList.toggle("view-overview", showOverview);
+      document.body.classList.toggle("view-proposal", !showOverview);
+      overviewPanel.hidden = !showOverview;
+      textPanels.forEach((panel) => { panel.hidden = showOverview; });
+
+      viewTabs.forEach((tab) => {
+        const selected = tab.dataset.view === selectedView;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      if (options.updateHash) {
+        history.replaceState(null, "", selectedView === "overview" ? "#overview" : "#proposal");
+      }
+
+      if (options.scroll) {
+        viewSwitcher.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      if (options.focus) {
+        viewTabs.find((tab) => tab.dataset.view === selectedView)?.focus();
+      }
+    };
+
+    const initialHash = window.location.hash;
+    const initialView = initialHash && initialHash !== "#overview" ? "proposal" : "overview";
+    setProposalView(initialView);
+
+    viewTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        setProposalView(tab.dataset.view, { updateHash: true });
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextTab = viewTabs[(index + direction + viewTabs.length) % viewTabs.length];
+        setProposalView(nextTab.dataset.view, { updateHash: true, focus: true });
+      });
+    });
+
+    viewTargets.forEach((target) => {
+      target.addEventListener("click", () => {
+        setProposalView(target.dataset.viewTarget, { updateHash: true, scroll: true });
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      if (window.location.hash === "#overview") setProposalView("overview");
+      else setProposalView("proposal");
+    });
+
+    const ecosystemNodes = [...document.querySelectorAll(".ecosystem-node[data-detail]")];
+    const ecosystemDetail = document.querySelector("#ecosystem-detail");
+    const ecosystemTooltip = document.querySelector("#ecosystem-tooltip");
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const defaultEcosystemDetail = {
+      dataset: {
+        title: "Explore the complete journey",
+        detail: "Hover over any element for a quick explanation, or select one to keep its explanation here."
+      }
+    };
+
+    const fillExplanation = (container, node) => {
+      const heading = document.createElement("strong");
+      heading.textContent = node.dataset.title;
+      container.replaceChildren(heading, document.createTextNode(node.dataset.detail));
+    };
+
+    const updateEcosystemDetail = (node) => {
+      ecosystemNodes.forEach((item) => {
+        const isSelected = item === node;
+        item.classList.toggle("is-selected", isSelected);
+        item.setAttribute("aria-pressed", String(isSelected));
+      });
+      fillExplanation(ecosystemDetail, node);
+    };
+
+    const clearEcosystemDetail = () => {
+      ecosystemNodes.forEach((item) => {
+        item.classList.remove("is-selected");
+        item.setAttribute("aria-pressed", "false");
+      });
+      fillExplanation(ecosystemDetail, defaultEcosystemDetail);
+    };
+
+    const hideEcosystemTooltip = () => {
+      ecosystemTooltip.classList.remove("is-visible");
+      ecosystemTooltip.setAttribute("aria-hidden", "true");
+    };
+
+    const showEcosystemTooltip = (node) => {
+      fillExplanation(ecosystemTooltip, node);
+      ecosystemTooltip.classList.add("is-visible");
+      ecosystemTooltip.setAttribute("aria-hidden", "false");
+
+      const nodeRect = node.getBoundingClientRect();
+      const tooltipRect = ecosystemTooltip.getBoundingClientRect();
+      const gutter = 12;
+      const preferredLeft = nodeRect.left + (nodeRect.width - tooltipRect.width) / 2;
+      const left = Math.min(
+        window.innerWidth - tooltipRect.width - gutter,
+        Math.max(gutter, preferredLeft)
+      );
+      let top = nodeRect.top - tooltipRect.height - 9;
+      if (top < gutter) top = nodeRect.bottom + 9;
+
+      ecosystemTooltip.style.left = `${left}px`;
+      ecosystemTooltip.style.top = `${top}px`;
+    };
+
+    ecosystemNodes.forEach((node) => {
+      node.setAttribute("aria-describedby", "ecosystem-detail");
+      node.setAttribute("aria-pressed", "false");
+
+      node.addEventListener("mouseenter", () => {
+        if (finePointer.matches) showEcosystemTooltip(node);
+      });
+      node.addEventListener("mouseleave", hideEcosystemTooltip);
+      node.addEventListener("focus", () => showEcosystemTooltip(node));
+      node.addEventListener("blur", hideEcosystemTooltip);
+      node.addEventListener("click", () => {
+        if (node.classList.contains("is-selected")) clearEcosystemDetail();
+        else updateEcosystemDetail(node);
+        if (!finePointer.matches) hideEcosystemTooltip();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".ecosystem-node")) return;
+      if (ecosystemNodes.some((node) => node.classList.contains("is-selected"))) {
+        clearEcosystemDetail();
+      }
+    });
+
+    window.addEventListener("resize", hideEcosystemTooltip);
+    window.addEventListener("scroll", hideEcosystemTooltip, true);
+
+    const sectionLinks = [...document.querySelectorAll(".contents nav a")];
+    const sections = sectionLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+
+      if (!visible) return;
+
+      sectionLinks.forEach((link) => {
+        const isCurrent = link.getAttribute("href") === `#${visible.target.id}`;
+        if (isCurrent) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    }, { rootMargin: "-15% 0px -70% 0px", threshold: 0 });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+{
+  "_comment": "Entirely fictional demonstration auction houses. No real business association is implied.",
+  "Alder & Ash Auction Rooms": {
+    "postcode": "",
+    "location": "Buckinghamshire demo location",
+    "address": "Buckinghamshire demo location",
+    "url": "",
+    "lat": 51.81,
+    "lng": -0.81,
+    "demo": true
+  },
+  "Northmere Fine Art Auctions": {
+    "postcode": "",
+    "location": "North Yorkshire demo location",
+    "address": "North Yorkshire demo location",
+    "url": "",
+    "lat": 54.12,
+    "lng": -1.11,
+    "demo": true
+  },
+  "Fenwick & Rowe Salerooms": {
+    "postcode": "",
+    "location": "Norfolk demo location",
+    "address": "Norfolk demo location",
+    "url": "",
+    "lat": 52.63,
+    "lng": 1.3,
+    "demo": true
+  },
+  "Harbour & Heath Auctions": {
+    "postcode": "",
+    "location": "Dorset demo location",
+    "address": "Dorset demo location",
+    "url": "",
+    "lat": 50.73,
+    "lng": -2.34,
+    "demo": true
+  },
+  "Calder Vale Auction Rooms": {
+    "postcode": "",
+    "location": "Lancashire demo location",
+    "address": "Lancashire demo location",
+    "url": "",
+    "lat": 53.79,
+    "lng": -2.66,
+    "demo": true
+  },
+  "Thistle & Oak Auctioneers": {
+    "postcode": "",
+    "location": "Edinburgh demo location",
+    "address": "Edinburgh demo location",
+    "url": "",
+    "lat": 55.95,
+    "lng": -3.19,
+    "demo": true
+  },
+  "Cambrian House Auctions": {
+    "postcode": "",
+    "location": "Cardiff demo location",
+    "address": "Cardiff demo location",
+    "url": "",
+    "lat": 51.48,
+    "lng": -3.18,
+    "demo": true
+  },
+  "Lagan & Linen Auction Rooms": {
+    "postcode": "",
+    "location": "Belfast demo location",
+    "address": "Belfast demo location",
+    "url": "",
+    "lat": 54.6,
+    "lng": -5.93,
+    "demo": true
+  },
+  "Wessex House Auctions": {
+    "postcode": "",
+    "location": "Wiltshire demo location",
+    "address": "Wiltshire demo location",
+    "url": "",
+    "lat": 51.35,
+    "lng": -1.99,
+    "demo": true
+  },
+  "Merefield & Co.": {
+    "postcode": "",
+    "location": "Nottinghamshire demo location",
+    "address": "Nottinghamshire demo location",
+    "url": "",
+    "lat": 53.08,
+    "lng": -0.95,
+    "demo": true
+  },
+  "Crown & County Salerooms": {
+    "postcode": "",
+    "location": "Warwickshire demo location",
+    "address": "Warwickshire demo location",
+    "url": "",
+    "lat": 52.28,
+    "lng": -1.58,
+    "demo": true
+  },
+  "Redbridge Auction Gallery": {
+    "postcode": "",
+    "location": "Essex demo location",
+    "address": "Essex demo location",
+    "url": "",
+    "lat": 51.68,
+    "lng": 0.12,
+    "demo": true
+  },
+  "Westmoor Antiques Auctions": {
+    "postcode": "",
+    "location": "Devon demo location",
+    "address": "Devon demo location",
+    "url": "",
+    "lat": 50.72,
+    "lng": -3.53,
+    "demo": true
+  },
+  "Tyne & Fell Auction Rooms": {
+    "postcode": "",
+    "location": "Newcastle demo location",
+    "address": "Newcastle demo location",
+    "url": "",
+    "lat": 54.98,
+    "lng": -1.61,
+    "demo": true
+  },
+  "Severn Valley Salerooms": {
+    "postcode": "",
+    "location": "Shropshire demo location",
+    "address": "Shropshire demo location",
+    "url": "",
+    "lat": 52.71,
+    "lng": -2.75,
+    "demo": true
+  },
+  "Orchard Gate Auctions": {
+    "postcode": "",
+    "location": "Kent demo location",
+    "address": "Kent demo location",
+    "url": "",
+    "lat": 51.19,
+    "lng": 0.73,
+    "demo": true
+  },
+  "Silver Birch Auction House": {
+    "postcode": "",
+    "location": "Cambridgeshire demo location",
+    "address": "Cambridgeshire demo location",
+    "url": "",
+    "lat": 52.21,
+    "lng": 0.12,
+    "demo": true
+  },
+  "Clyde & Heather Auctions": {
+    "postcode": "",
+    "location": "Glasgow demo location",
+    "address": "Glasgow demo location",
+    "url": "",
+    "lat": 55.86,
+    "lng": -4.25,
+    "demo": true
+  }
+}
