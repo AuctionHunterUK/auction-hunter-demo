@@ -91,6 +91,21 @@
   .discovery-box h2{margin-top:0}
   .discovery-box p{max-width:740px}
   .discovery-box p:last-child{margin-bottom:0}
+  .roadmap-intro{margin-bottom:18px}
+  .roadmap-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .roadmap-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:22px 24px}
+  .roadmap-panel h3{font-family:'Playfair Display',serif;font-size:1.08rem;color:#111827;margin:0 0 7px}
+  .roadmap-panel>p{margin-bottom:12px}
+  .roadmap-panel ul{display:grid;gap:4px}
+  .roadmap-panel li{position:relative;padding:4px 0 4px 22px}
+  .roadmap-panel li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+  .roadmap-future{background:#fcfaf6;border-color:#e8dfd1}
+  .roadmap-future li::before{content:"○";color:#987b50}
+  .rare-watch{grid-column:1/-1;background:#f3f7f3;border:1px solid #cfdccf;border-left:5px solid var(--accent);border-radius:10px;padding:24px 26px}
+  .rare-watch h3{font-family:'Playfair Display',serif;font-size:1.18rem;color:#111827;margin:0 0 7px}
+  .rare-watch p{max-width:790px}
+  .rare-watch p:last-child{margin-bottom:0}
+  .rare-watch-label{display:inline-block;margin-bottom:10px;padding:3px 8px;border-radius:999px;background:#fff;border:1px solid #c8d9c9;color:#315333;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
   .membership-intro{margin-bottom:18px}
   .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
   .tier-panel{background:#fbfcfa;border:1px solid #dfe6df;border-radius:10px;padding:20px 22px}
@@ -124,8 +139,8 @@
   .footer-contact{margin-bottom:7px;color:#6f776f;font-size:.8rem}
   .footer-contact a{color:#48654a;font-weight:600;text-decoration:none}
   .footer-contact a:hover,.footer-contact a:focus{text-decoration:underline}
-  @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid{grid-template-columns:1fr}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
-  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid{gap:14px}.feature-panel,.tier-panel,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.function-list>div{grid-template-columns:1fr;gap:3px}.morning-check,.working-demo-box,.discovery-box,.partner-box,.monitoring-box,.partner-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
+  @media(max-width:900px){.about-main{padding:32px 16px 56px}.about-layout{display:block}.about-toc{display:none}.feature-grid,.tiers,.support-grid,.roadmap-grid{grid-template-columns:1fr}.rare-watch{grid-column:auto}.wrap{padding:40px}.section-group,.discovery-box,.support-grid{scroll-margin-top:24px}}
+  @media(max-width:800px){header{position:static;padding:8px 12px}.headtop{grid-template-columns:max-content minmax(0,1fr) max-content;column-gap:10px;min-height:33px}.brand h1{font-size:.88rem}.app-nav{grid-column:auto;justify-self:auto;padding:2px}.app-nav-link{font-size:.64rem;padding:4px 9px}.tagline{display:none}.search-box-spacer{height:33px}.hrow2{min-height:23px;column-gap:8px}.header-page-tools{gap:6px 8px}.header-utility-nav{gap:6px}.header-utility-nav a{font-size:.62rem}.about-main{padding:22px 10px 42px}.wrap{padding:30px 20px;border-radius:12px}.section-group{margin-top:32px;padding-top:28px}.feature-grid,.support-grid,.roadmap-grid{gap:14px}.feature-panel,.tier-panel,.roadmap-panel,.rare-watch,.intelligent-search-box,.planner-box,.delivery-box,.companion-box,.seller-box,.overseas-box,.condition-box{padding:20px}.function-list>div{grid-template-columns:1fr;gap:3px}.morning-check,.working-demo-box,.discovery-box,.partner-box,.monitoring-box,.partner-reassurance{padding:20px}.decision-summary{padding:16px 18px}.discovery-box,.support-grid{margin-top:32px}}
   @media(max-width:380px){.about-main{padding-left:8px;padding-right:8px}.wrap{padding:25px 16px}h1{font-size:1.62rem}p{font-size:.9rem}.app-nav-link{padding-left:7px;padding-right:7px}.header-utility-nav{gap:5px}}
 </style>
 <link rel="stylesheet" href="assets/header.css">
@@ -202,6 +217,7 @@ body.gate-locked{overflow:hidden}
       <a class="is-active" href="#introduction">Introduction</a>
       <a href="#tools">Feature guide</a>
       <a href="#discovery">Supporting discovery</a>
+      <a href="#functions">Current &amp; future</a>
       <a href="#membership">Membership</a>
       <a href="#support">Additional tools</a>
       <a href="#stewardship">Responsible data use</a>
@@ -258,9 +274,9 @@ body.gate-locked{overflow:hidden}
         <dl class="function-list">
           <div><dt>Daily Search Terms</dt><dd>The broad interests used to create the morning briefing. Hover over the label to see the current terms; members would choose their own.</dd></div>
           <div><dt>Search items below</dt><dd>Type a word or phrase to filter the lots already shown in the briefing.</dd></div>
-          <div><dt>Local</dt><dd>Shows lots from the auction houses selected as local. The number alongside it shows the current total—43 in this frozen snapshot.</dd></div>
-          <div><dt>UK Today</dt><dd>Shows matching lots in UK auctions taking place on the briefing date. This snapshot contains 70.</dd></div>
-          <div><dt>UK Later</dt><dd>Shows matching lots in later UK auctions. This snapshot contains 470.</dd></div>
+          <div><dt>Local</dt><dd>Shows lots from the auction houses selected as local. The number alongside it shows the current total—10 in this fictional demonstration.</dd></div>
+          <div><dt>UK Today</dt><dd>Shows matching lots in UK auctions taking place on the briefing date. This fictional demonstration contains 3.</dd></div>
+          <div><dt>UK Later</dt><dd>Shows matching lots in later UK auctions. This fictional demonstration contains 17.</dd></div>
           <div><dt>Refined Search</dt><dd>A second, more precise filter for particular items. Switch it on or off; hover to see the active phrases and use Edit to change them. The number shows possible matches in the selected group.</dd></div>
           <div><dt>Lot cards</dt><dd>Each card shows the image, title, auction house, postcode, lot number, available price information and sale date. Select a card to open the official a partner marketplace listing.</dd></div>
           <div><dt>Desktop mini-map</dt><dd>Hover over a lot to highlight its auction-house location and show the house name, address, postcode and sale date.</dd></div>
@@ -301,6 +317,46 @@ body.gate-locked{overflow:hidden}
     <h2>Supporting discovery on a partner marketplace</h2>
     <p>AuctionSavvy’s personalised briefing is a starting point, not a replacement for wider browsing on a partner marketplace. Members could keep their interests broad and change them easily, while the rotating Daily Showcase would introduce non-members to different categories and encourage exploration beyond a fixed shortlist.</p>
     <p>For auction partners, the benefit could work in both directions: new dealers and collectors discovering the platform through AuctionSavvy’s own promotion, and existing customers finding relevant lots faster—returning more regularly and bidding more often. AuctionSavvy would not compete for the transaction; it would be an additional route through which relevant, motivated buyers reach a partner marketplace.</p>
+  </section>
+
+  <section class="section-group" id="functions">
+    <div class="section-lead">
+      <h2>Current functions and future functions</h2>
+      <p class="roadmap-intro">This working list separates what can be explored in the private demonstration from ideas that would require further development, authorised catalogue information or commercial partnerships. It can be expanded as AuctionSavvy develops.</p>
+    </div>
+    <div class="roadmap-grid">
+      <section class="roadmap-panel">
+        <h3>Working in the demonstration</h3>
+        <p>The present prototype demonstrates the main discovery journey using entirely fictional data.</p>
+        <ul>
+          <li>Lots grouped into Local, UK Today and UK Later briefings.</li>
+          <li>Search and refined wanted-item filtering.</li>
+          <li>Lot-card details with a hover location on the desktop mini-map.</li>
+          <li>A UK map of auction houses grouped by forthcoming sale date.</li>
+          <li>Browser-based editing of search terms and wanted-item phrases.</li>
+          <li>Clear routes from discovery to an official partner catalogue in a future authorised service.</li>
+        </ul>
+      </section>
+      <section class="roadmap-panel roadmap-future">
+        <h3>Future functions under consideration</h3>
+        <p>These are product directions rather than promises and would be prioritised with auction and data partners.</p>
+        <ul>
+          <li>Personalised morning briefings delivered by email.</li>
+          <li>Auction-day reminders and important-lot alerts.</li>
+          <li>AI-assisted search setup and reference-image matching.</li>
+          <li>Journey, collection and buying-tour planning.</li>
+          <li>Delivery guidance, seller introductions and condition-report requests.</li>
+          <li>Tools for specialist dealers, designers and overseas buyers.</li>
+        </ul>
+      </section>
+      <section class="rare-watch">
+        <span class="rare-watch-label">Possible standalone subscription</span>
+        <h3>Rare Item Watch</h3>
+        <p>Some collectors and specialist dealers do not need a daily briefing. They may be searching for one precisely defined object that appears at auction only a few times a year. Rare Item Watch would let them describe that object in detail—using maker, period, material, dimensions, identifying features, exclusions and, where useful, a reference image.</p>
+        <p>AuctionSavvy would quietly monitor authorised catalogues and send an email only when a credible match appeared. There would be no routine “nothing found” message. The value would be continuous monitoring across many auctions, not the number of emails received.</p>
+        <p>This could be offered separately from the main AuctionSavvy membership, with simple options such as one active watch, a small Collector package or a larger Dealer package. Its promise would be straightforward: <strong>tell us what you have been searching years for, and we will keep watching.</strong></p>
+      </section>
+    </div>
   </section>
 
   <section class="section-group" id="membership">
