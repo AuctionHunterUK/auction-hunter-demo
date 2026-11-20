@@ -851,14 +851,42 @@ document.addEventListener('DOMContentLoaded', function(){
 const map = L.map('map',{
   center:[54.4,-3.2],
   zoom:window.innerWidth < 768 ? 5 : 6,
-  // Smaller fractional steps make wheel, trackpad and control-button zooming
-  // feel progressive instead of snapping an entire level at once.
-  zoomSnap:0.25,
+  // Allow the custom wheel handler below to move continuously between levels.
+  // The control buttons still use predictable half-level steps.
+  zoomSnap:0,
   zoomDelta:0.5,
-  wheelPxPerZoomLevel:80,
-  wheelDebounceTime:20
+  scrollWheelZoom:false
 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2vjd_1_d55b502556a22090f63fb07e',{attribution:'&copy; OSM &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+
+// Leaflet's standard wheel zoom waits for a threshold and then snaps, which
+// feels both slow and jumpy on modern trackpads. Ease towards an accumulated
+// target instead, keeping the point beneath the pointer stationary.
+let wheelZoomTarget = map.getZoom();
+let wheelZoomPoint = null;
+let wheelZoomFrame = null;
+function runWheelZoom() {
+  const current = map.getZoom();
+  const difference = wheelZoomTarget - current;
+  if (Math.abs(difference) < 0.01) {
+    map.setZoomAround(wheelZoomPoint, wheelZoomTarget, {animate:false});
+    wheelZoomFrame = null;
+    return;
+  }
+  map.setZoomAround(wheelZoomPoint, current + difference * 0.3, {animate:false});
+  wheelZoomFrame = requestAnimationFrame(runWheelZoom);
+}
+map.getContainer().addEventListener('wheel', event => {
+  event.preventDefault();
+  const pixels = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? map.getSize().y : 1);
+  if (!wheelZoomFrame) wheelZoomTarget = map.getZoom();
+  wheelZoomPoint = map.mouseEventToContainerPoint(event);
+  const minZoom = map.getMinZoom();
+  const maxZoom = map.getMaxZoom();
+  const wheelStep = Math.max(-1.25, Math.min(1.25, -pixels / 70));
+  wheelZoomTarget = Math.max(minZoom, Math.min(maxZoom, wheelZoomTarget + wheelStep));
+  if (!wheelZoomFrame) wheelZoomFrame = requestAnimationFrame(runWheelZoom);
+}, {passive:false});
 
 const today = new Date(); today.setHours(0,0,0,0);
 const todayStr = today.toISOString().slice(0,10);
