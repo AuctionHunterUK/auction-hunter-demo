@@ -714,11 +714,67 @@ function cleanSales(raw) {
   return out.filter(s => s.date >= new Date().toISOString().slice(0,10));
 }
 
+// The private demonstration uses a rolling fictional calendar so its timing
+// filters remain useful long after the original demo was assembled. Nothing
+// here represents a real auction or a real auctioneer's schedule.
+const DEMO_DAY_OFFSETS = [0, 1, 2, 3, 5, 7, 9, 12, 15, 18, 22, 27, 34, 42];
+function demoDateFromOffset(offset) {
+  const date = new Date();
+  date.setHours(12, 0, 0, 0);
+  date.setDate(date.getDate() + offset);
+  return date.toISOString().slice(0, 10);
+}
+function rollingDemoSales(index) {
+  const offset = DEMO_DAY_OFFSETS[index % DEMO_DAY_OFFSETS.length];
+  return [{
+    date: demoDateFromOffset(offset),
+    time: ['10:00', '10:30', '11:00', '14:00'][index % 4],
+    title: ['Fictional interiors sale', 'Fictional antiques and collectables sale', 'Fictional country-house sale'][index % 3]
+  }];
+}
+
 // Will be populated from dates.json on page load
 let RAW_DATES = {};
 
 // ── HOUSE DATA ───────────────────────────────────────────────────────────────
-const ALL_HOUSES = [{"name":"Alder & Ash Auction Rooms","address":"Buckinghamshire demo location","postcode":"DEMO","url":"#","lat":51.81,"lng":-0.81,"demo":true},{"name":"Northmere Fine Art Auctions","address":"North Yorkshire demo location","postcode":"DEMO","url":"#","lat":54.12,"lng":-1.11,"demo":true},{"name":"Fenwick & Rowe Salerooms","address":"Norfolk demo location","postcode":"DEMO","url":"#","lat":52.63,"lng":1.3,"demo":true},{"name":"Harbour & Heath Auctions","address":"Dorset demo location","postcode":"DEMO","url":"#","lat":50.73,"lng":-2.34,"demo":true},{"name":"Calder Vale Auction Rooms","address":"Lancashire demo location","postcode":"DEMO","url":"#","lat":53.79,"lng":-2.66,"demo":true},{"name":"Thistle & Oak Auctioneers","address":"Edinburgh demo location","postcode":"DEMO","url":"#","lat":55.95,"lng":-3.19,"demo":true},{"name":"Cambrian House Auctions","address":"Cardiff demo location","postcode":"DEMO","url":"#","lat":51.48,"lng":-3.18,"demo":true},{"name":"Lagan & Linen Auction Rooms","address":"Belfast demo location","postcode":"DEMO","url":"#","lat":54.6,"lng":-5.93,"demo":true},{"name":"Wessex House Auctions","address":"Wiltshire demo location","postcode":"DEMO","url":"#","lat":51.35,"lng":-1.99,"demo":true},{"name":"Merefield & Co.","address":"Nottinghamshire demo location","postcode":"DEMO","url":"#","lat":53.08,"lng":-0.95,"demo":true},{"name":"Crown & County Salerooms","address":"Warwickshire demo location","postcode":"DEMO","url":"#","lat":52.28,"lng":-1.58,"demo":true},{"name":"Redbridge Auction Gallery","address":"Essex demo location","postcode":"DEMO","url":"#","lat":51.68,"lng":0.12,"demo":true},{"name":"Westmoor Antiques Auctions","address":"Devon demo location","postcode":"DEMO","url":"#","lat":50.72,"lng":-3.53,"demo":true},{"name":"Tyne & Fell Auction Rooms","address":"Newcastle demo location","postcode":"DEMO","url":"#","lat":54.98,"lng":-1.61,"demo":true},{"name":"Severn Valley Salerooms","address":"Shropshire demo location","postcode":"DEMO","url":"#","lat":52.71,"lng":-2.75,"demo":true},{"name":"Orchard Gate Auctions","address":"Kent demo location","postcode":"DEMO","url":"#","lat":51.19,"lng":0.73,"demo":true},{"name":"Silver Birch Auction House","address":"Cambridgeshire demo location","postcode":"DEMO","url":"#","lat":52.21,"lng":0.12,"demo":true},{"name":"Clyde & Heather Auctions","address":"Glasgow demo location","postcode":"DEMO","url":"#","lat":55.86,"lng":-4.25,"demo":true}];
+const ALL_HOUSES = [
+  {"name":"Alder & Ash Auction Rooms","address":"Buckinghamshire demo location","postcode":"DEMO","url":"#","lat":51.81,"lng":-0.81,"demo":true},
+  {"name":"Northmere Fine Art Auctions","address":"North Yorkshire demo location","postcode":"DEMO","url":"#","lat":54.12,"lng":-1.11,"demo":true},
+  {"name":"Fenwick & Rowe Salerooms","address":"Norfolk demo location","postcode":"DEMO","url":"#","lat":52.63,"lng":1.3,"demo":true},
+  {"name":"Harbour & Heath Auctions","address":"Dorset demo location","postcode":"DEMO","url":"#","lat":50.73,"lng":-2.34,"demo":true},
+  {"name":"Calder Vale Auction Rooms","address":"Lancashire demo location","postcode":"DEMO","url":"#","lat":53.79,"lng":-2.66,"demo":true},
+  {"name":"Thistle & Oak Auctioneers","address":"Edinburgh demo location","postcode":"DEMO","url":"#","lat":55.95,"lng":-3.19,"demo":true},
+  {"name":"Cambrian House Auctions","address":"Cardiff demo location","postcode":"DEMO","url":"#","lat":51.48,"lng":-3.18,"demo":true},
+  {"name":"Lagan & Linen Auction Rooms","address":"Belfast demo location","postcode":"DEMO","url":"#","lat":54.6,"lng":-5.93,"demo":true},
+  {"name":"Wessex House Auctions","address":"Wiltshire demo location","postcode":"DEMO","url":"#","lat":51.35,"lng":-1.99,"demo":true},
+  {"name":"Merefield & Co.","address":"Nottinghamshire demo location","postcode":"DEMO","url":"#","lat":53.08,"lng":-0.95,"demo":true},
+  {"name":"Crown & County Salerooms","address":"Warwickshire demo location","postcode":"DEMO","url":"#","lat":52.28,"lng":-1.58,"demo":true},
+  {"name":"Redbridge Auction Gallery","address":"Essex demo location","postcode":"DEMO","url":"#","lat":51.68,"lng":0.12,"demo":true},
+  {"name":"Westmoor Antiques Auctions","address":"Devon demo location","postcode":"DEMO","url":"#","lat":50.72,"lng":-3.53,"demo":true},
+  {"name":"Tyne & Fell Auction Rooms","address":"Newcastle demo location","postcode":"DEMO","url":"#","lat":54.98,"lng":-1.61,"demo":true},
+  {"name":"Severn Valley Salerooms","address":"Shropshire demo location","postcode":"DEMO","url":"#","lat":52.71,"lng":-2.75,"demo":true},
+  {"name":"Orchard Gate Auctions","address":"Kent demo location","postcode":"DEMO","url":"#","lat":51.19,"lng":0.73,"demo":true},
+  {"name":"Silver Birch Auction House","address":"Cambridgeshire demo location","postcode":"DEMO","url":"#","lat":52.21,"lng":0.12,"demo":true},
+  {"name":"Clyde & Heather Auctions","address":"Glasgow demo location","postcode":"DEMO","url":"#","lat":55.86,"lng":-4.25,"demo":true},
+  {"name":"Rosewood & Flint Salerooms","address":"Somerset demo location","postcode":"DEMO","url":"#","lat":51.02,"lng":-2.56,"demo":true},
+  {"name":"Pennine Crest Auctions","address":"West Yorkshire demo location","postcode":"DEMO","url":"#","lat":53.8,"lng":-1.55,"demo":true},
+  {"name":"Hearth & Hall Auctioneers","address":"Oxfordshire demo location","postcode":"DEMO","url":"#","lat":51.75,"lng":-1.26,"demo":true},
+  {"name":"Granite Shore Auction Rooms","address":"Aberdeenshire demo location","postcode":"DEMO","url":"#","lat":57.15,"lng":-2.1,"demo":true},
+  {"name":"Meadow Crown Salerooms","address":"Lincolnshire demo location","postcode":"DEMO","url":"#","lat":53.23,"lng":-0.54,"demo":true},
+  {"name":"Avon & Elm Auctions","address":"Bristol demo location","postcode":"DEMO","url":"#","lat":51.45,"lng":-2.59,"demo":true},
+  {"name":"Dalesbridge Auction House","address":"Cumbria demo location","postcode":"DEMO","url":"#","lat":54.46,"lng":-2.75,"demo":true},
+  {"name":"Bluebell County Auctions","address":"Sussex demo location","postcode":"DEMO","url":"#","lat":50.94,"lng":-0.36,"demo":true},
+  {"name":"March & Mason Salerooms","address":"Northamptonshire demo location","postcode":"DEMO","url":"#","lat":52.24,"lng":-0.9,"demo":true},
+  {"name":"Oakmere Auction Gallery","address":"Cheshire demo location","postcode":"DEMO","url":"#","lat":53.19,"lng":-2.52,"demo":true},
+  {"name":"Beacon Hill Auction Rooms","address":"Worcestershire demo location","postcode":"DEMO","url":"#","lat":52.19,"lng":-2.22,"demo":true},
+  {"name":"Solent & Stone Auctions","address":"Hampshire demo location","postcode":"DEMO","url":"#","lat":50.92,"lng":-1.4,"demo":true},
+  {"name":"Forth & Fern Auctioneers","address":"Fife demo location","postcode":"DEMO","url":"#","lat":56.21,"lng":-3.15,"demo":true},
+  {"name":"Border Lantern Salerooms","address":"Scottish Borders demo location","postcode":"DEMO","url":"#","lat":55.55,"lng":-2.84,"demo":true},
+  {"name":"Snowdon Vale Auctions","address":"Gwynedd demo location","postcode":"DEMO","url":"#","lat":53.14,"lng":-4.27,"demo":true},
+  {"name":"Usk & Willow Auction Rooms","address":"Monmouthshire demo location","postcode":"DEMO","url":"#","lat":51.7,"lng":-2.9,"demo":true},
+  {"name":"Causeway Coast Salerooms","address":"County Antrim demo location","postcode":"DEMO","url":"#","lat":55.13,"lng":-6.67,"demo":true},
+  {"name":"Mourne House Auctions","address":"County Down demo location","postcode":"DEMO","url":"#","lat":54.18,"lng":-5.94,"demo":true}
+];
 
 
 
@@ -1554,10 +1610,10 @@ function setUpdateStatus(msg, col) {
       Object.assign(RAW_DATES, data.houses);
       
       // Apply to all houses
-      allH.forEach(h => {
-        if (RAW_DATES[h.name]) {
-          h.sales = cleanSales(RAW_DATES[h.name]);
-        }
+      allH.forEach((h, index) => {
+        h.sales = data.demo
+          ? rollingDemoSales(index)
+          : cleanSales(RAW_DATES[h.name] || []);
       });
       
       // Update UI badges (format matches the Finds app: "Friday 03 July 2026, 01:40")
@@ -1567,7 +1623,9 @@ function setUpdateStatus(msg, col) {
       const fullDateStr = scrapedDate.toLocaleDateString('en-GB', {day:'2-digit', month:'long'});
       const timeStr = scrapedDate.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', hour12:false});
       
-      document.getElementById('update-status').textContent = `✅ Successfully updated - ${dayName} ${fullDateStr}, ${timeStr}`;
+      document.getElementById('update-status').textContent = data.demo
+        ? '● Fictional rolling demonstration schedule'
+        : `✅ Successfully updated - ${dayName} ${fullDateStr}, ${timeStr}`;
       document.getElementById('updated-badge').textContent = dateStr;
       document.getElementById('up-last-updated').textContent = `Last updated: ${dateStr}`;
       
