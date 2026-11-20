@@ -883,7 +883,7 @@ map.getContainer().addEventListener('wheel', event => {
   wheelZoomPoint = map.mouseEventToContainerPoint(event);
   const minZoom = map.getMinZoom();
   const maxZoom = map.getMaxZoom();
-  const wheelStep = Math.max(-1.25, Math.min(1.25, -pixels / 70));
+  const wheelStep = Math.max(-0.75, Math.min(0.75, -pixels / 140));
   wheelZoomTarget = Math.max(minZoom, Math.min(maxZoom, wheelZoomTarget + wheelStep));
   if (!wheelZoomFrame) wheelZoomFrame = requestAnimationFrame(runWheelZoom);
 }, {passive:false});
