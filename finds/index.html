@@ -520,6 +520,19 @@
     }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
     .card-img { position: relative; width: 100%; line-height: 0; background: var(--accent-soft); }
+    .lot-link-tip {
+      position: absolute; top: 32px; left: 8px; right: 8px; z-index: 5;
+      max-width: 310px; margin: 0 auto; padding: 9px 11px;
+      border-radius: 6px; background: #273b2a; color: #fff;
+      box-shadow: 0 3px 12px rgba(0,0,0,.24);
+      font-size: .875rem; line-height: 1.35;
+      visibility: hidden; pointer-events: none;
+    }
+    @media (hover: hover) {
+      .card:not(.lot-link-tip-dismissed):hover .lot-link-tip { visibility: visible; }
+    }
+    .card:not(.lot-link-tip-dismissed):focus-visible .lot-link-tip,
+    .card.lot-link-tip-open .lot-link-tip { visibility: visible; }
     .card-img::before {
       content: "Loading image…";
       position: absolute; inset: 0; z-index: 0;
@@ -1582,6 +1595,53 @@ const HOUSE_POPUP_DATA = {"alder & ash auction rooms": {"name": "Alder & Ash Auc
       });
       window.addEventListener('scroll', hidePopup, true);
       window.addEventListener('resize', hidePopup);
+    })();
+
+    // Explain where the demo cards would lead without opening a fake listing.
+    (function initDemoLotLinks() {
+      let openCard = null;
+      function closeTip() {
+        if (openCard) openCard.classList.remove('lot-link-tip-open');
+        openCard = null;
+      }
+      const cards = document.querySelectorAll('.card[href^="#demo-lot-"]');
+      cards.forEach((card, index) => {
+        const image = card.querySelector('.card-img');
+        if (!image) return;
+        const tip = document.createElement('span');
+        tip.className = 'lot-link-tip';
+        tip.id = 'demo-lot-link-tip-' + (index + 1);
+        tip.setAttribute('role', 'tooltip');
+        tip.textContent = 'In an Easy Live partnership, clicking would open this exact lot on Easy Live Auction. This demo lot is fictional.';
+        image.appendChild(tip);
+        card.setAttribute('aria-describedby', tip.id);
+        card.removeAttribute('target');
+        card.addEventListener('click', event => {
+          event.preventDefault();
+          if (openCard !== card) closeTip();
+          card.classList.remove('lot-link-tip-dismissed');
+          card.classList.add('lot-link-tip-open');
+          openCard = card;
+        });
+        const resetTip = () => {
+          card.classList.remove('lot-link-tip-dismissed');
+          if (openCard === card) closeTip();
+        };
+        card.addEventListener('mouseleave', resetTip);
+        card.addEventListener('blur', resetTip);
+      });
+      document.addEventListener('pointerdown', event => {
+        if (openCard && !openCard.contains(event.target)) closeTip();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        cards.forEach(card => {
+          if (card === openCard || card.matches(':hover, :focus-visible')) {
+            card.classList.add('lot-link-tip-dismissed');
+          }
+        });
+        closeTip();
+      });
     })();
 
     // ── PLANNED LOT PREVIEW (shared popup; hover/focus/tap) ──
